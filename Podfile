@@ -7,4 +7,8 @@ target 'Vinder' do
 
   # Pods for Vinder
 
+pod 'AgoraRtcEngine_iOS'
+pod 'Firebase/Core'
+pod 'FirebaseUI/Auth'
+
 end
