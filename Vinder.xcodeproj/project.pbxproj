@@ -9,13 +9,16 @@
 /* Begin PBXBuildFile section */
 		2829F008C558904A7F28D088 /* Pods_Vinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */; };
 		E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543422B9735F00CD7958 /* AppDelegate.swift */; };
-		E935543722B9735F00CD7958 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* ViewController.swift */; };
-		E935543A22B9735F00CD7958 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E935543822B9735F00CD7958 /* Main.storyboard */; };
+		E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* LoginViewController.swift */; };
 		E935543C22B9736000CD7958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E935543B22B9736000CD7958 /* Assets.xcassets */; };
 		E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E935543D22B9736000CD7958 /* LaunchScreen.storyboard */; };
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
 		EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */; };
+		E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544622B987BF00CD7958 /* SignUpViewController.swift */; };
+		E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544822B99B3C00CD7958 /* LoginFormViewController.swift */; };
+		E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */; };
+		E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935545022BAA57900CD7958 /* RecordVideoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,8 +26,7 @@
 		538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543122B9735F00CD7958 /* Vinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543422B9735F00CD7958 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E935543622B9735F00CD7958 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		E935543922B9735F00CD7958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E935543622B9735F00CD7958 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E935543B22B9736000CD7958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E935543E22B9736000CD7958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E935544022B9736000CD7958 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -32,6 +34,10 @@
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		F0C8F18A0138C4DE55983CB0 /* Pods-Vinder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.debug.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.debug.xcconfig"; sourceTree = "<group>"; };
+		E935544622B987BF00CD7958 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
+		E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVideoViewController.swift; sourceTree = "<group>"; };
+		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVideoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +86,11 @@
 				E935543822B9735F00CD7958 /* Main.storyboard */,
 				ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */,
 				EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */,
+				E935543622B9735F00CD7958 /* LoginViewController.swift */,
+				E935544622B987BF00CD7958 /* SignUpViewController.swift */,
+				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
+				E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */,
+				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
 				E935543B22B9736000CD7958 /* Assets.xcassets */,
 				E935543D22B9736000CD7958 /* LaunchScreen.storyboard */,
 				ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */,
@@ -233,6 +244,11 @@
 			files = (
 				EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */,
 				E935543722B9735F00CD7958 /* ViewController.swift in Sources */,
+				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
+				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
+				E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */,
+				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
+				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
 			);
@@ -241,14 +257,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		E935543822B9735F00CD7958 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E935543922B9735F00CD7958 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		E935543D22B9736000CD7958 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
