@@ -124,7 +124,7 @@ class RecordVideoViewController: UIViewController {
       confirmButton.widthAnchor.constraint(equalToConstant: 50),
       
       retakeVideoButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30),
-      retakeVideoButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -100),
+      retakeVideoButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -120),
       retakeVideoButton.heightAnchor.constraint(equalToConstant: 50),
       retakeVideoButton.widthAnchor.constraint(equalToConstant: 50),
       ])
@@ -141,7 +141,12 @@ class RecordVideoViewController: UIViewController {
   }
   
   @objc func retakeButtonTapped(){
-    print("retake")
+    do {
+        try cameraController.switchCameras()
+    } catch {
+        print("can not swict camera: \(error)")
+    }
+    
   }
   
   @objc func confirmTapped(){

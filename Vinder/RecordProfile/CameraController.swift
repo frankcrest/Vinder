@@ -23,7 +23,13 @@ class CameraController {
     var photoOutput: AVCapturePhotoOutput?
     var previewLayer: AVCaptureVideoPreviewLayer?
     
+    var videoOutput: AVCaptureVideoDataOutput?
     
+    func test() {
+        
+        
+        
+    }
     
     func displayPreview(on view: UIView) throws {
         
@@ -38,6 +44,56 @@ class CameraController {
         view.layer.insertSublayer(self.previewLayer!, at: 0)
         self.previewLayer?.frame = view.frame
         
+    }
+    
+    func switchCameras() throws {
+        
+        guard  let currentCameraPosition = currentCameraPosition, let captureSession = captureSession, captureSession.isRunning else {
+            throw CameraControllerError.captureSessionIsMissing
+        }
+        
+        func switchToFront() throws {
+            guard let inputs = captureSession.inputs as? [AVCaptureInput], let rearCameraInput = self.rearCameraInput, inputs.contains(rearCameraInput), let frontCamera = self.frontCamera else {
+                throw CameraControllerError.invalidOperation
+            }
+            
+            frontCameraInput = try AVCaptureDeviceInput(device: frontCamera)
+            captureSession.removeInput(rearCameraInput)
+            
+            if captureSession.canAddInput(frontCameraInput!) {
+                captureSession.addInput(frontCameraInput!)
+                self.currentCameraPosition = .front
+            } else {
+                throw CameraControllerError.invalidOperation
+            }
+        }
+        
+        func switchToRear() throws {
+                guard let inputs = captureSession.inputs as? [AVCaptureInput], let frontCameraInput = self.frontCameraInput, inputs.contains(frontCameraInput), let rearCamera = self.rearCamera else {
+                    throw CameraControllerError.invalidOperation
+                }
+                
+                rearCameraInput = try AVCaptureDeviceInput(device: rearCamera)
+                captureSession.removeInput(frontCameraInput)
+                
+                if captureSession.canAddInput(rearCameraInput!) {
+                    captureSession.addInput(rearCameraInput!)
+                    self.currentCameraPosition = .rear
+                } else {
+                    throw CameraControllerError.invalidOperation
+                }
+            }
+            
+        
+        
+        switch currentCameraPosition {
+        case .front:
+            try switchToRear()
+        case .rear:
+            try switchToFront()
+        }
+        
+        captureSession.commitConfiguration()
     }
     
     
@@ -84,16 +140,8 @@ extension CameraController {
                 throw CameraControllerError.captureSessionIsMissing
             }
             
-            if let rearCamera = self.rearCamera {
-                self.rearCameraInput = try AVCaptureDeviceInput(device: rearCamera)
                 
-                if captureSession.canAddInput(self.rearCameraInput!) {
-                    captureSession.addInput(self.rearCameraInput!)
-                }
-                self.currentCameraPosition = .rear
-            }
-                
-            else if let frontCamera = self.frontCamera {
+            if let frontCamera = self.frontCamera {
                 self.frontCameraInput = try AVCaptureDeviceInput(device: frontCamera)
                 
                 if captureSession.canAddInput(self.frontCameraInput!) {
@@ -101,6 +149,15 @@ extension CameraController {
                 }
                 
                 self.currentCameraPosition = .front
+            }
+                
+            else if let rearCamera = self.rearCamera {
+                self.rearCameraInput = try AVCaptureDeviceInput(device: rearCamera)
+                
+                if captureSession.canAddInput(self.rearCameraInput!) {
+                    captureSession.addInput(self.rearCameraInput!)
+                }
+                self.currentCameraPosition = .rear
             }
                 
             else { throw CameraControllerError.noCamerasAvailable }
