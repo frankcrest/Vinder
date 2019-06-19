@@ -10,18 +10,20 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    private let networkManager = NetworkManager()
+    
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .cyan
-   
+
     // Do any additional setup after loading the view.
   }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        let vc = VideoViewController()
-        present(vc, animated: true, completion: nil)
+        
     }
+
 
 
 }
