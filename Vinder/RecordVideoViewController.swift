@@ -7,8 +7,14 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
 
 class RecordVideoViewController: UIViewController {
+
+  var ref = Database.database().reference()
+  
+  let ud = UserDefaults.standard
   
   let recordView:UIView = {
     let v = UIView()
@@ -116,7 +122,25 @@ class RecordVideoViewController: UIViewController {
   }
   
   @objc func confirmTapped(){
+    guard let email = ud.string(forKey: "email") else {return}
+    guard let password = ud.string(forKey: "password") else {return}
+    guard let name = ud.string(forKey: "name") else {return}
+    guard let username = ud.string(forKey: "username") else {return}
     
+    Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+      if let error = error{
+        print(error)
+        return
+      }
+      guard let uid = user?.user.uid else {return}
+      self.ref.child("users").child(uid).setValue((["email":email, "username":username, "name":name]), withCompletionBlock: { (error, ref) in
+        if let error = error{
+          print(error)
+          return
+        }
+        //segue to mapview
+      })
+    }
   }
   
 }

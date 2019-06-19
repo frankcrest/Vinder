@@ -8,7 +8,18 @@
 
 import UIKit
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController,UITextFieldDelegate {
+  
+  let ud = UserDefaults.standard
+  
+  let emailLabel: UILabel = {
+    let label = UILabel()
+    label.font = UIFont.boldSystemFont(ofSize: 20)
+    label.text = "Tell Us Your Email"
+    label.textColor = .black
+    label.translatesAutoresizingMaskIntoConstraints = false
+    return label
+  }()
   
   let usernameLabel: UILabel = {
     let label = UILabel()
@@ -37,9 +48,18 @@ class SignUpViewController: UIViewController {
     return label
   }()
   
+  let emailTextfield: UITextField = {
+    let tf = UITextField()
+    tf.placeholder = "email"
+    tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
+    tf.translatesAutoresizingMaskIntoConstraints = false
+    return tf
+  }()
+  
   let usernameTextfield: UITextField = {
     let tf = UITextField()
     tf.placeholder = "username"
+    tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
   }()
@@ -47,6 +67,7 @@ class SignUpViewController: UIViewController {
   let nameTextfield: UITextField = {
     let tf = UITextField()
     tf.placeholder = "name"
+    tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
   }()
@@ -55,6 +76,7 @@ class SignUpViewController: UIViewController {
     let tf = UITextField()
     tf.isSecureTextEntry = true
     tf.placeholder = "password"
+    tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
   }()
@@ -66,29 +88,55 @@ class SignUpViewController: UIViewController {
     b.translatesAutoresizingMaskIntoConstraints = false
     b.setTitleColor(.white, for: .normal)
     b.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
-    b.backgroundColor = .cyan
+    b.backgroundColor = .red
     return b
+  }()
+  
+  lazy var tapGesture:UITapGestureRecognizer = {
+    let tg = UITapGestureRecognizer(target: self, action: #selector(screenTapped))
+    return tg
   }()
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    signUpButton.isEnabled = false
+    
+    emailTextfield.delegate = self
+    usernameTextfield.delegate = self
+    nameTextfield.delegate = self
+    passwordTextfield.delegate = self
+    
+    self.view.addGestureRecognizer(tapGesture)
     
     setupViews()
   }
   
   func setupViews(){
     self.view.backgroundColor = .white
+    self.view.addSubview(emailLabel)
     self.view.addSubview(usernameLabel)
     self.view.addSubview(nameLabel)
     self.view.addSubview(passwordLabel)
+    self.view.addSubview(emailTextfield)
     self.view.addSubview(usernameTextfield)
     self.view.addSubview(nameTextfield)
     self.view.addSubview(passwordTextfield)
     self.view.addSubview(signUpButton)
     
     NSLayoutConstraint.activate([
-      usernameLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -200),
+      emailLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -200),
+      emailLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
+      emailLabel.widthAnchor.constraint(equalToConstant: 250),
+      emailLabel.heightAnchor.constraint(equalToConstant: 20),
+      
+      emailTextfield.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
+      emailTextfield.topAnchor.constraint(equalTo: self.emailLabel.bottomAnchor, constant: 8),
+      emailTextfield.heightAnchor.constraint(equalToConstant: 20),
+      emailTextfield.widthAnchor.constraint(equalToConstant: 250),
+      
       usernameLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
+      usernameLabel.topAnchor.constraint(equalTo: self.emailTextfield.bottomAnchor, constant: 8),
       usernameLabel.widthAnchor.constraint(equalToConstant: 250),
       usernameLabel.heightAnchor.constraint(equalToConstant: 20),
       
@@ -127,6 +175,28 @@ class SignUpViewController: UIViewController {
   @objc func signUpTapped(){
     let signUpVideoVC = SignUpVideoViewController()
     self.navigationController?.pushViewController(signUpVideoVC, animated: true)
+    
+    ud.set(emailTextfield.text, forKey: "email")
+    ud.set(usernameTextfield.text, forKey: "username")
+    ud.set(nameTextfield.text, forKey: "name")
+    ud.set(passwordTextfield.text, forKey: "password")
   }
+  
+  @objc func screenTapped(){
+    view.endEditing(true)
+  }
+  
+  @objc func handleTextInputChange() {
+    let isFormValid = emailTextfield.text?.isEmpty == false && usernameTextfield.text?.isEmpty == false && nameTextfield.text?.isEmpty == false && passwordTextfield.text?.isEmpty == false
+    
+    if isFormValid {
+      signUpButton.isEnabled = true
+      signUpButton.backgroundColor = .blue
+    } else {
+      signUpButton.isEnabled = false
+      signUpButton.backgroundColor = .red
+    }
+  }
+  
   
 }

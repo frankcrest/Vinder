@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import FirebaseAuth
 
-class LoginFormViewController: UIViewController {
+class LoginFormViewController: UIViewController,UITextFieldDelegate {
   
   let usernameLabel: UILabel = {
     let label = UILabel()
@@ -28,9 +29,10 @@ class LoginFormViewController: UIViewController {
     return label
   }()
   
-  let usernameTextfield: UITextField = {
+  let emailTextField: UITextField = {
     let tf = UITextField()
     tf.placeholder = "username"
+    tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
   }()
@@ -38,6 +40,7 @@ class LoginFormViewController: UIViewController {
   let passwordTextfield: UITextField = {
     let tf = UITextField()
     tf.placeholder = "password"
+    tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
   }()
@@ -47,7 +50,8 @@ class LoginFormViewController: UIViewController {
     b.setTitle("Log In", for: .normal)
     b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
     b.setTitleColor(.white, for: .normal)
-    b.backgroundColor = .magenta
+    b.backgroundColor = .red
+    b.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()
@@ -62,7 +66,7 @@ class LoginFormViewController: UIViewController {
     self.view.backgroundColor = .white
     self.view.addSubview(usernameLabel)
     self.view.addSubview(passwordLabel)
-    self.view.addSubview(usernameTextfield)
+    self.view.addSubview(emailTextField)
     self.view.addSubview(passwordTextfield)
     self.view.addSubview(loginButton)
     
@@ -76,13 +80,13 @@ class LoginFormViewController: UIViewController {
       usernameLabel.widthAnchor.constraint(equalToConstant: 250),
       usernameLabel.heightAnchor.constraint(equalToConstant: 20),
       
-      usernameTextfield.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      usernameTextfield.topAnchor.constraint(equalTo: self.usernameLabel.bottomAnchor, constant: 8),
-      usernameTextfield.heightAnchor.constraint(equalToConstant: 20),
-      usernameTextfield.widthAnchor.constraint(equalToConstant: 250),
+      emailTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
+      emailTextField.topAnchor.constraint(equalTo: self.usernameLabel.bottomAnchor, constant: 8),
+      emailTextField.heightAnchor.constraint(equalToConstant: 20),
+      emailTextField.widthAnchor.constraint(equalToConstant: 250),
       
       passwordLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      passwordLabel.topAnchor.constraint(equalTo: self.usernameTextfield.bottomAnchor, constant: 8),
+      passwordLabel.topAnchor.constraint(equalTo: self.emailTextField.bottomAnchor, constant: 8),
       passwordLabel.widthAnchor.constraint(equalToConstant: 250),
       passwordLabel.heightAnchor.constraint(equalToConstant: 20),
       
@@ -96,6 +100,31 @@ class LoginFormViewController: UIViewController {
       loginButton.heightAnchor.constraint(equalToConstant: 30),
       loginButton.widthAnchor.constraint(equalToConstant: 180),
       ])
+  }
+  
+  
+  @objc func handleTextInputChange() {
+    let isFormValid = emailTextField.text?.isEmpty == false && passwordTextfield.text?.isEmpty == false
+    
+    if isFormValid {
+      loginButton.isEnabled = true
+      loginButton.backgroundColor = .blue
+    } else {
+      loginButton.isEnabled = false
+      loginButton.backgroundColor = .red
+    }
+  }
+  
+  @objc func loginTapped(){
+    guard let email = emailTextField.text else {return}
+    guard let password = passwordTextfield.text else {return}
+    Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+      if let error = error{
+        print(error)
+        return
+      }
+      //segue to map
+    }
   }
   
   

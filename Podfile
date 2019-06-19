@@ -11,4 +11,8 @@ pod 'AgoraRtcEngine_iOS'
 pod 'Firebase/Core'
 pod 'FirebaseUI/Auth'
 pod 'SwiftyJSON'
+pod 'Firebase/Analytics'
+pod 'Firebase/Database'
+pod 'Firebase/Storage'
+
 end
