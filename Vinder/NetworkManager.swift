@@ -48,6 +48,17 @@ class NetworkManager {
         
     }
     
+    /*
+     
+     import SwiftyJSON
+     
+     networkManager.fetchJokes { (data) -> (Void) in
+     let json = JSON(data)
+     print("joke : \(json["joke"])")
+     }
+     
+ 
+ */
     
     
     
