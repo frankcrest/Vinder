@@ -12,11 +12,12 @@ import MapKit
 class NearbyUser: NSObject , MKAnnotation{
     var coordinate: CLLocationCoordinate2D
     var username : String!
-    var image : String!
+    var imageName : String!
     
-    init(username : String, image: String, coordinate: CLLocationCoordinate2D){
+    
+    init(username : String, imageName: String, coordinate: CLLocationCoordinate2D){
         self.username = username
-        self.image = image
+        self.imageName = imageName
         self.coordinate = coordinate
     }
     

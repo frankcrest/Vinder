@@ -6,14 +6,20 @@ class MapViewController: UIViewController {
     var locationManager:CLLocationManager = CLLocationManager()
     var mapView : MKMapView = MKMapView()
     var currentLocation: CLLocation = CLLocation()
+    var nearbyUsers : [NearbyUser] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.delegate = self
-        let user1 = NearbyUser(username: "adamck6302438", image: "Ray.jpg", coordinate: CLLocationCoordinate2D(latitude: 43.644311, longitude: -79.402225))
-        let user2 = NearbyUser(username: "myley_cyrus", image: "miley-cyrus.jpg", coordinate: CLLocationCoordinate2D(latitude: 32.444311, longitude: -59.402225))
-        let user3 = NearbyUser(username: "kawhi", image: "kawhi.jpg", coordinate: CLLocationCoordinate2D(latitude: 35.444311, longitude: -79.666666))
+//        mapView.delegate = self
+        
+//        mapView.register(NearbyUserMarkerView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        
+        mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        
+        let user1 = NearbyUser(username: "adamck6302438", imageName: "Ray", coordinate: CLLocationCoordinate2D(latitude: 43.644311, longitude: -79.402225))
+        let user2 = NearbyUser(username: "myley_cyrus", imageName: "miley-cyrus", coordinate: CLLocationCoordinate2D(latitude: 43.594311, longitude: -79.502225))
+        let user3 = NearbyUser(username: "kawhi", imageName: "kawhi", coordinate: CLLocationCoordinate2D(latitude: 43.624311, longitude: -79.566666))
         
         mapView.addAnnotation(user1)
         mapView.addAnnotation(user2)
@@ -22,9 +28,9 @@ class MapViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-
+        
     }
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -61,14 +67,16 @@ class MapViewController: UIViewController {
         }
     }
     
-    func loadInitialData(){
+    
+    //fetch nearby users
+    func fetchUsers(){
         
     }
     
 }
 
 extension MapViewController : CLLocationManagerDelegate {
-   
+    
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
     {
@@ -90,24 +98,24 @@ extension MapViewController : CLLocationManagerDelegate {
 }
 
 
-extension MapViewController : MKMapViewDelegate {
+//extension MapViewController : MKMapViewDelegate {
 
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard let annotation = annotation as? NearbyUser else { return nil }
-        
-        let identifier = "neaby user"
-        var view: MKMarkerAnnotationView
-        
-        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView{
-            dequeuedView.annotation = annotation
-            view = dequeuedView
-        } else{
-            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            view.canShowCallout = true
-            view.calloutOffset = CGPoint(x: -5, y: 5)
-            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        }
-        return view
-    }
-    
-}
+//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//        guard let annotation = annotation as? NearbyUser else { return nil }
+//
+//        let identifier = "user"
+//        var view: MKMarkerAnnotationView
+//
+//        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView{
+//            dequeuedView.annotation = annotation
+//            view = dequeuedView
+//        } else{
+//            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+//            view.canShowCallout = false
+//            view.calloutOffset = CGPoint(x: -5, y: 5)
+//            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+//        }
+//        return view
+//    }
+//
+//}
