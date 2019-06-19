@@ -20,9 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
     let initialController = LoginViewController()
-    let nav = UINavigationController()
-    nav.viewControllers = [initialController]
-    self.window?.rootViewController = nav
+    let loginNav = UINavigationController()
+    loginNav.viewControllers = [initialController]
+    
+    if Auth.auth().currentUser != nil {
+      self.window?.rootViewController = loginNav
+    } else{
+      //
+    }
     self.window?.makeKeyAndVisible()
     
     return true
