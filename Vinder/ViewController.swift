@@ -17,10 +17,16 @@ class ViewController: UIViewController {
     // Do any additional setup after loading the view.
   }
     
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(true)
+//        let vc = VideoViewController()
+//        present(vc, animated: true, completion: nil)
+//    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        let vc = VideoViewController()
-        present(vc, animated: true, completion: nil)
+        let mc = MapViewController()
+        present(mc, animated: true, completion: nil)
     }
 
 
