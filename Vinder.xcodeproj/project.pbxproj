@@ -8,20 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543422B9735F00CD7958 /* AppDelegate.swift */; };
-		E935543722B9735F00CD7958 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* ViewController.swift */; };
-		E935543A22B9735F00CD7958 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E935543822B9735F00CD7958 /* Main.storyboard */; };
+		E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* LoginViewController.swift */; };
 		E935543C22B9736000CD7958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E935543B22B9736000CD7958 /* Assets.xcassets */; };
 		E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E935543D22B9736000CD7958 /* LaunchScreen.storyboard */; };
+		E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544622B987BF00CD7958 /* SignUpViewController.swift */; };
+		E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544822B99B3C00CD7958 /* LoginFormViewController.swift */; };
+		E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */; };
+		E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935545022BAA57900CD7958 /* RecordVideoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E935543122B9735F00CD7958 /* Vinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543422B9735F00CD7958 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E935543622B9735F00CD7958 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		E935543922B9735F00CD7958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E935543622B9735F00CD7958 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E935543B22B9736000CD7958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E935543E22B9736000CD7958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E935544022B9736000CD7958 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E935544622B987BF00CD7958 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
+		E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVideoViewController.swift; sourceTree = "<group>"; };
+		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVideoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,8 +61,11 @@
 			isa = PBXGroup;
 			children = (
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,
-				E935543622B9735F00CD7958 /* ViewController.swift */,
-				E935543822B9735F00CD7958 /* Main.storyboard */,
+				E935543622B9735F00CD7958 /* LoginViewController.swift */,
+				E935544622B987BF00CD7958 /* SignUpViewController.swift */,
+				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
+				E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */,
+				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
 				E935543B22B9736000CD7958 /* Assets.xcassets */,
 				E935543D22B9736000CD7958 /* LaunchScreen.storyboard */,
 				E935544022B9736000CD7958 /* Info.plist */,
@@ -124,7 +133,6 @@
 			files = (
 				E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */,
 				E935543C22B9736000CD7958 /* Assets.xcassets in Resources */,
-				E935543A22B9735F00CD7958 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,7 +143,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E935543722B9735F00CD7958 /* ViewController.swift in Sources */,
+				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
+				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
+				E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */,
+				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
+				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,14 +155,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		E935543822B9735F00CD7958 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E935543922B9735F00CD7958 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		E935543D22B9736000CD7958 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
