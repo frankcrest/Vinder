@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import AVFoundation
 
 class RecordVideoViewController: UIViewController {
   
-  let recordView:UIView = {
+    //MARK: UI VIEWS
+    
+  let recordPreviewView:UIView = {
     let v = UIView()
     v.translatesAutoresizingMaskIntoConstraints = false
     v.backgroundColor = .blue
@@ -56,15 +59,39 @@ class RecordVideoViewController: UIViewController {
     button.translatesAutoresizingMaskIntoConstraints = false
     return button
   }()
+    
+    //MARK: PROPERTIES
+    
+    let cameraController = CameraController()
+    
+    //MARK: VIEW DID LOAD
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     setupViews()
+    
+
+    
+    configureCameraController()
+    
+    
   }
+    //MARK: CAMERACONTROLLER
+    
+    func configureCameraController() {
+        cameraController.prepare { (error) in
+            if let error = error {
+                print("can not configure camera controller: \(error)")
+            }
+            try? self.cameraController.displayPreview(on: self.recordPreviewView)
+            
+        }
+    }
+    
+    //MARK: SETUP VIEWS
   
   func setupViews(){
-    self.view.addSubview(recordView)
+    self.view.addSubview(recordPreviewView)
     self.view.addSubview(recordButton)
     self.view.addSubview(cancleButton)
     self.view.addSubview(retakeVideoButton)
@@ -76,10 +103,10 @@ class RecordVideoViewController: UIViewController {
     self.navigationController?.navigationBar.isHidden = true
     
     NSLayoutConstraint.activate([
-      recordView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
-      recordView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
-      recordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
-      recordView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
+      recordPreviewView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
+      recordPreviewView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
+      recordPreviewView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
+      recordPreviewView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
       
       recordButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30),
       recordButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
@@ -102,6 +129,8 @@ class RecordVideoViewController: UIViewController {
       retakeVideoButton.widthAnchor.constraint(equalToConstant: 50),
       ])
   }
+    
+    //MARK: ACTIONS
   
   @objc func recordTapped(){
     print("recording")
@@ -119,4 +148,15 @@ class RecordVideoViewController: UIViewController {
     
   }
   
+}
+
+extension RecordVideoViewController {
+    
+    
+
+    
+   
+    
+    
+    
 }
