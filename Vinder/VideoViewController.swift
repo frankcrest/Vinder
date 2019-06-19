@@ -30,7 +30,6 @@ class VideoViewController: UIViewController {
         setupVideoViews()
         setupButtons()
         
-        
 
     }
     
@@ -41,13 +40,35 @@ class VideoViewController: UIViewController {
         setupVideo()
         setupLocalVideoCanvas()
         agoraKit.startPreview()
+        joinChannel()
     }
     
     //MARK: ACTIONS
     
+    @objc private func mute(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        agoraKit.muteLocalAudioStream(sender.isSelected)
+    }
+    
+    @objc private func switchCamera(_ sender: UIButton) {
+        agoraKit.switchCamera()
+    }
+    
+    @objc private func turnOffCamera(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected {
+            agoraKit.disableVideo()
+        } else {
+            agoraKit.enableVideo()
+        }
+        
+        agoraKit.muteLocalVideoStream(sender.isSelected)
+        
+    }
     
     
-    //MARK: UI STUFFS
+    
+    //MARK: UI SETUPS
     
     private func setupVideoViews() {
         remoteVideoView = UIView()
@@ -71,7 +92,7 @@ class VideoViewController: UIViewController {
             localVideoView.heightAnchor.constraint(equalToConstant: 240.0)
             ])
         
-//        videoView.backgroundColor = .red
+        remoteVideoView.backgroundColor = .black
         localVideoView.backgroundColor = .black
         
     }
@@ -80,20 +101,21 @@ class VideoViewController: UIViewController {
 
         switchButton = UIButton()
         switchButton.setTitle("Switch", for: .normal)
-        switchButton.addTarget(self, action: #selector(self.joinChannel), for: .touchUpInside)
+        switchButton.addTarget(self, action: #selector(self.switchCamera(_:)), for: .touchUpInside)
 
         hangupButton = UIButton()
         hangupButton.setTitle("Hangup", for: .normal)
-
+        hangupButton.addTarget(self, action: #selector(self.leaveChannel), for: .touchUpInside)
+        
         muteButton = UIButton()
         muteButton.setTitle("Mute", for: .normal)
+        muteButton.addTarget(self, action: #selector(self.mute(_:)), for: .touchUpInside)
 
         turnOffCameraButton = UIButton()
         turnOffCameraButton.setTitle("Turn Off", for: .normal)
+        turnOffCameraButton.addTarget(self, action: #selector(self.turnOffCamera(_:)), for: .touchUpInside)
 
-        NSLayoutConstraint.activate([
 
-            ])
 
         let buttonStackView = UIStackView(arrangedSubviews: [switchButton, hangupButton,turnOffCameraButton,muteButton])
         buttonStackView.axis = .horizontal
@@ -119,7 +141,7 @@ class VideoViewController: UIViewController {
 
 }
 
-//MARK: Setup Engine
+//MARK: AGORA ENGINE SET UP
 
 extension VideoViewController: AgoraRtcEngineDelegate {
     
@@ -148,11 +170,9 @@ extension VideoViewController: AgoraRtcEngineDelegate {
             self.agoraKit.setEnableSpeakerphone(true)
             UIApplication.shared.isIdleTimerDisabled = true
         }
-        
-        print("did join chan")
     }
     
-    private func leaveChannel() {
+    @objc private func leaveChannel() {
         
         agoraKit.leaveChannel(nil)
         UIApplication.shared.isIdleTimerDisabled = false
