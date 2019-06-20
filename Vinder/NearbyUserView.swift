@@ -19,7 +19,7 @@ class NearbyUserView: MKAnnotationView {
             rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             
             if let imageName = nearbyUser.imageName {
-                image = UIImage(named: imageName)?.scaleImage(toSize: CGSize.init(width: 20, height: 20))
+                image = UIImage(named: imageName)?.scaleImage(toSize: CGSize.init(width: 25, height: 25))
             } else {
                 image = nil
             }
@@ -28,6 +28,9 @@ class NearbyUserView: MKAnnotationView {
 
 }
 
+
+
+//MARK: UIImage Helper method
 extension UIImage {
     func scaleImage(toSize newSize: CGSize) -> UIImage? {
         var newImage: UIImage?

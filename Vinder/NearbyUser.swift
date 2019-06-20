@@ -9,16 +9,24 @@
 import UIKit
 import MapKit
 
+enum UserGender{
+    case male
+    case female
+}
+
 class NearbyUser: NSObject , MKAnnotation{
     var coordinate: CLLocationCoordinate2D
     var username : String!
     var imageName : String!
+    var gender : UserGender!
     
     
-    init(username : String, imageName: String, coordinate: CLLocationCoordinate2D){
+    
+    init(username : String, imageName: String, coordinate: CLLocationCoordinate2D, gender : UserGender){
         self.username = username
         self.imageName = imageName
         self.coordinate = coordinate
+        self.gender = gender
     }
     
     var subtitle: String? {

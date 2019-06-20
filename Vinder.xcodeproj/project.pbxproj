@@ -11,8 +11,8 @@
 		0D3E98D622BAA84E00D02311 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3E98D522BAA84E00D02311 /* MapKit.framework */; };
 		0D3E98D822BAA87B00D02311 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3E98D722BAA87B00D02311 /* CoreLocation.framework */; };
 		0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */; };
-		0D3E992922BAE05500D02311 /* NearbyUserMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E992822BAE05500D02311 /* NearbyUserMarkerView.swift */; };
 		0D3E992D22BAEF2000D02311 /* NearbyUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E992C22BAEF2000D02311 /* NearbyUserView.swift */; };
+		0D3E992F22BAF98C00D02311 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E992E22BAF98C00D02311 /* VideoView.swift */; };
 		2829F008C558904A7F28D088 /* Pods_Vinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */; };
 		E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543422B9735F00CD7958 /* AppDelegate.swift */; };
 		E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* LoginViewController.swift */; };
@@ -32,8 +32,8 @@
 		0D3E98D522BAA84E00D02311 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0D3E98D722BAA87B00D02311 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyUser.swift; sourceTree = "<group>"; };
-		0D3E992822BAE05500D02311 /* NearbyUserMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyUserMarkerView.swift; sourceTree = "<group>"; };
 		0D3E992C22BAEF2000D02311 /* NearbyUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyUserView.swift; sourceTree = "<group>"; };
+		0D3E992E22BAF98C00D02311 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		1E180473BECC247993331594 /* Pods-Vinder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.release.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.release.xcconfig"; sourceTree = "<group>"; };
 		538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543122B9735F00CD7958 /* Vinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,7 +101,7 @@
 				0D3E98D322BAA60200D02311 /* MapViewController.swift */,
 				0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */,
 				0D3E992C22BAEF2000D02311 /* NearbyUserView.swift */,
-				0D3E992822BAE05500D02311 /* NearbyUserMarkerView.swift */,
+				0D3E992E22BAF98C00D02311 /* VideoView.swift */,
 				ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */,
 				EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */,
 				E935543622B9735F00CD7958 /* LoginViewController.swift */,
@@ -270,8 +270,8 @@
 				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
 				E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */,
 				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
-				0D3E992922BAE05500D02311 /* NearbyUserMarkerView.swift in Sources */,
 				0D3E992D22BAEF2000D02311 /* NearbyUserView.swift in Sources */,
+				0D3E992F22BAF98C00D02311 /* VideoView.swift in Sources */,
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */,
