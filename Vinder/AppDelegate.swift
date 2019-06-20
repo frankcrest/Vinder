@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     FirebaseApp.configure()
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
+
     let initialController = LoginViewController()
     let loginNav = UINavigationController()
     loginNav.viewControllers = [initialController]
@@ -28,7 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     } else{
       //
     }
+
     self.window?.makeKeyAndVisible()
+    
     
     return true
   }
