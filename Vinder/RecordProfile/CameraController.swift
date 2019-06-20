@@ -10,8 +10,8 @@ import Foundation
 import AVFoundation
 import UIKit
 
-class CameraController {
-    
+class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
+
     //MARK: PROPERTIES
     
     var captureSession: AVCaptureSession?
@@ -20,17 +20,19 @@ class CameraController {
     var currentCameraPosition: CameraPosition?
     var frontCameraInput: AVCaptureDeviceInput?
     var rearCameraInput: AVCaptureDeviceInput?
-    var photoOutput: AVCapturePhotoOutput?
+//    var photoOutput: AVCaptureMovieFileOutput?
     var previewLayer: AVCaptureVideoPreviewLayer?
+
+    var videoOutput: AVCaptureMovieFileOutput?
+    var fileURL: URL = {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let fileURL = paths[0].appendingPathComponent("profile.mov")
+        try? FileManager.default.removeItem(at: fileURL)
+        return fileURL
+    }()
     
-    var videoOutput: AVCaptureVideoDataOutput?
     
-    func test() {
-        
-        
-        
-    }
-    
+    //MARK: PREVIEW LAYER
     func displayPreview(on view: UIView) throws {
         
         guard let captureSession = self.captureSession, captureSession.isRunning else {
@@ -45,6 +47,12 @@ class CameraController {
         self.previewLayer?.frame = view.frame
         
     }
+    
+    func removePreview() {
+        self.previewLayer?.removeFromSuperlayer()
+    }
+    
+    //MARK: SWITCH CAMERA
     
     func switchCameras() throws {
         
@@ -69,22 +77,20 @@ class CameraController {
         }
         
         func switchToRear() throws {
-                guard let inputs = captureSession.inputs as? [AVCaptureInput], let frontCameraInput = self.frontCameraInput, inputs.contains(frontCameraInput), let rearCamera = self.rearCamera else {
-                    throw CameraControllerError.invalidOperation
-                }
-                
-                rearCameraInput = try AVCaptureDeviceInput(device: rearCamera)
-                captureSession.removeInput(frontCameraInput)
-                
-                if captureSession.canAddInput(rearCameraInput!) {
-                    captureSession.addInput(rearCameraInput!)
-                    self.currentCameraPosition = .rear
-                } else {
-                    throw CameraControllerError.invalidOperation
-                }
+            guard let inputs = captureSession.inputs as? [AVCaptureInput], let frontCameraInput = self.frontCameraInput, inputs.contains(frontCameraInput), let rearCamera = self.rearCamera else {
+                throw CameraControllerError.invalidOperation
             }
             
-        
+            rearCameraInput = try AVCaptureDeviceInput(device: rearCamera)
+            captureSession.removeInput(frontCameraInput)
+            
+            if captureSession.canAddInput(rearCameraInput!) {
+                captureSession.addInput(rearCameraInput!)
+                self.currentCameraPosition = .rear
+            } else {
+                throw CameraControllerError.invalidOperation
+            }
+        }
         
         switch currentCameraPosition {
         case .front:
@@ -96,8 +102,31 @@ class CameraController {
         captureSession.commitConfiguration()
     }
     
+    //MARK: RECORD AND SAVE VIDEO
+    
+    func startRecording() {
+        
+        videoOutput?.startRecording(to: fileURL, recordingDelegate: self)
+    
+    }
+    
+    func stopRecording() {
+        videoOutput?.stopRecording()
+    }
+    
+    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
+        guard error == nil else {
+            print("can not save: \(String(describing: error))")
+            return
+        }
+        UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
+    }
+    
+    
     
 }
+
+
 
 //MARK: PREPARE
 
@@ -106,12 +135,15 @@ extension CameraController {
     func prepare(completion: @escaping (Error?) -> Void) {
         
         //handle the creation and config of new capture seesion
-        //1. create a capture session
+        
+        //START
+        
+        //MARK: 1. create a capture session
         func createCaptureSession() {
             self.captureSession = AVCaptureSession()
         }
         
-        //2.obtain and config capture devices
+        //MARK:2.obtain and config capture devices
         func configureCaptureDevices() throws {
             
             let session = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified)
@@ -133,14 +165,14 @@ extension CameraController {
             }
         }
         
-        //3.create inputs using capture devices
+        //MARK: 3.create input devices
         func configureDeviceInputs() throws {
             
             guard let captureSession = self.captureSession else {
                 throw CameraControllerError.captureSessionIsMissing
             }
             
-                
+            
             if let frontCamera = self.frontCamera {
                 self.frontCameraInput = try AVCaptureDeviceInput(device: frontCamera)
                 
@@ -163,21 +195,30 @@ extension CameraController {
             else { throw CameraControllerError.noCamerasAvailable }
             
         }
-        //4.config photo output object to process captured images
+        //MARK: 4.config video output
         func configurePhotoOutput() throws {
             
             guard let captureSession = self.captureSession else { throw CameraControllerError.captureSessionIsMissing }
             
-            self.photoOutput = AVCapturePhotoOutput()
-            self.photoOutput!.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.jpeg])], completionHandler: nil)
+            captureSession.sessionPreset = AVCaptureSession.Preset.high
             
-            if captureSession.canAddOutput(self.photoOutput!) {
-                captureSession.addOutput(self.photoOutput!)
+            //video output
+            videoOutput = AVCaptureMovieFileOutput()
+            videoOutput?.maxRecordedDuration = CMTime(seconds: 15.0, preferredTimescale: CMTimeScale())
+            
+            
+            
+            if captureSession.canAddOutput(self.videoOutput!) {
+                captureSession.addOutput(self.videoOutput!)
             }
+            
+            captureSession.commitConfiguration()
             
             captureSession.startRunning()
         }
         
+        
+        // END
         DispatchQueue(label: "prepare").sync {
             do {
                 createCaptureSession()
@@ -197,6 +238,8 @@ extension CameraController {
         
     }
 }
+
+//MARK: ENUMS
 
 extension CameraController {
     enum CameraControllerError: Swift.Error {

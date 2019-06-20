@@ -8,10 +8,11 @@
 
 import UIKit
 import AVFoundation
+import AVKit
 
 class RecordVideoViewController: UIViewController {
   
-    //MARK: UI VIEWS
+    //MARK: UI VIEW PROPERTIES
     
   let recordPreviewView:UIView = {
     let v = UIView()
@@ -22,7 +23,7 @@ class RecordVideoViewController: UIViewController {
   
   let recordButton:UIButton = {
     let button = UIButton()
-    button.setTitle("record", for: .normal)
+    button.setTitle("RRR", for: .normal)
     button.setTitleColor(.black, for: .normal)
     button.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
     button.backgroundColor = .white
@@ -32,7 +33,7 @@ class RecordVideoViewController: UIViewController {
   
   let cancleButton:UIButton = {
     let button = UIButton()
-    button.setTitle("cancle", for: .normal)
+    button.setTitle("CC", for: .normal)
     button.setTitleColor(.black, for: .normal)
     button.addTarget(self, action: #selector(cancleTapped), for: .touchUpInside)
     button.backgroundColor = .white
@@ -42,7 +43,7 @@ class RecordVideoViewController: UIViewController {
   
   let retakeVideoButton: UIButton = {
     let button = UIButton()
-    button.setTitle("retake", for: .normal)
+    button.setTitle("RT", for: .normal)
     button.setTitleColor(.black, for: .normal)
     button.addTarget(self, action: #selector(retakeButtonTapped), for: .touchUpInside)
     button.backgroundColor = .white
@@ -63,15 +64,15 @@ class RecordVideoViewController: UIViewController {
     //MARK: PROPERTIES
     
     let cameraController = CameraController()
+    var playerLayer: AVPlayerLayer?
+    var player: AVPlayer?
+    var isLoop: Bool = false
     
-    //MARK: VIEW DID LOAD
+    //MARK: ViewWDidLoad
   
   override func viewDidLoad() {
     super.viewDidLoad()
     setupViews()
-    
-
-    
     configureCameraController()
     
     
@@ -84,8 +85,21 @@ class RecordVideoViewController: UIViewController {
                 print("can not configure camera controller: \(error)")
             }
             try? self.cameraController.displayPreview(on: self.recordPreviewView)
-            
         }
+    }
+    
+    //MARK: VIDEO REVIEW
+    
+    func configureReview() {
+        let videoUrl = cameraController.fileURL
+        player = AVPlayer(url: videoUrl)
+        playerLayer = AVPlayerLayer(player: player)
+        playerLayer?.videoGravity = .resizeAspectFill
+        if let playerLayer = self.playerLayer {
+            view.layer.addSublayer(playerLayer)
+            playerLayer.frame = view.layer.frame
+        }
+        player?.play()
     }
     
     //MARK: SETUP VIEWS
@@ -134,10 +148,13 @@ class RecordVideoViewController: UIViewController {
   
   @objc func recordTapped(){
     print("recording")
+    cameraController.startRecording()
   }
   
   @objc func cancleTapped(){
-    print("cancle")
+    cameraController.stopRecording()
+    cameraController.removePreview()
+    configureReview()
   }
   
   @objc func retakeButtonTapped(){
