@@ -21,6 +21,13 @@ class MapViewController: UIViewController {
   let user2 = NearbyUser(username: "myley_cyrus", image: "miley-cyrus.jpg", coordinate: CLLocationCoordinate2D(latitude: 32.444311, longitude: -59.402225))
   let user3 = NearbyUser(username: "kawhi", image: "kawhi.jpg", coordinate: CLLocationCoordinate2D(latitude: 35.444311, longitude: -79.666666))
   
+  let navView: UIView = {
+    let v = UIView()
+    v.backgroundColor = .magenta
+    v.translatesAutoresizingMaskIntoConstraints = false
+    return v
+  }()
+  
   let mapView : MKMapView = {
     let mp = MKMapView()
     mp.mapType = MKMapType.standard
@@ -38,6 +45,16 @@ class MapViewController: UIViewController {
     b.setTitleColor(.black, for: .normal)
     b.translatesAutoresizingMaskIntoConstraints = false
     b.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
+    return b
+  }()
+  
+  let settingButton: UIButton = {
+    let b = UIButton()
+    b.setTitle("setting", for: .normal)
+    b.backgroundColor = .white
+    b.setTitleColor(.black, for: .normal)
+    b.translatesAutoresizingMaskIntoConstraints = false
+    b.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
     return b
   }()
   
@@ -77,10 +94,19 @@ class MapViewController: UIViewController {
     return sv
   }()
   
-  let tableView:UITableView = {
+  let messageTableView:UITableView = {
     let tb = UITableView()
     tb.translatesAutoresizingMaskIntoConstraints = false
+    tb.register(MessageTableViewCell.self, forCellReuseIdentifier: "messageCell")
     return tb
+  }()
+  
+  let contactsCollectionView:UICollectionView = {
+    let flowLayout = CustomFlowLayout()
+    let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+    cv.register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: "contactCell")
+    cv.translatesAutoresizingMaskIntoConstraints = false
+    return cv
   }()
   
   let centerView: UIView = {
@@ -115,19 +141,26 @@ class MapViewController: UIViewController {
   }
   
   func setupViews(){
+    self.view.addSubview(navView)
     self.view.addSubview(centerView)
     self.view.addSubview(leftView)
     self.view.addSubview(rightView)
     
     self.centerView.addSubview(mapView)
     self.view.addSubview(logoutButton)
+    self.view.addSubview(settingButton)
     self.view.addSubview(buttonStackView)
     self.buttonStackView.addArrangedSubview(contactButton)
     self.buttonStackView.addArrangedSubview(mapButton)
     self.buttonStackView.addArrangedSubview(meButton)
     
-    self.leftView.addSubview(tableView)
-    tableView.delegate = self
+    self.rightView.addSubview(messageTableView)
+    messageTableView.delegate = self
+    messageTableView.dataSource = self
+    
+    self.leftView.addSubview(contactsCollectionView)
+    contactsCollectionView.delegate = self
+    contactsCollectionView.dataSource = self
     
     mapView.addAnnotation(user1)
     mapView.addAnnotation(user2)
@@ -137,18 +170,23 @@ class MapViewController: UIViewController {
     rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
     
     NSLayoutConstraint.activate([
-      centerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
+      navView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
+      navView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
+      navView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
+      navView.heightAnchor.constraint(equalToConstant: 90),
+      
+      centerView.topAnchor.constraint(equalTo: self.navView.bottomAnchor, constant: 0),
       centerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
       centerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
       centerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
       
       leftViewTrailing,
-      leftView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 0),
+      leftView.topAnchor.constraint(equalTo: self.navView.bottomAnchor, constant: 0),
       leftView.heightAnchor.constraint(equalToConstant: self.view.bounds.height),
       leftView.widthAnchor.constraint(equalToConstant: self.view.bounds.width),
       
       rightViewLeading,
-      rightView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 0),
+      rightView.topAnchor.constraint(equalTo: self.navView.bottomAnchor, constant: 0),
       rightView.heightAnchor.constraint(equalToConstant: self.view.bounds.height),
       rightView.widthAnchor.constraint(equalToConstant: self.view.bounds.width),
       
@@ -158,9 +196,14 @@ class MapViewController: UIViewController {
       mapView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: 0),
       
       logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10),
-      logoutButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
+      logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
       logoutButton.heightAnchor.constraint(equalToConstant: 50),
       logoutButton.widthAnchor.constraint(equalToConstant: 50),
+      
+      settingButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10),
+      settingButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
+      settingButton.heightAnchor.constraint(equalToConstant: 50),
+      settingButton.widthAnchor.constraint(equalToConstant: 50),
       
       contactButton.heightAnchor.constraint(equalToConstant: 50),
       contactButton.widthAnchor.constraint(equalToConstant: 50),
@@ -176,10 +219,15 @@ class MapViewController: UIViewController {
       buttonStackView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
       buttonStackView.heightAnchor.constraint(equalToConstant: 50),
       
-      tableView.topAnchor.constraint(equalTo: self.leftView.topAnchor, constant: 0),
-      tableView.leadingAnchor.constraint(equalTo: self.leftView.leadingAnchor, constant: 0),
-      tableView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
-      tableView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
+      messageTableView.topAnchor.constraint(equalTo: self.rightView.topAnchor, constant: 0),
+      messageTableView.leadingAnchor.constraint(equalTo: self.rightView.leadingAnchor, constant: 0),
+      messageTableView.trailingAnchor.constraint(equalTo: self.rightView.trailingAnchor, constant: 0),
+      messageTableView.bottomAnchor.constraint(equalTo: self.rightView.bottomAnchor, constant: 0),
+      
+      contactsCollectionView.topAnchor.constraint(equalTo: self.leftView.topAnchor, constant: 0),
+      contactsCollectionView.leadingAnchor.constraint(equalTo: self.leftView.leadingAnchor, constant: 0),
+      contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
+      contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
       ])
   }
   
@@ -207,6 +255,11 @@ class MapViewController: UIViewController {
     }catch let err{
       print(err)
     }
+  }
+  
+  @objc func settingTapped(){
+    let settingsVC = SettingViewController()
+    self.present(settingsVC, animated: true, completion: nil)
   }
   
   func updateLocationToFirebase(){
@@ -313,7 +366,9 @@ extension MapViewController : MKMapViewDelegate {
 }
 
 extension MapViewController: UITableViewDelegate{
-  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return self.view.bounds.width
+  }
 }
 
 extension MapViewController: UITableViewDataSource{
@@ -322,8 +377,31 @@ extension MapViewController: UITableViewDataSource{
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? UITableViewCell(style: .default, reuseIdentifier: "cell")
-    cell.textLabel?.text = "hello"
+    let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
+    cell.nameLabel.text = "name"
+    cell.distanceLabel.text = "10km"
     return cell
+  }
+}
+
+extension MapViewController:UICollectionViewDelegate{
+
+}
+
+extension MapViewController: UICollectionViewDataSource{
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return 5
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "contactCell", for: indexPath) as! ContactsCollectionViewCell
+    cell.nameLabel.text = "name"
+    return cell
+  }
+}
+
+extension MapViewController:UICollectionViewDelegateFlowLayout{
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    return CGSize(width: (self.view.bounds.width - 40) / 4, height: (self.view.bounds.width - 40) / 4)
   }
 }
