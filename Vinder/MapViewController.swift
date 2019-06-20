@@ -3,6 +3,7 @@ import CoreLocation
 import MapKit
 import FirebaseDatabase
 import FirebaseAuth
+import AVKit
 
 class MapViewController: UIViewController {
   
@@ -17,9 +18,62 @@ class MapViewController: UIViewController {
   var leftViewTrailing :NSLayoutConstraint!
   var rightViewLeading: NSLayoutConstraint!
   
-  let user1 = NearbyUser(username: "adamck6302438", image: "Ray.jpg", coordinate: CLLocationCoordinate2D(latitude: 43.644311, longitude: -79.402225))
-  let user2 = NearbyUser(username: "myley_cyrus", image: "miley-cyrus.jpg", coordinate: CLLocationCoordinate2D(latitude: 32.444311, longitude: -59.402225))
-  let user3 = NearbyUser(username: "kawhi", image: "kawhi.jpg", coordinate: CLLocationCoordinate2D(latitude: 35.444311, longitude: -79.666666))
+  let user1 = NearbyUser(username: "adamck6302438", imageName: "Ray.jpg", coordinate: CLLocationCoordinate2D(latitude: 43.644311, longitude: -79.402225), gender:.female)
+  let user2 = NearbyUser(username: "myley_cyrus", imageName: "miley-cyrus.jpg", coordinate: CLLocationCoordinate2D(latitude: 32.444311, longitude: -59.402225), gender:.male)
+  let user3 = NearbyUser(username: "kawhi", imageName: "kawhi.jpg", coordinate: CLLocationCoordinate2D(latitude: 35.444311, longitude: -79.666666),gender:.male)
+  
+  var nearbyUsers : [NearbyUser] = []
+  var videoView : VideoView!
+  
+  let maleColor : UIColor = UIColor(red: 98, green: 98, blue: 247, alpha: 1)
+  let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
+  
+  let container : UIView = {
+    let v = UIView()
+    v.backgroundColor = .white
+    v.layer.cornerRadius = 20
+    v.isHidden = true
+    v.translatesAutoresizingMaskIntoConstraints = false
+    return v
+  }()
+  
+  let buttonContainer:UIView = {
+    let v = UIView()
+    v.backgroundColor = .blue
+    v.translatesAutoresizingMaskIntoConstraints = false
+    return v
+  }()
+  
+  let videoContainer:UIView = {
+    let v = UIView()
+    v.backgroundColor = .green
+    v.translatesAutoresizingMaskIntoConstraints = false
+    return v
+  }()
+  
+  let sendMessageButton:UIButton = {
+    let b = UIButton()
+    b.layer.cornerRadius = 0.5 * 50
+    b.clipsToBounds = true
+    b.backgroundColor = UIColor.yellow
+    b.imageView?.contentMode = .scaleAspectFit
+    b.setImage(UIImage(named: "message"), for: .normal)
+    b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
+    b.translatesAutoresizingMaskIntoConstraints = false
+    return b
+  }()
+  
+  let callButton:UIButton = {
+    let b = UIButton()
+    b.layer.cornerRadius = 0.5 * 50
+    b.clipsToBounds = true
+    b.backgroundColor = UIColor.red
+    b.setImage(UIImage(named: "call"), for: .normal)
+    b.imageView?.contentMode = .scaleAspectFit
+    b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
+    b.translatesAutoresizingMaskIntoConstraints = false
+    return b
+  }()
   
   let navView: UIView = {
     let v = UIView()
@@ -130,14 +184,26 @@ class MapViewController: UIViewController {
     return v
   }()
   
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     
     mapView.delegate = self
+    determineCurrentLocation()
+    
+    //set up map view
+    mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+    
+    mapView.addAnnotation(user1)
+    mapView.addAnnotation(user2)
+    mapView.addAnnotation(user3)
     
     setupViews()
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
     determineCurrentLocation()
+    self.view.sendSubviewToBack(mapView)
   }
   
   func setupViews(){
@@ -162,9 +228,11 @@ class MapViewController: UIViewController {
     contactsCollectionView.delegate = self
     contactsCollectionView.dataSource = self
     
-    mapView.addAnnotation(user1)
-    mapView.addAnnotation(user2)
-    mapView.addAnnotation(user3)
+    self.centerView.addSubview(container)
+    self.container.addSubview(buttonContainer)
+    self.container.addSubview(videoContainer)
+    self.buttonContainer.addSubview(callButton)
+    self.buttonContainer.addSubview(sendMessageButton)
     
     leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
     rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
@@ -195,8 +263,8 @@ class MapViewController: UIViewController {
       mapView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0),
       mapView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: 0),
       
-      logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10),
-      logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
+      logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 20),
+      logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
       logoutButton.heightAnchor.constraint(equalToConstant: 50),
       logoutButton.widthAnchor.constraint(equalToConstant: 50),
       
@@ -228,6 +296,31 @@ class MapViewController: UIViewController {
       contactsCollectionView.leadingAnchor.constraint(equalTo: self.leftView.leadingAnchor, constant: 0),
       contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
       contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
+      
+      container.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: 50),
+      container.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 20),
+      container.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -20),
+      container.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -200),
+      
+      buttonContainer.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -5),
+      buttonContainer.heightAnchor.constraint(equalToConstant: 80),
+      buttonContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 5),
+      buttonContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -5),
+      
+      videoContainer.topAnchor.constraint(equalTo: container.topAnchor, constant: 5),
+      videoContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 5),
+      videoContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -5),
+      videoContainer.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -5),
+      
+      callButton.heightAnchor.constraint(equalToConstant: 50),
+      callButton.widthAnchor.constraint(equalToConstant: 50),
+      callButton.trailingAnchor.constraint(equalTo: buttonContainer.trailingAnchor, constant: -50),
+      callButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
+      
+      sendMessageButton.heightAnchor.constraint(equalToConstant: 50),
+      sendMessageButton.widthAnchor.constraint(equalToConstant: 50),
+      sendMessageButton.leadingAnchor.constraint(equalTo: buttonContainer.leadingAnchor, constant: 50),
+      sendMessageButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
       ])
   }
   
@@ -284,7 +377,9 @@ class MapViewController: UIViewController {
       
     } else{
       leftViewTrailing.constant = self.view.bounds.width
-      self.view.layoutIfNeeded()
+      UIView.animate(withDuration: 0.2) {
+        self.view.layoutIfNeeded()
+      }
     }
   }
   
@@ -312,11 +407,52 @@ class MapViewController: UIViewController {
       })
     } else{
       rightViewLeading.constant = -self.view.bounds.width
-      self.view.layoutIfNeeded()
+      UIView.animate(withDuration: 0.3) {
+        self.view.layoutIfNeeded()
+      }
     }
   }
+  
+  
+  //MARK: Fetch nearby users
+  func fetchUsers(){
+    //TODO: network call to fetch nearby user locatino
+  }
+  
+  
+  func setUpVideoView(){
+    self.videoContainer.addSubview(videoView)
+    videoView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      videoView.topAnchor.constraint(equalTo: videoContainer.topAnchor),
+      videoView.leadingAnchor.constraint(equalTo: videoContainer.leadingAnchor),
+      videoView.trailingAnchor.constraint(equalTo: videoContainer.trailingAnchor),
+      videoView.bottomAnchor.constraint(equalTo: videoContainer.bottomAnchor)
+      ])
+    videoView.configure(url: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
+    videoView.isLoop = false
+    videoView.play()
+    print("play")
+  }
+  
+  //MARK: Handle user interaction
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    let touch = touches.first
+    guard let location = touch?.location(in: self.view) else { return }
+    if !container.frame.contains(location) && container.isHidden == false{
+      UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
+        self.container.alpha = 0
+      }, completion: nil)
+      self.container.isHidden = true
+    }else {
+      
+    }
+  }
+  
 }
 
+
+//MARK: CLLocationManagerDelegate
 extension MapViewController : CLLocationManagerDelegate {
   
   func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
@@ -340,30 +476,51 @@ extension MapViewController : CLLocationManagerDelegate {
     myAnnotation.title = "Current location"
     mapView.addAnnotation(myAnnotation)
   }
+  
 }
 
-
+//MARK: MKMapViewDelegate
 extension MapViewController : MKMapViewDelegate {
   
   func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
     guard let annotation = annotation as? NearbyUser else { return nil }
     
-    let identifier = "neaby user"
-    var view: MKMarkerAnnotationView
+    let identifier = "user"
+    var view: NearbyUserView
     
-    if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView{
+    if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? NearbyUserView{
       dequeuedView.annotation = annotation
       view = dequeuedView
     } else{
-      view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+      view = NearbyUserView(annotation: annotation, reuseIdentifier: identifier)
       view.canShowCallout = false
       view.calloutOffset = CGPoint(x: -5, y: 5)
       view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
     }
+    
+    view.layer.cornerRadius = view.frame.size.height/2
+    view.layer.borderColor = UIColor.white.cgColor
+    view.layer.masksToBounds = true
+    
+    //implement gender
+    //        if(view.annotation. == UserGender.male){
+    //            view.layer.borderColor = UIColor.blue.cgColor
+    //        }else{
+    //            view.layer.borderColor = UIColor.red.cgColor
+    //        }
+    
+    view.layer.borderWidth = 5
     return view
   }
   
+  func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+    container.isHidden = false
+    UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
+      self.container.alpha = 1
+    }, completion: nil)
+  }
 }
+  
 
 extension MapViewController: UITableViewDelegate{
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -385,7 +542,7 @@ extension MapViewController: UITableViewDataSource{
 }
 
 extension MapViewController:UICollectionViewDelegate{
-
+  
 }
 
 extension MapViewController: UICollectionViewDataSource{

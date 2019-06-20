@@ -15,12 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
   var window: UIWindow?
   
-  
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
     FirebaseApp.configure()
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
+
     let initialController = LoginViewController()
     let loginNav = UINavigationController()
     loginNav.viewControllers = [initialController]
@@ -31,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     } else{
       self.window?.rootViewController = loginNav
     }
+
     self.window?.makeKeyAndVisible()
     
     return true

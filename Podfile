@@ -9,7 +9,7 @@ target 'Vinder' do
 
 pod 'AgoraRtcEngine_iOS'
 pod 'Firebase/Core'
-pod 'FirebaseUI/Auth'
+pod 'Firebase/Auth'
 pod 'SwiftyJSON'
 pod 'Firebase/Analytics'
 pod 'Firebase/Database'

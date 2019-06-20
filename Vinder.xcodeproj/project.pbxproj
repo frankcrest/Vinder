@@ -24,6 +24,8 @@
 		E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */; };
 		E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */; };
 		E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F322BC313800AE8155 /* SettingViewController.swift */; };
+		E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F622BC3F0000AE8155 /* VideoView.swift */; };
+		E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */; };
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
 		EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */; };
@@ -50,6 +52,8 @@
 		E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		E97F74F322BC313800AE8155 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		E97F74F622BC3F0000AE8155 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbyUserView.swift; sourceTree = "<group>"; };
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -102,7 +106,9 @@
 			isa = PBXGroup;
 			children = (
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,
+				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
 				0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */,
+				E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */,
 				ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */,
 				EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */,
 				E935543622B9735F00CD7958 /* LoginViewController.swift */,
@@ -144,7 +150,6 @@
 				E935542E22B9735F00CD7958 /* Frameworks */,
 				E935542F22B9735F00CD7958 /* Resources */,
 				61F9D3E9819E3A7922AB5DE8 /* [CP] Embed Pods Frameworks */,
-				937EB0AD01B85C8B6B893934 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -246,23 +251,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Vinder/Pods-Vinder-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		937EB0AD01B85C8B6B893934 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Vinder/Pods-Vinder-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Vinder/Pods-Vinder-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Vinder/Pods-Vinder-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -281,7 +269,9 @@
 				E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */,
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
+				E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */,
 				0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */,
+				E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
 				E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */,
 				0D3E98D422BAA60200D02311 /* MapViewController.swift in Sources */,

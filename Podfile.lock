@@ -47,9 +47,6 @@ PODS:
     - FirebaseAuthInterop (~> 1.0)
     - FirebaseCore (~> 6.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseUI/Auth (7.0.0):
-    - Firebase/Auth (~> 6.0)
-    - GoogleUtilities/UserDefaults
   - GoogleAppMeasurement (6.0.1):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -86,10 +83,10 @@ PODS:
 DEPENDENCIES:
   - AgoraRtcEngine_iOS
   - Firebase/Analytics
+  - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
-  - FirebaseUI/Auth
   - SwiftyJSON
 
 SPEC REPOS:
@@ -103,7 +100,6 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseInstanceID
     - FirebaseStorage
-    - FirebaseUI
     - GoogleAppMeasurement
     - GoogleUtilities
     - GTMSessionFetcher
@@ -121,7 +117,6 @@ SPEC CHECKSUMS:
   FirebaseDatabase: f48e067716864be2b855cf716b927ef375d6cfa0
   FirebaseInstanceID: 27bed93a59b6685f5c3e0c028a878a764fd75c33
   FirebaseStorage: 926d41552072b9fee67aa645760f05f87b7ce604
-  FirebaseUI: aa1ffe07fad45c2e2271a8bfa429549ad260e77d
   GoogleAppMeasurement: 51d8d9ea48f0ca44484d29cfbdef976fbd4fc336
   GoogleUtilities: 84df567c76ca84f67b7bb40e769fdd4acc746a10
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
@@ -129,6 +124,6 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 7ad3ecc36b733e1774e3e7446c2f006b881b4797
+PODFILE CHECKSUM: 4537bd46b24481cf2e2012f956bfced3519dbe18
 
 COCOAPODS: 1.7.0
