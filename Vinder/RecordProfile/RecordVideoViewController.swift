@@ -100,7 +100,17 @@ class RecordVideoViewController: UIViewController {
             playerLayer.frame = view.layer.frame
         }
         player?.play()
+        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
     }
+    
+    @objc func playerItemDidReachEnd(notification: Notification) {
+        if let playerItem = notification.object as? AVPlayerItem {
+            playerItem.seek(to: CMTime.zero, completionHandler: nil)
+            player?.play()
+        }
+    }
+    
+    
     
     //MARK: SETUP VIEWS
   
@@ -153,8 +163,12 @@ class RecordVideoViewController: UIViewController {
   
   @objc func cancleTapped(){
     cameraController.stopRecording()
-    cameraController.removePreview()
-    configureReview()
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        self.cameraController.removePreview()
+        self.configureReview()
+    }
+    
   }
   
   @objc func retakeButtonTapped(){

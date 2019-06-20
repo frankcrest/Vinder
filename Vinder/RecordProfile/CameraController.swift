@@ -20,9 +20,8 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
     var currentCameraPosition: CameraPosition?
     var frontCameraInput: AVCaptureDeviceInput?
     var rearCameraInput: AVCaptureDeviceInput?
-//    var photoOutput: AVCaptureMovieFileOutput?
     var previewLayer: AVCaptureVideoPreviewLayer?
-
+    var audioInput: AVCaptureDevice?
     var videoOutput: AVCaptureMovieFileOutput?
     var fileURL: URL = {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -114,12 +113,18 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
         videoOutput?.stopRecording()
     }
     
+    func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
+        // show progress bar ... 
+    }
+    
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
         guard error == nil else {
             print("can not save: \(String(describing: error))")
             return
         }
         UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
+        
+        
     }
     
     
@@ -145,7 +150,7 @@ extension CameraController {
         
         //MARK:2.obtain and config capture devices
         func configureCaptureDevices() throws {
-            
+            //get video devices
             let session = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified)
             let cameras = (session.devices.compactMap( { $0} ))
             guard !cameras.isEmpty else {
@@ -163,6 +168,9 @@ extension CameraController {
                     camera.unlockForConfiguration()
                 }
             }
+            
+            // get audio device
+            audioInput = AVCaptureDevice.default(for: AVMediaType.audio)
         }
         
         //MARK: 3.create input devices
@@ -171,6 +179,8 @@ extension CameraController {
             guard let captureSession = self.captureSession else {
                 throw CameraControllerError.captureSessionIsMissing
             }
+            
+            try captureSession.addInput(AVCaptureDeviceInput(device: audioInput!))
             
             
             if let frontCamera = self.frontCamera {
@@ -204,7 +214,7 @@ extension CameraController {
             
             //video output
             videoOutput = AVCaptureMovieFileOutput()
-            videoOutput?.maxRecordedDuration = CMTime(seconds: 15.0, preferredTimescale: CMTimeScale())
+            videoOutput?.maxRecordedDuration = CMTime(seconds: 15, preferredTimescale: 1)
             
             
             
