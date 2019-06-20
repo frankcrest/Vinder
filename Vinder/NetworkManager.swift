@@ -10,7 +10,6 @@ import Foundation
 
 class NetworkManager {
     
-    
     func fetchJokes(completion: @escaping (Data) -> (Void)) {
         
         let url = URL(string: "https://icanhazdadjoke.com/")

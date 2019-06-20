@@ -11,10 +11,12 @@ import FirebaseAuth
 
 class LoginFormViewController: UIViewController,UITextFieldDelegate {
   
-  let usernameLabel: UILabel = {
+  let ud = UserDefaults.standard
+  
+  let emailLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
-    label.text = "Username"
+    label.text = "Email"
     label.textColor = .black
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
@@ -31,7 +33,7 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
   
   let emailTextField: UITextField = {
     let tf = UITextField()
-    tf.placeholder = "username"
+    tf.placeholder = "email"
     tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
@@ -42,6 +44,7 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     tf.placeholder = "password"
     tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
+    tf.isSecureTextEntry = true
     return tf
   }()
   
@@ -62,9 +65,13 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     setupViews()
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    emailTextField.text = ud.string(forKey: "email") ?? ""
+  }
+  
   func setupViews(){
     self.view.backgroundColor = .white
-    self.view.addSubview(usernameLabel)
+    self.view.addSubview(emailLabel)
     self.view.addSubview(passwordLabel)
     self.view.addSubview(emailTextField)
     self.view.addSubview(passwordTextfield)
@@ -75,13 +82,13 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     self.navigationController?.navigationBar.isTranslucent = true
     
     NSLayoutConstraint.activate([
-      usernameLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -200),
-      usernameLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      usernameLabel.widthAnchor.constraint(equalToConstant: 250),
-      usernameLabel.heightAnchor.constraint(equalToConstant: 20),
+      emailLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -200),
+      emailLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
+      emailLabel.widthAnchor.constraint(equalToConstant: 250),
+      emailLabel.heightAnchor.constraint(equalToConstant: 20),
       
       emailTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      emailTextField.topAnchor.constraint(equalTo: self.usernameLabel.bottomAnchor, constant: 8),
+      emailTextField.topAnchor.constraint(equalTo: self.emailLabel.bottomAnchor, constant: 8),
       emailTextField.heightAnchor.constraint(equalToConstant: 20),
       emailTextField.widthAnchor.constraint(equalToConstant: 250),
       
@@ -123,7 +130,12 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
         print(error)
         return
       }
-      //segue to map
+      self.ud.set(self.emailTextField.text, forKey: "email")
+      self.emailTextField.text = ""
+      self.passwordTextfield.text = ""
+      
+      let mapviewController = MapViewController()
+      self.present(mapviewController, animated: true, completion: nil)
     }
   }
   

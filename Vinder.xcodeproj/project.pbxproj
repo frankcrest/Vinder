@@ -20,6 +20,10 @@
 		E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544822B99B3C00CD7958 /* LoginFormViewController.swift */; };
 		E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */; };
 		E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935545022BAA57900CD7958 /* RecordVideoViewController.swift */; };
+		E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */; };
+		E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */; };
+		E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */; };
+		E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F322BC313800AE8155 /* SettingViewController.swift */; };
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
 		EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */; };
@@ -42,6 +46,10 @@
 		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
 		E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVideoViewController.swift; sourceTree = "<group>"; };
 		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVideoViewController.swift; sourceTree = "<group>"; };
+		E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
+		E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
+		E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
+		E97F74F322BC313800AE8155 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -94,9 +102,6 @@
 			isa = PBXGroup;
 			children = (
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,
-				E935543622B9735F00CD7958 /* ViewController.swift */,
-				E935543822B9735F00CD7958 /* Main.storyboard */,
-				0D3E98D322BAA60200D02311 /* MapViewController.swift */,
 				0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */,
 				ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */,
 				EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */,
@@ -105,6 +110,11 @@
 				E935544622B987BF00CD7958 /* SignUpViewController.swift */,
 				E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */,
 				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
+				0D3E98D322BAA60200D02311 /* MapViewController.swift */,
+				E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */,
+				E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */,
+				E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */,
+				E97F74F322BC313800AE8155 /* SettingViewController.swift */,
 				E935543B22B9736000CD7958 /* Assets.xcassets */,
 				E935543D22B9736000CD7958 /* LaunchScreen.storyboard */,
 				ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */,
@@ -263,13 +273,17 @@
 				EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */,
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
+				E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */,
 				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
+				E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */,
 				E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */,
 				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
+				E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */,
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
+				E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */,
 				0D3E98D422BAA60200D02311 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

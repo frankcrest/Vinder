@@ -138,7 +138,8 @@ class RecordVideoViewController: UIViewController {
           print(error)
           return
         }
-        //segue to mapview
+        let mapViewVC = MapViewController()
+        self.present(mapViewVC, animated: true, completion: nil)
       })
     }
   }
