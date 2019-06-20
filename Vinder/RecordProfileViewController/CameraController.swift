@@ -23,6 +23,7 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
     var previewLayer: AVCaptureVideoPreviewLayer?
     var audioInput: AVCaptureDevice?
     var videoOutput: AVCaptureMovieFileOutput?
+    
     var fileURL: URL = {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let fileURL = paths[0].appendingPathComponent("profile.mov")
@@ -31,7 +32,7 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
     }()
     
     
-    //MARK: PREVIEW LAYER
+    //MARK: DISPLAY PREVIEW LAYER
     func displayPreview(on view: UIView) throws {
         
         guard let captureSession = self.captureSession, captureSession.isRunning else {
@@ -44,7 +45,6 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
         
         view.layer.insertSublayer(self.previewLayer!, at: 0)
         self.previewLayer?.frame = view.frame
-        
     }
     
     func removePreview() {
@@ -212,9 +212,7 @@ extension CameraController {
             
             captureSession.sessionPreset = AVCaptureSession.Preset.high
             
-            //video output
             videoOutput = AVCaptureMovieFileOutput()
-            videoOutput?.maxRecordedDuration = CMTime(seconds: 15, preferredTimescale: 1)
             
             
             

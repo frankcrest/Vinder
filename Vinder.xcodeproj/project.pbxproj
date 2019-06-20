@@ -16,6 +16,8 @@
 		E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544822B99B3C00CD7958 /* LoginFormViewController.swift */; };
 		E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */; };
 		E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935545022BAA57900CD7958 /* RecordVideoViewController.swift */; };
+		ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE84122BBF89F0046E35C /* ButtonView.swift */; };
+		ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86522BC1F330046E35C /* RecordButtonView.swift */; };
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
 		EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */; };
@@ -35,6 +37,8 @@
 		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
 		E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVideoViewController.swift; sourceTree = "<group>"; };
 		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVideoViewController.swift; sourceTree = "<group>"; };
+		ED3BE84122BBF89F0046E35C /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		ED3BE86522BC1F330046E35C /* RecordButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButtonView.swift; sourceTree = "<group>"; };
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -90,7 +94,7 @@
 				E935544622B987BF00CD7958 /* SignUpViewController.swift */,
 				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
 				E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */,
-				EDF4476622BAD6130048BAE2 /* RecordProfile */,
+				EDF4476622BAD6130048BAE2 /* RecordProfileViewController */,
 				E935543B22B9736000CD7958 /* Assets.xcassets */,
 				E935543D22B9736000CD7958 /* LaunchScreen.storyboard */,
 				ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */,
@@ -99,13 +103,15 @@
 			path = Vinder;
 			sourceTree = "<group>";
 		};
-		EDF4476622BAD6130048BAE2 /* RecordProfile */ = {
+		EDF4476622BAD6130048BAE2 /* RecordProfileViewController */ = {
 			isa = PBXGroup;
 			children = (
 				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
 				EDF4476222BABFBA0048BAE2 /* CameraController.swift */,
+				ED3BE86522BC1F330046E35C /* RecordButtonView.swift */,
+				ED3BE84122BBF89F0046E35C /* ButtonView.swift */,
 			);
-			path = RecordProfile;
+			path = RecordProfileViewController;
 			sourceTree = "<group>";
 		};
 		F2E6C00A1AF2E58EEC06126B /* Pods */ = {
@@ -256,7 +262,9 @@
 				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
 				EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */,
 				E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */,
+				ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */,
 				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
+				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,

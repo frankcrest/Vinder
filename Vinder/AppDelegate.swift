@@ -19,9 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     FirebaseApp.configure()
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
-    let initialController = LoginViewController()
+//    let initialController = LoginViewController()
+    let initialController = VideoViewController()
     let nav = UINavigationController()
     nav.viewControllers = [initialController]
+
     self.window?.rootViewController = nav
     self.window?.makeKeyAndVisible()
     
