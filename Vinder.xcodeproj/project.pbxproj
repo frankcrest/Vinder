@@ -26,9 +26,6 @@
 		E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F322BC313800AE8155 /* SettingViewController.swift */; };
 		E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F622BC3F0000AE8155 /* VideoView.swift */; };
 		E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */; };
-		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
-		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
-		EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */; };
 		ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE84122BBF89F0046E35C /* ButtonView.swift */; };
 		ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86522BC1F330046E35C /* RecordButtonView.swift */; };
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
@@ -60,9 +57,6 @@
 		E97F74F322BC313800AE8155 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		E97F74F622BC3F0000AE8155 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbyUserView.swift; sourceTree = "<group>"; };
-		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
-		EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		ED3BE84122BBF89F0046E35C /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
 		ED3BE86522BC1F330046E35C /* RecordButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButtonView.swift; sourceTree = "<group>"; };
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -127,12 +121,12 @@
 				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
 				E935544622B987BF00CD7958 /* SignUpViewController.swift */,
 				E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */,
-				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
 				0D3E98D322BAA60200D02311 /* MapViewController.swift */,
 				E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */,
 				E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */,
 				E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */,
 				E97F74F322BC313800AE8155 /* SettingViewController.swift */,
+				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
 				EDF4476622BAD6130048BAE2 /* RecordProfileViewController */,
 				E935543B22B9736000CD7958 /* Assets.xcassets */,
 				E935543D22B9736000CD7958 /* LaunchScreen.storyboard */,
@@ -145,7 +139,6 @@
 		EDF4476622BAD6130048BAE2 /* RecordProfileViewController */ = {
 			isa = PBXGroup;
 			children = (
-				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
 				ED3BE86522BC1F330046E35C /* RecordButtonView.swift */,
 				ED3BE84122BBF89F0046E35C /* ButtonView.swift */,
 				EDF4476222BABFBA0048BAE2 /* CameraController.swift */,
@@ -441,7 +434,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WPKBU3MB67;
+				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Vinder/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -461,7 +454,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WPKBU3MB67;
+				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Vinder/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
