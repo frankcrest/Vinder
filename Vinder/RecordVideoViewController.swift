@@ -16,7 +16,8 @@ import FirebaseDatabase
 class RecordVideoViewController: UIViewController {
     
     //MARK: UI VIEW PROPERTIES
-    
+    let buttonView = ButtonView()
+    let tutorialView = TutorialView()
     let recordPreviewView:UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -30,20 +31,20 @@ class RecordVideoViewController: UIViewController {
     
     var ref = Database.database().reference()
     let ud = UserDefaults.standard
+    
     let cameraController = CameraController()
-    var buttonView = ButtonView()
     var playerLayer: AVPlayerLayer?
     var player: AVPlayer?
-    
+    var isTutorialMode = true
     //MARK: ViewWDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         cameraController.startAnimationDelegate = self
         setupViews()
         configureCameraController()
         buttonView.recordButtonView.videoHandlerDelegate = self
-        
         
     }
     //MARK: CAMERA CONTROLLER
@@ -57,10 +58,7 @@ class RecordVideoViewController: UIViewController {
         }
     }
     
-    
-    
-    
-    
+
     //MARK: SETUP VIEWS
     
     func setupViews(){
@@ -106,7 +104,7 @@ class RecordVideoViewController: UIViewController {
     @objc func backButton(_ sender: UIButton) {
         
         if sender.titleLabel?.text == "back" {
-            
+            self.navigationController?.popViewController(animated: true)
         }
         
         if sender.titleLabel?.text == "retake" {
@@ -115,6 +113,7 @@ class RecordVideoViewController: UIViewController {
             player = nil
             self.playerLayer?.removeFromSuperlayer()
             self.configureCameraController()
+            buttonView.switchCameraButton.isHidden = false
         }
     }
     
@@ -173,6 +172,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
     }
     
     func stopRecording(){
+        buttonView.switchCameraButton.isHidden = true
         cameraController.stopRecording()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.cameraController.removePreview()
