@@ -153,7 +153,7 @@ extension VideoViewController: AgoraRtcEngineDelegate {
     private func setupVideo() {
         agoraKit.enableAudio()
         agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension1920x1080, frameRate: .fps30, bitrate: AgoraVideoBitrateStandard, orientationMode: .adaptative))
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension1280x720, frameRate: .fps30, bitrate: AgoraVideoBitrateStandard, orientationMode: .adaptative))
     }
     
     private func setupLocalVideoCanvas() {

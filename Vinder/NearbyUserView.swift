@@ -10,6 +10,8 @@ import UIKit
 import MapKit
 
 class NearbyUserView: MKAnnotationView {
+    
+    var videoURL : String!
 
     override var annotation : MKAnnotation? {
         willSet{
@@ -17,7 +19,7 @@ class NearbyUserView: MKAnnotationView {
             canShowCallout = false
             calloutOffset = CGPoint(x: -5, y: 5)
             rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            
+            videoURL = nearbyUser.introURL
             if let imageName = nearbyUser.imageName {
                 image = UIImage(named: imageName)?.scaleImage(toSize: CGSize.init(width: 25, height: 25))
             } else {
