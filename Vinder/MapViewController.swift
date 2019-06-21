@@ -35,53 +35,7 @@ class MapViewController: UIViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-    //
-    //  let container : UIView = {
-    //    let v = UIView()
-    //    v.backgroundColor = .white
-    //    v.layer.cornerRadius = 20
-    //    v.isHidden = true
-    //    v.translatesAutoresizingMaskIntoConstraints = false
-    //    return v
-    //  }()
-    
-    //  let buttonContainer:UIView = {
-    //    let v = UIView()
-    //    v.backgroundColor = .blue
-    //    v.translatesAutoresizingMaskIntoConstraints = false
-    //    return v
-    //  }()
-    
-    //  let videoContainer:UIView = {
-    //    let v = UIView()
-    //    v.backgroundColor = .green
-    //    v.translatesAutoresizingMaskIntoConstraints = false
-    //    return v
-    //  }()
-    
-    //  let sendMessageButton:UIButton = {
-    //    let b = UIButton()
-    //    b.layer.cornerRadius = 0.5 * 50
-    //    b.clipsToBounds = true
-    //    b.backgroundColor = UIColor.yellow
-    //    b.imageView?.contentMode = .scaleAspectFit
-    //    b.setImage(UIImage(named: "message"), for: .normal)
-    //    b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
-    //    b.translatesAutoresizingMaskIntoConstraints = false
-    //    return b
-    //  }()
-    //
-    //  let callButton:UIButton = {
-    //    let b = UIButton()
-    //    b.layer.cornerRadius = 0.5 * 50
-    //    b.clipsToBounds = true
-    //    b.backgroundColor = UIColor.red
-    //    b.setImage(UIImage(named: "call"), for: .normal)
-    //    b.imageView?.contentMode = .scaleAspectFit
-    //    b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
-    //    b.translatesAutoresizingMaskIntoConstraints = false
-    //    return b
-    //  }()
+
     
     let navView: UIView = {
         let v = UIView()
@@ -237,10 +191,7 @@ class MapViewController: UIViewController {
         contactsCollectionView.dataSource = self
         
         self.centerView.addSubview(videoView)
-        //    self.container.addSubview(buttonContainer)
-        //    self.container.addSubview(videoContainer)
-        //    self.buttonContainer.addSubview(callButton)
-        //    self.buttonContainer.addSubview(sendMessageButton)
+
         
         leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
         rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
@@ -309,26 +260,7 @@ class MapViewController: UIViewController {
             videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 20),
             videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -20),
             videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -200),
-            //
-            //      buttonContainer.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -5),
-            //      buttonContainer.heightAnchor.constraint(equalToConstant: 80),
-            //      buttonContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 5),
-            //      buttonContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -5),
-            //
-            //      videoContainer.topAnchor.constraint(equalTo: container.topAnchor, constant: 5),
-            //      videoContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 5),
-            //      videoContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -5),
-            //      videoContainer.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -5),
-            //
-            //      callButton.heightAnchor.constraint(equalToConstant: 50),
-            //      callButton.widthAnchor.constraint(equalToConstant: 50),
-            //      callButton.trailingAnchor.constraint(equalTo: buttonContainer.trailingAnchor, constant: -50),
-            //      callButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
-            //
-            //      sendMessageButton.heightAnchor.constraint(equalToConstant: 50),
-            //      sendMessageButton.widthAnchor.constraint(equalToConstant: 50),
-            //      sendMessageButton.leadingAnchor.constraint(equalTo: buttonContainer.leadingAnchor, constant: 50),
-            //      sendMessageButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
+
             ])
     }
     
