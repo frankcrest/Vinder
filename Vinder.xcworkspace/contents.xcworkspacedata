@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-      location = "group:../../../Downloads/sample-gpx.gpx">
-   </FileRef>
    <FileRef
       location = "group:Vinder.xcodeproj">
    </FileRef>

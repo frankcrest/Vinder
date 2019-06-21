@@ -287,19 +287,13 @@
 				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
 				E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */,
 				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
-<<<<<<< HEAD
 				E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */,
-=======
 				EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */,
->>>>>>> apibranch
 				E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */,
 				ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */,
 				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
-<<<<<<< HEAD
 				E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */,
-=======
 				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
->>>>>>> apibranch
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */,
