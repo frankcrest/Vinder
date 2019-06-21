@@ -13,12 +13,12 @@ class NearbyUserView: MKAnnotationView {
 
     override var annotation : MKAnnotation? {
         willSet{
-            guard let nearbyUser = newValue as? NearbyUser else {return}
+            guard let user = newValue as? User else {return}
             canShowCallout = false
             calloutOffset = CGPoint(x: -5, y: 5)
             rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             
-            if let imageName = nearbyUser.imageName {
+            if let imageName = user.imageUrl {
                 image = UIImage(named: imageName)?.scaleImage(toSize: CGSize.init(width: 25, height: 25))
             } else {
                 image = nil

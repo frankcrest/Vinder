@@ -133,7 +133,7 @@ class RecordVideoViewController: UIViewController {
         return
       }
       guard let uid = user?.user.uid else {return}
-      self.ref.child("users").child(uid).setValue((["email":email, "username":username, "name":name]), withCompletionBlock: { (error, ref) in
+      self.ref.child("users").child(uid).setValue((["uid":uid,"email":email, "username":username, "name":name]), withCompletionBlock: { (error, ref) in
         if let error = error{
           print(error)
           return
