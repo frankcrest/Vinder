@@ -31,14 +31,13 @@
 	<string>Do you allow this app to know your current location?</string>
 	<key>NSLocationUsageDescription</key>
 	<string>We need your location to find other users.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Need to use microphone to chat</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need your location to find other users.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need to use microphone to chat</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
-		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
