@@ -14,7 +14,7 @@ protocol VideoHandlerDelegate: AnyObject {
 }
 
 class RecordButtonView: UIView, CAAnimationDelegate {
- 
+    
     
     private let circleLayer = CAShapeLayer()
     private let trackLayer = CAShapeLayer()
@@ -29,6 +29,7 @@ class RecordButtonView: UIView, CAAnimationDelegate {
         super.init(coder: coder)
         setupView()
     }
+    
     
     func setupView()  {
         
@@ -59,7 +60,7 @@ class RecordButtonView: UIView, CAAnimationDelegate {
         circleLayer.frame = self.bounds
         circleLayer.path = circularPath.cgPath
         circleLayer.strokeColor = UIColor.red.cgColor
-        circleLayer.lineWidth = 10
+        circleLayer.lineWidth = 8
         circleLayer.fillColor = UIColor.clear.cgColor
         circleLayer.lineCap = CAShapeLayerLineCap.round
         circleLayer.strokeEnd = 0
@@ -67,9 +68,19 @@ class RecordButtonView: UIView, CAAnimationDelegate {
         trackLayer.frame = self.bounds
         trackLayer.path = circularPath.cgPath
         trackLayer.strokeColor = UIColor.darkGray.cgColor
-        trackLayer.lineWidth = 10
+        trackLayer.lineWidth = 8
         trackLayer.fillColor = UIColor.clear.cgColor
         
+    }
+    
+    func hideCircleBar() {
+        circleLayer.isHidden = true
+        trackLayer.isHidden = true
+    }
+    
+    func showCircleBar() {
+        circleLayer.isHidden = false
+        trackLayer.isHidden = false
     }
     
     

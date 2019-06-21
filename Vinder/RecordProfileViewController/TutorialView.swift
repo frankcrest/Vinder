@@ -12,14 +12,17 @@ class TutorialView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupViews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setupViews()
     }
     
     override func layoutSubviews() {
-        
+        super.layoutSubviews()
+        setupStackView()
     }
     
     let promptLabel : UILabel = {
@@ -37,7 +40,6 @@ class TutorialView: UIView {
         button.setTitle("Replay", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(replayTapped), for: .touchUpInside)
         return button
     }()
     
@@ -46,48 +48,51 @@ class TutorialView: UIView {
         button.setTitle("GOT IT!", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(gotItTapped), for: .touchUpInside)
         return button
     }()
     
+     let stackView = UIStackView()
+    
     func setupViews(){
+        translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .darkGray
+        stackView.addArrangedSubview(replayButton)
+        stackView.addArrangedSubview(gotItButton)
+        addSubview(promptLabel)
+        addSubview(stackView)
+
+       setupStackView()
+
         
-        self.addSubview(promptLabel)
-        self.addSubview(replayButton)
-        self.addSubview(gotItButton)
         
         NSLayoutConstraint.activate([
-            
+
             promptLabel.topAnchor.constraint(equalTo: self.topAnchor),
             promptLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
             promptLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
             promptLabel.heightAnchor.constraint(equalToConstant: 100),
-            
-            replayButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            replayButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
-            replayButton.heightAnchor.constraint(equalToConstant: 20),
-            replayButton.widthAnchor.constraint(equalToConstant: 100),
-            
-            gotItButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            gotItButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
-            gotItButton.heightAnchor.constraint(equalToConstant: 20),
-            gotItButton.widthAnchor.constraint(equalToConstant: 100),
-            
+
             ])
     }
     
-    
-    @objc func gotItTapped() {
+    func setupStackView() {
         
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = 20
         
+        NSLayoutConstraint.activate([
+            
+            stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -44),
+            stackView.heightAnchor.constraint(equalToConstant: 44),
+            stackView.widthAnchor.constraint(equalTo: widthAnchor)
+            //problem here
+            
+            ])
     }
-    
-    @objc func replayTapped() {
-        
-    }
-    
-    
-    
-    
+
     
 }

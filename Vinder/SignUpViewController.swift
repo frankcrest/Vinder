@@ -174,6 +174,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   
   @objc func signUpTapped(){
     let recordProfileVideoController = RecordVideoViewController()
+    recordProfileVideoController.isTutorialMode = true
     self.navigationController?.pushViewController(recordProfileVideoController, animated: true)
     
     ud.set(emailTextfield.text, forKey: "email")
