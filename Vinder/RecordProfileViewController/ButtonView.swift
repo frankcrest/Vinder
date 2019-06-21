@@ -27,7 +27,8 @@ class ButtonView: UIStackView {
     
     var backButton: UIButton!
     var recordButtonView: RecordButtonView!
-    var spaceView: UIView!
+    var switchButtonView: UIView!
+    var switchCameraButton: UIButton!
     var didFinishRecording: Bool = false
     
     
@@ -51,34 +52,45 @@ class ButtonView: UIStackView {
             recordButtonView = RecordButtonView()
         }
         
-        func spaccViewConfig() {
-            spaceView = UIView()
-            spaceView.translatesAutoresizingMaskIntoConstraints = false
-            spaceView.backgroundColor = .clear
+        func switchButtonViewConfig() {
+            switchButtonView = UIView()
+            switchButtonView.translatesAutoresizingMaskIntoConstraints = false
+            switchButtonView.backgroundColor = .clear
+            
+            switchCameraButton = UIButton()
+            switchCameraButton.translatesAutoresizingMaskIntoConstraints = false
+            switchCameraButton.setTitle("switch", for: .normal)
+            switchCameraButton.setTitleColor(.white, for: .normal)
+            
+            switchButtonView.addSubview(switchCameraButton)
+            NSLayoutConstraint.activate([
+                switchCameraButton.centerYAnchor.constraint(equalTo: switchButtonView.centerYAnchor),
+                switchCameraButton.trailingAnchor.constraint(equalTo: switchButtonView.trailingAnchor, constant: -20)
+                ])
+            
         }
         
         backButtonConfig()
         recordButtonConfig()
-        spaccViewConfig()
+        switchButtonViewConfig()
         
         self.addArrangedSubview(backButton)
         self.addArrangedSubview(recordButtonView)
-        self.addArrangedSubview(spaceView)
+        self.addArrangedSubview(switchButtonView)
         self.axis = .horizontal
         self.alignment = .fill
         self.distribution = .fillEqually
         self.spacing = 8.0
-//        if !didFinishRecording {
-            recordButtonView.setupCircleProgressBar()
-//        }
-            }
-    
+        //        if !didFinishRecording {
+        recordButtonView.setupCircleProgressBar()
+        //        }
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-//        if !didFinishRecording {
-            recordButtonView.setupCircleProgressBar()
-//        }
+        //        if !didFinishRecording {
+        recordButtonView.setupCircleProgressBar()
+        //        }
         
     }
     

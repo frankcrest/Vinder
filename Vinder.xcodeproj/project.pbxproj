@@ -107,9 +107,9 @@
 			isa = PBXGroup;
 			children = (
 				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
-				EDF4476222BABFBA0048BAE2 /* CameraController.swift */,
 				ED3BE86522BC1F330046E35C /* RecordButtonView.swift */,
 				ED3BE84122BBF89F0046E35C /* ButtonView.swift */,
+				EDF4476222BABFBA0048BAE2 /* CameraController.swift */,
 			);
 			path = RecordProfileViewController;
 			sourceTree = "<group>";

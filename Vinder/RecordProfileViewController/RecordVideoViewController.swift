@@ -22,14 +22,6 @@ class RecordVideoViewController: UIViewController {
         return view
     }()
     
-    var switchCameraButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("switch", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        return button
-    }()
-    
     
     //MARK: PROPERTIES
     
@@ -42,13 +34,14 @@ class RecordVideoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        cameraController.startAnimationDelegate = self
         setupViews()
         configureCameraController()
         buttonView.recordButtonView.videoHandlerDelegate = self
         
         
     }
-    //MARK: CAMERACONTROLLER
+    //MARK: CAMERA CONTROLLER
     
     func configureCameraController() {
         cameraController.prepare { (error) in
@@ -69,9 +62,8 @@ class RecordVideoViewController: UIViewController {
         
         view.addSubview(recordPreviewView)
         view.addSubview(buttonView)
-        view.addSubview(switchCameraButton)
         
-        switchCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
+        buttonView.switchCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
         buttonView.backButton.addTarget(self, action: #selector(backButton(_:)), for: .touchUpInside)
         
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -81,13 +73,10 @@ class RecordVideoViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             
-            switchCameraButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 44),
-            switchCameraButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
             buttonView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -44),
+            buttonView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.frame.height * 1/12),
             buttonView.widthAnchor.constraint(equalToConstant: view.frame.width),
-            buttonView.heightAnchor.constraint(equalToConstant: 100),
+            buttonView.heightAnchor.constraint(equalToConstant: view.frame.height * 1/12),
             
             recordPreviewView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
             recordPreviewView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
@@ -108,6 +97,8 @@ class RecordVideoViewController: UIViewController {
         }
     }
     
+
+    
     @objc func backButton(_ sender: UIButton) {
         
         if sender.titleLabel?.text == "back" {
@@ -127,13 +118,13 @@ class RecordVideoViewController: UIViewController {
 
 //MARK: VIDEO RELATED
 
-extension RecordVideoViewController: VideoHandlerDelegate {
+extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegate {
     
     //MARK: VIDEO REVIEW
     
     func configureReview() {
         let videoUrl = cameraController.fileURL
-        player = AVPlayer(url: videoUrl)
+        player = AVPlayer(url: videoUrl)                    
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.videoGravity = .resizeAspectFill
         if let playerLayer = self.playerLayer {
@@ -163,6 +154,11 @@ extension RecordVideoViewController: VideoHandlerDelegate {
             self.buttonView.backButton.setTitle("retake", for: .normal)
         }
     }
+    
+    func startAnimation() {
+        buttonView.recordButtonView.startAnimation()
+    }
+    
     
     
     

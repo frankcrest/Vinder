@@ -10,10 +10,14 @@ import Foundation
 import AVFoundation
 import UIKit
 
+protocol StartAnimationDelegate: AnyObject {
+    func startAnimation()
+}
+
 class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
 
     //MARK: PROPERTIES
-    
+    var startAnimationDelegate: StartAnimationDelegate?
     var captureSession: AVCaptureSession?
     var frontCamera: AVCaptureDevice?
     var rearCamera: AVCaptureDevice?
@@ -60,7 +64,8 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
         }
         
         func switchToFront() throws {
-            guard let inputs = captureSession.inputs as? [AVCaptureInput], let rearCameraInput = self.rearCameraInput, inputs.contains(rearCameraInput), let frontCamera = self.frontCamera else {
+            let inputs = captureSession.inputs
+            guard let rearCameraInput = self.rearCameraInput, inputs.contains(rearCameraInput), let frontCamera = self.frontCamera else {
                 throw CameraControllerError.invalidOperation
             }
             
@@ -76,7 +81,8 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
         }
         
         func switchToRear() throws {
-            guard let inputs = captureSession.inputs as? [AVCaptureInput], let frontCameraInput = self.frontCameraInput, inputs.contains(frontCameraInput), let rearCamera = self.rearCamera else {
+            let inputs = captureSession.inputs
+            guard let frontCameraInput = self.frontCameraInput, inputs.contains(frontCameraInput), let rearCamera = self.rearCamera else {
                 throw CameraControllerError.invalidOperation
             }
             
@@ -101,7 +107,7 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
         captureSession.commitConfiguration()
     }
     
-    //MARK: RECORD AND SAVE VIDEO
+    //MARK: RECORD AND SAVE VIDEO 
     
     func startRecording() {
         
@@ -114,7 +120,7 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
     }
     
     func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
-        // show progress bar ... 
+        self.startAnimationDelegate?.startAnimation()
     }
     
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
@@ -122,8 +128,6 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
             print("can not save: \(String(describing: error))")
             return
         }
-        UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
-        
         
     }
     
@@ -152,7 +156,7 @@ extension CameraController {
         func configureCaptureDevices() throws {
             //get video devices
             let session = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified)
-            let cameras = (session.devices.compactMap( { $0} ))
+            let cameras = session.devices
             guard !cameras.isEmpty else {
                 throw CameraControllerError.noCamerasAvailable
             }

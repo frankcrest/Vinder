@@ -14,6 +14,7 @@ protocol VideoHandlerDelegate: AnyObject {
 }
 
 class RecordButtonView: UIView, CAAnimationDelegate {
+ 
     
     private let circleLayer = CAShapeLayer()
     private let trackLayer = CAShapeLayer()
@@ -41,13 +42,7 @@ class RecordButtonView: UIView, CAAnimationDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        basicAnimation.delegate = self
-        basicAnimation.toValue = 1
-        basicAnimation.duration = 15
-        basicAnimation.fillMode = CAMediaTimingFillMode.forwards
-        basicAnimation.isRemovedOnCompletion = false
-        circleLayer.add(basicAnimation, forKey: "animate")
+        self.videoHandlerDelegate?.startRecording()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -59,7 +54,7 @@ class RecordButtonView: UIView, CAAnimationDelegate {
         
         let center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
         let radius = self.bounds.height/2.0
-        let circularPath = UIBezierPath(arcCenter: center, radius: radius , startAngle: -CGFloat.pi/2, endAngle: 2 * CGFloat.pi, clockwise: true)
+        let circularPath = UIBezierPath(arcCenter: center, radius: radius , startAngle: -CGFloat.pi/2, endAngle: 1.5 * CGFloat.pi, clockwise: true)
         
         circleLayer.frame = self.bounds
         circleLayer.path = circularPath.cgPath
@@ -81,8 +76,17 @@ class RecordButtonView: UIView, CAAnimationDelegate {
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         videoHandlerDelegate?.stopRecording()
     }
-    func animationDidStart(_ anim: CAAnimation) {
-        self.videoHandlerDelegate?.startRecording()
+    
+    func startAnimation() {
+        
+        let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        basicAnimation.delegate = self
+        basicAnimation.toValue = 1
+        basicAnimation.duration = 15
+        basicAnimation.fillMode = CAMediaTimingFillMode.forwards
+        basicAnimation.isRemovedOnCompletion = false
+        circleLayer.add(basicAnimation, forKey: "animate")
+        
     }
 }
 
