@@ -43,9 +43,16 @@ class RecordVideoViewController: UIViewController {
         setupViews()
         configureCameraController()
         buttonView.recordButtonView.videoHandlerDelegate = self
-        
-        
     }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(true)
+    
+    self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+    self.navigationController?.navigationBar.shadowImage = UIImage()
+    self.navigationController?.navigationBar.isTranslucent = true
+    self.navigationController?.navigationBar.isHidden = true
+  }
     //MARK: CAMERA CONTROLLER
     
     func configureCameraController() {
@@ -66,11 +73,6 @@ class RecordVideoViewController: UIViewController {
         
         buttonView.switchCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
         buttonView.backButton.addTarget(self, action: #selector(backButton(_:)), for: .touchUpInside)
-        
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.navigationBar.isHidden = true
         
         NSLayoutConstraint.activate([
             

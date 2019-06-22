@@ -352,7 +352,11 @@ class MapViewController: UIViewController {
     container.isHidden = true
     do{
       try Auth.auth().signOut()
-      self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
+      
+      let navController = self.presentingViewController as? UINavigationController
+      self.dismiss(animated: true) {
+        let _ = navController?.popToRootViewController(animated: true)
+      }
     }catch let err{
       print(err)
     }

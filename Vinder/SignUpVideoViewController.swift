@@ -63,12 +63,17 @@ class SignUpVideoViewController: UIViewController {
     setupViews()
   }
   
-  func setupViews(){
-    self.view.backgroundColor = .white
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(true)
+    
     self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
     self.navigationController?.navigationBar.shadowImage = UIImage()
     self.navigationController?.navigationBar.isTranslucent = true
     self.navigationController?.navigationBar.isHidden = true
+  }
+  
+  func setupViews(){
+    self.view.backgroundColor = .white
     
     self.view.addSubview(containerView)
     self.view.addSubview(promptLabel)
