@@ -13,6 +13,7 @@ import FirebaseStorage
 
 class Register {
     
+    var downloadURL: URL!
     var ref = Database.database().reference()
     
     let ud = UserDefaults.standard
@@ -24,8 +25,8 @@ class Register {
         return storageRef.child("profileVideos")
     }
     
-    func uploadVideo(atURL url: URL) {
-        print("about to upload")
+    func uploadVideo(atURL url: URL,  completion: @escaping (URL) -> (Void)) {
+        
         let videoName = "\(NSUUID().uuidString)\(url)"
         let ref = profileVideosStorageRef.child(videoName)
         let uploadTask = ref.putFile(from: url, metadata: nil) { (metaData, error) in
@@ -33,14 +34,11 @@ class Register {
                 print("cant upload video: \(String(describing: error))")
                 return
             } else {
-                let size = metaData?.size
-                print("size \(size)")
                 ref.downloadURL { (url, err) in
                     guard let downloadURL = url else {
                         return
                     }
-                    
-                    print(downloadURL)
+                    completion(downloadURL)
                 }
             }
         }
@@ -49,7 +47,7 @@ class Register {
         
     }
     
-    func register(registered: @escaping (Bool) -> Void) {
+    func register(withProfileURL url: URL, registered: @escaping (Bool, Error?) -> Void) {
         
         guard let email = ud.string(forKey: "email") else {return}
         guard let password = ud.string(forKey: "password") else {return}
@@ -58,19 +56,18 @@ class Register {
         
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             
-            if let error = error{
-                print(error)
-                registered(false)
+            guard error == nil else {
+                registered(false, error)
                 return
             }
             
             guard let uid = user?.user.uid else { return }
-            registered(true)
+            registered(true, nil)
             
-            self.ref.child("users").child(uid).setValue((["email":email, "username":username, "name":name]), withCompletionBlock: { (error, ref) in
+            self.ref.child("users").child(uid).setValue((["email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
                 
                 if let error = error{
-                    print(error)
+                    print("can not set ref error \(error)")
                     return
                 }
             })

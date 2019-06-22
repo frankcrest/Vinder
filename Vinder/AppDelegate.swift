@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window = UIWindow(frame:UIScreen.main.bounds)
 
     let initialController = LoginViewController()
-//    let initialController = RecordVideoViewController()
+//    let initialController = VideoViewController()
     let loginNav = UINavigationController()
     loginNav.viewControllers = [initialController]
     let mapviewController = MapViewController()

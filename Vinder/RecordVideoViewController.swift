@@ -147,10 +147,22 @@ class RecordVideoViewController: UIViewController {
         
         if sender.titleLabel?.text == "confirm" {
             print("confirm tapped")
-            register.uploadVideo(atURL: cameraController.fileURL)
+            register.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
+                self.register.register(withProfileURL: url) { (succeeded, error) in
+                    
+                    if succeeded {
+                        let mapViewVC = MapViewController()
+                        self.present(mapViewVC, animated: true, completion: nil)
+                    } else {
+                        print("error:\(String(describing: error))")
+                    }
+                    
+                    
+                    
+                }
+            }
             
-            let mapViewVC = MapViewController()
-            self.present(mapViewVC, animated: true, completion: nil)
+
         }
 
     }
@@ -163,6 +175,7 @@ class RecordVideoViewController: UIViewController {
         }
         
         if sender.titleLabel?.text == "retake" {
+            notSurebutton.isHidden = false 
             buttonView.switchCameraButton.setTitle("switch", for: .normal)
             sender.setTitle("back", for: .normal)
             videoReviewer.player?.pause()
@@ -203,8 +216,10 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.cameraController.removePreview()
             self.videoReviewer.playVideo(atUrl: self.cameraController.fileURL, on: self.recordPreviewView )
+            
             self.buttonView.backButton.setTitle("retake", for: .normal)
             self.buttonView.switchCameraButton.setTitle("confirm", for: .normal)
+            self.notSurebutton.isHidden = true
             
         }
     }
