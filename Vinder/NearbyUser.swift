@@ -19,6 +19,7 @@ class NearbyUser: NSObject , MKAnnotation{
     var username : String!
     var imageName : String!
     var gender : UserGender!
+    var profileURL: String?
     
     
     

@@ -15,7 +15,7 @@ class VideoPlayer {
     var player: AVPlayer?
     
     func playVideo(atUrl videoUrl: URL, on view: UIView) {
-//        let videoUrl = cameraController.fileURL
+
         player = AVPlayer(url: videoUrl)
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.videoGravity = .resizeAspectFill

@@ -12,9 +12,11 @@ import AVKit
 
 
 
-class RecordVideoViewController: UIViewController {
+class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
+    
     
     //MARK: UI VIEW PROPERTIES
+    var loading: LoadingView!
     let buttonView = ButtonView()
     let notSurebutton = UIButton()
     let tutorialView = TutorialView()
@@ -29,7 +31,7 @@ class RecordVideoViewController: UIViewController {
     
     //MARK: PROPERTIES
     
-    let register = Register()
+    let register = WebService()
     let videoReviewer = VideoPlayer()
     let cameraController = CameraController()
     var isTutorialMode = false
@@ -43,15 +45,19 @@ class RecordVideoViewController: UIViewController {
         
         cameraController.startAnimationDelegate = self
         buttonView.recordButtonView.videoHandlerDelegate = self
+        register.updateProgressDelegate = self
         
         hideNavBar()
         notSurebutton.isHidden = true
         setupViews()
         if isTutorialMode {
-            setupTutorialView()
-            recordPreviewView.isHidden = true
-            buttonView.isHidden = true
-            notSurebutton.isHidden = false
+            self.setupTutorialView()
+            self.recordPreviewView.isHidden = true
+            self.buttonView.isHidden = true
+            self.notSurebutton.isHidden = false
+            //self.videoReviewer.playVideo(atUrl:url, on: self.tutorialView)
+            
+            
         }
         
     }
@@ -72,7 +78,7 @@ class RecordVideoViewController: UIViewController {
     //MARK: SETUP VIEWS
     
     func setupViews(){
-       
+        
         view.addSubview(recordPreviewView)
         view.addSubview(buttonView)
         view.addSubview(notSurebutton)
@@ -106,7 +112,7 @@ class RecordVideoViewController: UIViewController {
         
         view.addSubview(tutorialView)
         tutorialView.gotItButton.addTarget(self, action: #selector(gotItTapped), for: .touchUpInside)
-         tutorialView.replayButton.addTarget(self, action: #selector(replayTapped), for: .touchUpInside)
+        tutorialView.replayButton.addTarget(self, action: #selector(replayTapped), for: .touchUpInside)
         NSLayoutConstraint.activate([
             tutorialView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tutorialView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -124,14 +130,27 @@ class RecordVideoViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
     }
     
-
+    func presentLoadingView() {
+        
+        loading = LoadingView()
+        self.view.addSubview(loading)
+        
+        NSLayoutConstraint.activate([
+            loading.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loading.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loading.widthAnchor.constraint(equalTo: view.widthAnchor),
+            loading.heightAnchor.constraint(equalTo: view.heightAnchor),
+            
+            ])
+    }
+    
+    
     //MARK: ACTIONS
     
     @objc func bringBackTutorial() {
         recordPreviewView.isHidden = true
         buttonView.isHidden = true
         setupTutorialView()
-//        view.layoutIfNeeded()
         
     }
     
@@ -145,26 +164,31 @@ class RecordVideoViewController: UIViewController {
             }
         }
         
+        //MARK: CONFIRM Button
+        
         if sender.titleLabel?.text == "confirm" {
-            print("confirm tapped")
+            
+            presentLoadingView()
+            
             register.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
+                
                 self.register.register(withProfileURL: url) { (succeeded, error) in
                     
                     if succeeded {
                         let mapViewVC = MapViewController()
+                        self.loading.removeFromSuperview()
                         self.present(mapViewVC, animated: true, completion: nil)
+                        
                     } else {
                         print("error:\(String(describing: error))")
                     }
-                    
-                    
-                    
                 }
             }
-            
-
         }
-
+    }
+    
+    func updateProgress(progress: Double) {
+        loading.progressLabel.text = "Uploading: \(round(progress))%"
     }
     
     
@@ -175,7 +199,7 @@ class RecordVideoViewController: UIViewController {
         }
         
         if sender.titleLabel?.text == "retake" {
-            notSurebutton.isHidden = false 
+            notSurebutton.isHidden = false
             buttonView.switchCameraButton.setTitle("switch", for: .normal)
             sender.setTitle("back", for: .normal)
             videoReviewer.player?.pause()
@@ -197,38 +221,36 @@ class RecordVideoViewController: UIViewController {
     @objc func replayTapped() {
         
     }
+    
 }
 
 //MARK: START/ STOP RECORDING
 
 extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegate {
     
-
     func startRecording() {
         cameraController.startRecording()
     }
     
     func stopRecording(){
-
+        
         buttonView.recordButtonView.hideCircleBar()
-
+        
         cameraController.stopRecording()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            
             self.cameraController.removePreview()
             self.videoReviewer.playVideo(atUrl: self.cameraController.fileURL, on: self.recordPreviewView )
             
             self.buttonView.backButton.setTitle("retake", for: .normal)
             self.buttonView.switchCameraButton.setTitle("confirm", for: .normal)
             self.notSurebutton.isHidden = true
-            
         }
     }
     
     func startAnimation() {
         buttonView.recordButtonView.startAnimation()
     }
-    
-    
     
 }
 

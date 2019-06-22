@@ -26,12 +26,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let loginNav = UINavigationController()
     loginNav.viewControllers = [initialController]
     let mapviewController = MapViewController()
-    
-    if Auth.auth().currentUser != nil {
-      self.window?.rootViewController = mapviewController
-    } else{
-      self.window?.rootViewController = loginNav
-    }
+ self.window?.rootViewController = loginNav
+//    if Auth.auth().currentUser != nil {
+//      self.window?.rootViewController = mapviewController
+//    } else{
+//      self.window?.rootViewController = loginNav
+//    }
 
     self.window?.makeKeyAndVisible()
     
