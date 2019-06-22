@@ -151,7 +151,6 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
         recordPreviewView.isHidden = true
         buttonView.isHidden = true
         setupTutorialView()
-        
     }
     
     @objc func switchCameraOrConfirm(_ sender: UIButton){
@@ -164,7 +163,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             }
         }
         
-        //MARK: CONFIRM Button
+        //MARK: CONFIRM BUTTON
         
         if sender.titleLabel?.text == "confirm" {
             
@@ -177,7 +176,8 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
                     if succeeded {
                         let mapViewVC = MapViewController()
                         self.loading.removeFromSuperview()
-                        self.present(mapViewVC, animated: true, completion: nil)
+                        self.navigationController?.pushViewController(mapViewVC, animated: true)
+//                        self.present(mapViewVC, animated: true, completion: nil)
                         
                     } else {
                         print("error:\(String(describing: error))")
@@ -190,7 +190,6 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     func updateProgress(progress: Double) {
         loading.progressLabel.text = "Uploading: \(round(progress))%"
     }
-    
     
     @objc func backButton(_ sender: UIButton) {
         
