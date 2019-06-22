@@ -19,6 +19,7 @@ class VideoViewController: UIViewController {
     var hangupButton: UIButton!
     var muteButton: UIButton!
     var turnOffCameraButton: UIButton!
+    var buttonStackView: UIStackView!
 
     private let appID = "007d7c78a4cc4fe48b838110bde1cd0c"
     private var agoraKit: AgoraRtcEngineKit!
@@ -75,6 +76,24 @@ class VideoViewController: UIViewController {
         sender.setTranslation(CGPoint.zero, in: view)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        if buttonStackView.isHidden {
+            buttonStackView.isHidden = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.buttonStackView.alpha = 1
+            }) { (_) in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.buttonStackView.alpha = 0
+                    }) { (_) in
+                        self.buttonStackView.isHidden = true
+                    }
+                }
+            }
+        }
+    }
+    
     
     
     
@@ -128,7 +147,7 @@ class VideoViewController: UIViewController {
 
 
 
-        let buttonStackView = UIStackView(arrangedSubviews: [switchButton, hangupButton,turnOffCameraButton,muteButton])
+        buttonStackView = UIStackView(arrangedSubviews: [switchButton, hangupButton,turnOffCameraButton,muteButton])
         buttonStackView.axis = .horizontal
         buttonStackView.distribution = .fillEqually
         buttonStackView.alignment = .fill
@@ -198,6 +217,14 @@ extension VideoViewController: AgoraRtcEngineDelegate {
         remoteVideoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(remoteVideoCanvas)
         view.bringSubviewToFront(localVideoView)
+        
+        //hide control buttons
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.buttonStackView.alpha = 0
+        }) { (_) in
+            self.buttonStackView.isHidden = true
+        }
     }
     
     

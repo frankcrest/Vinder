@@ -52,15 +52,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     self.window = UIWindow(frame:UIScreen.main.bounds)
 
     let initialController = LoginViewController()
+//    let initialController = VideoViewController()
     let loginNav = UINavigationController()
     loginNav.viewControllers = [initialController]
     let mapviewController = MapViewController()
-    
-    if Auth.auth().currentUser != nil {
-      self.window?.rootViewController = mapviewController
-    } else{
-      self.window?.rootViewController = loginNav
-    }
+ self.window?.rootViewController = loginNav
+//    if Auth.auth().currentUser != nil {
+//      self.window?.rootViewController = mapviewController
+//    } else{
+//      self.window?.rootViewController = loginNav
+//    }
 
     self.window?.makeKeyAndVisible()
     

@@ -35,6 +35,11 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
         return fileURL
     }()
     
+    let tutorialURL: URL = {
+       let url = URL(fileURLWithPath: "tutorial", isDirectory: false)
+        return url
+    }()
+    
     
     //MARK: DISPLAY PREVIEW LAYER
     func displayPreview(on view: UIView) throws {
