@@ -7,9 +7,9 @@ import AVKit
 
 class MapViewController: UIViewController {
   
+  let ref = Database.database().reference()
   let currentUser = Auth.auth().currentUser
   var locationManager:CLLocationManager = CLLocationManager()
-  let ref = Database.database().reference()
   var userLocation : CLLocation? {
     didSet{
       updateLocationToFirebase()
@@ -18,15 +18,14 @@ class MapViewController: UIViewController {
   var leftViewTrailing :NSLayoutConstraint!
   var rightViewLeading: NSLayoutConstraint!
   
-  let user1 = NearbyUser(username: "adamck6302438", imageName: "Ray.jpg", coordinate: CLLocationCoordinate2D(latitude: 43.644311, longitude: -79.402225), gender:.female)
-  let user2 = NearbyUser(username: "myley_cyrus", imageName: "miley-cyrus.jpg", coordinate: CLLocationCoordinate2D(latitude: 32.444311, longitude: -59.402225), gender:.male)
-  let user3 = NearbyUser(username: "kawhi", imageName: "kawhi.jpg", coordinate: CLLocationCoordinate2D(latitude: 35.444311, longitude: -79.666666),gender:.male)
   
-  var nearbyUsers : [NearbyUser] = []
+  var users : [User] = []
   var videoView : VideoView!
   
   let maleColor : UIColor = UIColor(red: 98, green: 98, blue: 247, alpha: 1)
   let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
+  
+  var selectedUser: User?
   
   let container : UIView = {
     let v = UIView()
@@ -72,6 +71,7 @@ class MapViewController: UIViewController {
     b.imageView?.contentMode = .scaleAspectFit
     b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
     b.translatesAutoresizingMaskIntoConstraints = false
+    b.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
     return b
   }()
   
@@ -188,22 +188,14 @@ class MapViewController: UIViewController {
     super.viewDidLoad()
     
     mapView.delegate = self
-    determineCurrentLocation()
-    
     //set up map view
     mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-    
-    mapView.addAnnotation(user1)
-    mapView.addAnnotation(user2)
-    mapView.addAnnotation(user3)
-    
     setupViews()
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     determineCurrentLocation()
-    self.view.sendSubviewToBack(mapView)
   }
   
   func setupViews(){
@@ -337,14 +329,30 @@ class MapViewController: UIViewController {
     }
   }
   
-  func loadInitialData(){
-    
+  func loadUsers(){
+    ref.child("users").observe(.value) { (snapshot) in
+      for user in snapshot.children.allObjects as! [DataSnapshot]{
+        guard let userObject = user.value as? [String:AnyObject] else{return}
+        
+        guard let name = userObject["name"] as? String else {return}
+        guard let username = userObject["username"] as? String else{return}
+        guard let uid = userObject["uid"] as? String else {return}
+        guard let lat = userObject["latitude"] as? String else {return}
+        guard let lon = userObject["longitude"] as? String else{return}
+        
+        let user = User(uid: uid , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon)
+        self.mapView.addAnnotation(user)
+        self.users.append(user)
+      }
+    }
   }
   
   @objc func logoutTapped(){
+    print("logout")
+    container.isHidden = true
     do{
       try Auth.auth().signOut()
-      self.view.window?.rootViewController?.dismiss(animated:true, completion:nil)
+      self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
     }catch let err{
       print(err)
     }
@@ -358,8 +366,12 @@ class MapViewController: UIViewController {
   func updateLocationToFirebase(){
     guard let uid = currentUser?.uid else{return}
     guard let location = userLocation else{return}
-    self.ref.child("users").child(uid).updateChildValues(["latitude":location.coordinate.latitude])
-    self.ref.child("users").child(uid).updateChildValues(["longitude":location.coordinate.longitude])
+    let lat = String(format: "%f", location.coordinate.latitude)
+    let lon = String(format: "%f", location.coordinate.longitude)
+    self.ref.child("users").child(uid).updateChildValues(["latitude":lat])
+    self.ref.child("users").child(uid).updateChildValues(["longitude":lon])
+    
+    loadUsers()
   }
   
   @objc func contactTapped(){
@@ -449,6 +461,12 @@ class MapViewController: UIViewController {
     }
   }
   
+  @objc func callTapped(){
+    let videoVC = VideoViewController()
+//    videoVC.userChannelID = self.selectedUser?.uid
+    self.present(videoVC, animated: true, completion: nil)
+  }
+  
 }
 
 
@@ -483,7 +501,7 @@ extension MapViewController : CLLocationManagerDelegate {
 extension MapViewController : MKMapViewDelegate {
   
   func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-    guard let annotation = annotation as? NearbyUser else { return nil }
+    guard let annotation = annotation as? User else { return nil }
     
     let identifier = "user"
     var view: NearbyUserView
@@ -514,6 +532,9 @@ extension MapViewController : MKMapViewDelegate {
   }
   
   func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+    self.selectedUser = view.annotation as? User
+    print(self.selectedUser?.uid)
+    
     container.isHidden = false
     UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
       self.container.alpha = 1
@@ -562,3 +583,4 @@ extension MapViewController:UICollectionViewDelegateFlowLayout{
     return CGSize(width: (self.view.bounds.width - 40) / 4, height: (self.view.bounds.width - 40) / 4)
   }
 }
+

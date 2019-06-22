@@ -57,10 +57,6 @@ class RecordVideoViewController: UIViewController {
         }
     }
     
-    
-    
-    
-    
     //MARK: SETUP VIEWS
     
     func setupViews(){
@@ -95,18 +91,20 @@ class RecordVideoViewController: UIViewController {
     //MARK: ACTIONS
     
     @objc func switchCamera(){
-        do {
-            try cameraController.switchCameras()
-        } catch {
-            print("can not swict camera: \(error)")
-        }
+      let mapVC = MapViewController()
+      self.present(mapVC, animated: true, completion: nil)
+//        do {
+//            try cameraController.switchCameras()
+//        } catch {
+//            print("can not swict camera: \(error)")
+//        }
     }
     
     
     @objc func backButton(_ sender: UIButton) {
         
         if sender.titleLabel?.text == "back" {
-            
+          self.navigationController?.popViewController(animated: true)
         }
         
         if sender.titleLabel?.text == "retake" {
