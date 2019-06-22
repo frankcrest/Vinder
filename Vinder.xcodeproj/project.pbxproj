@@ -53,10 +53,8 @@
 		E935544022B9736000CD7958 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E935544622B987BF00CD7958 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
-		E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVideoViewController.swift; sourceTree = "<group>"; };
-		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVideoViewController.swift; sourceTree = "<group>"; };
-		E972D7AB22BD84520058D54E /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordVideoViewController.swift; path = ../RecordVideoViewController.swift; sourceTree = "<group>"; };
+		E972D7AB22BD84520058D54E /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
@@ -333,7 +331,7 @@
 				E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */,
 				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
 				ED3BE86C22BD714E0046E35C /* WebService.swift in Sources */,
-				0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */,
+				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
 				E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
 				E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */,
@@ -478,7 +476,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Vinder/Vinder.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WPKBU3MB67;
+				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Vinder/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -500,7 +498,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Vinder/Vinder.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WPKBU3MB67;
+				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Vinder/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;

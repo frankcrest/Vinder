@@ -32,7 +32,7 @@ class WebService {
         return storageRef.child("profileVideos")
     }
     
-    //download fileURL need to change 
+    //download fileURL needs to be changed
     private var fileURL: URL = {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let fileURL = paths[0].appendingPathComponent("sample.mov")
