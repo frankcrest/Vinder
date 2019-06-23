@@ -468,7 +468,10 @@ class MapViewController: UIViewController {
   
   @objc func callTapped(){
     container.isHidden = true
-    print(selectedUser?.token)
+    guard let user = selectedUser else {return}
+    guard let currentUser = currentUser else {return}
+    ref.child("calling").child(currentUser.uid).setValue([user.uid : 1])
+    
     let videoVC = VideoViewController()
     self.present(videoVC, animated: true, completion: nil)
   }
