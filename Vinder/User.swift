@@ -18,19 +18,21 @@ class User: NSObject , MKAnnotation{
   
   var coordinate: CLLocationCoordinate2D {
     get{
-      return CLLocationCoordinate2D(latitude: Double(lat) as! CLLocationDegrees, longitude: Double(lon) as! CLLocationDegrees)
+      return CLLocationCoordinate2D(latitude: Double(lat)! as CLLocationDegrees, longitude: Double(lon)! as CLLocationDegrees)
     }
   }
   var uid:String
+  var token:String
   var username:String
   var name:String
   var imageUrl:String?
   var gender: UserGender
   var lat:String
   var lon:String
-  
-  init(uid : String, username: String, name: String, imageUrl : String, gender:UserGender, lat:String, lon:String){
+
+  init(uid : String, token:String,  username: String, name: String, imageUrl : String, gender:UserGender, lat:String, lon:String){
     self.uid = uid
+    self.token = token
     self.username = username
     self.name = name
     self.imageUrl = imageUrl

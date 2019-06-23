@@ -93,6 +93,7 @@ class RecordVideoViewController: UIViewController {
     //MARK: ACTIONS
     
     @objc func switchCamera(){
+      confirmTapped()
       let mapVC = MapViewController()
       self.present(mapVC, animated: true, completion: nil)
 //        do {
@@ -123,6 +124,7 @@ class RecordVideoViewController: UIViewController {
         guard let password = ud.string(forKey: "password") else {return}
         guard let name = ud.string(forKey: "name") else {return}
         guard let username = ud.string(forKey: "username") else {return}
+      guard let token = ud.string(forKey: "fcmToken") else {return}
         
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             if let error = error{
@@ -130,7 +132,7 @@ class RecordVideoViewController: UIViewController {
                 return
             }
             guard let uid = user?.user.uid else {return}
-            self.ref.child("users").child(uid).setValue((["email":email, "username":username, "name":name]), withCompletionBlock: { (error, ref) in
+          self.ref.child("users").child(uid).setValue((["uid":uid, "token": token, "email":email, "username":username, "name":name]), withCompletionBlock: { (error, ref) in
                 if let error = error{
                     print(error)
                     return

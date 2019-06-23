@@ -13,13 +13,13 @@
 		0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98DB22BAC5CA00D02311 /* User.swift */; };
 		2829F008C558904A7F28D088 /* Pods_Vinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */; };
 		E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543422B9735F00CD7958 /* AppDelegate.swift */; };
-		E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* LoginViewController.swift */; };
 		E935543C22B9736000CD7958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E935543B22B9736000CD7958 /* Assets.xcassets */; };
 		E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E935543D22B9736000CD7958 /* LaunchScreen.storyboard */; };
 		E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544622B987BF00CD7958 /* SignUpViewController.swift */; };
 		E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544822B99B3C00CD7958 /* LoginFormViewController.swift */; };
 		E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */; };
 		E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935545022BAA57900CD7958 /* RecordVideoViewController.swift */; };
+		E94E239322BF13C6006761E9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94E239222BF13C6006761E9 /* LoginViewController.swift */; };
 		E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */; };
 		E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */; };
 		E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */; };
@@ -43,7 +43,6 @@
 		538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543122B9735F00CD7958 /* Vinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543422B9735F00CD7958 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E935543622B9735F00CD7958 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E935543B22B9736000CD7958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E935543E22B9736000CD7958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E935544022B9736000CD7958 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -51,6 +50,7 @@
 		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
 		E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVideoViewController.swift; sourceTree = "<group>"; };
 		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVideoViewController.swift; sourceTree = "<group>"; };
+		E94E239222BF13C6006761E9 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E972D7AB22BD84520058D54E /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 				E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */,
 				ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */,
 				EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */,
-				E935543622B9735F00CD7958 /* LoginViewController.swift */,
+				E94E239222BF13C6006761E9 /* LoginViewController.swift */,
 				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
 				E935544622B987BF00CD7958 /* SignUpViewController.swift */,
 				E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */,
@@ -284,10 +284,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */,
-				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
 				E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */,
 				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
+				E94E239322BF13C6006761E9 /* LoginViewController.swift in Sources */,
 				E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */,
 				EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */,
 				E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */,
@@ -295,7 +295,6 @@
 				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
 				E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */,
 				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
-				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */,
 				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
