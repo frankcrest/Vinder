@@ -18,10 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
   
   var window: UIWindow?
   let ud = UserDefaults.standard
+  var ref : DatabaseReference?
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
      FirebaseApp.configure()
+    
+    self.ref = Database.database().reference()
     // Override point for customization after application launch.
     if #available(iOS 10.0, *) {
       // For iOS 10 display notification (sent via APNS)
@@ -94,10 +97,15 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                               didReceive response: UNNotificationResponse,
                               withCompletionHandler completionHandler: @escaping () -> Void) {
     let userInfo = response.notification.request.content.userInfo
-    // Print message ID.
-    // Print full message.
-    print(userInfo)
+    guard let callerId = userInfo["callerId"] as? String else {return}
+    print(callerId)
     
+    guard let currentUserUid = Auth.auth().currentUser?.uid else {return}
+    
+    guard let databaseRef = ref else {return}
+    
+    databaseRef.child("callResponse").child(callerId).setValue([currentUserUid : 1])
+
     completionHandler()
     let presentVC = MapViewController()
     self.window?.rootViewController = presentVC

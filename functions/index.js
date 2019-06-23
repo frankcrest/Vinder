@@ -12,10 +12,11 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 
 //listen for call in database and then trigger a push notifications
 exports.observeCalling = functions.database.ref('/calling/{uid}/{callingId}').onCreate((snapshot,context) => {
+
       const uppercase = "hello";
       var uid = context.params.uid;
       var callingId = context.params.callingId;
-      console.log('User:' + uid + 'is calling' + callingId);
+      console.log('User:' + uid + ' is calling ' + callingId);
 
 //configure fcm token to send push notifications
       return admin.database().ref('/users/' + callingId).once('value', snapshot => {
@@ -28,8 +29,11 @@ exports.observeCalling = functions.database.ref('/calling/{uid}/{callingId}').on
             notification:{
               title:"Someone is attempting to call you~",
               body: userDoingCalling.username +  ' wants to call you!'
-            }
-          }
+            },
+            data:{
+              "callerId": userDoingCalling.uid
+            },
+          };
 
           admin.messaging().sendToDevice(userWeAreCalling.token, payload).then(function(response){
             console.log("succesfully send message:", response);
@@ -42,6 +46,39 @@ exports.observeCalling = functions.database.ref('/calling/{uid}/{callingId}').on
         })
       return snapshot.ref.parent.child('uppercase').set(uppercase);
     });
+
+exports.observeCallResponse = functions.database.ref('/callResponse/{callerId}/{uid}').onCreate((snapshot, context) => {
+  var callerId = context.params.callerId;
+  var uid = context.params.uid;
+
+  console.log('User' + callerId + 'is calling' + uid);
+
+  return admin.database().ref('/users/' + callerId).once('value',snapshot => {
+    var userDoingCalling = snapshot.val();
+
+    return admin.database().ref('/users/' + uid).once('value', snapshot => {
+      var userWeAreCalling = snapshot.val();
+
+      var payload = {
+        "aps" : {
+        "content-available" : 1
+        },
+        "callerId" : callerId.uid
+      };
+
+      admin.messaging().sendToDevice(userDoingCalling.token, payload).then(function(response){
+        console.log("succesfully send message:", response);
+      })
+      .catch(function(errror){
+        console.log("Error sending message:",error);
+      });
+
+
+    })
+  })
+
+
+})
 
 exports.sendNotifications = functions.https.onRequest((req,res) => {
   res.send("attempting to send notifications");
