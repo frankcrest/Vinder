@@ -92,7 +92,7 @@ class WebService {
             guard let uid = user?.user.uid else { return }
             registered(true, nil)
             
-        self.ref.child("users").child(uid).setValue((["id": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
+        self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
                 
                 if let error = error{
                     print("can not set ref error \(error)")

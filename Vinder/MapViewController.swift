@@ -341,8 +341,9 @@ class MapViewController: UIViewController {
         guard let lon = userObject["longitude"] as? String else{return}
         guard let token = userObject["token"] as? String else{return}
         guard let profileUrl = userObject["profileVideo"] as? String else {return}
-        
+        print(profileUrl)
         let user = User(uid: uid, token: token , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: profileUrl)
+        print("user:\(user)")
         self.mapView.addAnnotation(user)
         self.users.append(user)
       }
