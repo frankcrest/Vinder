@@ -86,6 +86,8 @@ class VideoView: UIView {
     }
 
     //AVPlayer methods
+//    *************************************************************************************************
+    //need change 
     func configure(url: String) {
         let videoURL = URL(string: url)
         player = AVPlayer(url: videoURL!)
@@ -118,25 +120,5 @@ class VideoView: UIView {
         }
     }
     
-    //handle button tapped
-    @objc func callTapped(){
-        print("call")
-        
-    }
-    
-    @objc func sendMessageTapped(){
-        
-        
-        
-    }
-    
-    @objc func pickUpCallTapped(){
-        print("pick up")
-        
-    }
-    
-    @objc func rejectCallTapped(){
-        print("reject call")
-        
-    }
+
 }

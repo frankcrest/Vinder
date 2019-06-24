@@ -7,7 +7,9 @@ import AVKit
 
 class MapViewController: UIViewController {
     
-    let webService = WebService()
+    //MARK: PROPERTIES
+    private let webService = WebService()
+    private var messages: [Messages] = []
     let ref = Database.database().reference()
     let currentUser = Auth.auth().currentUser
     var locationManager:CLLocationManager = CLLocationManager()
@@ -18,15 +20,12 @@ class MapViewController: UIViewController {
     }
     var leftViewTrailing :NSLayoutConstraint!
     var rightViewLeading: NSLayoutConstraint!
-    
-    
     var users : [User] = []
-    
     let maleColor : UIColor = UIColor(red: 98, green: 98, blue: 247, alpha: 1)
     let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
-    
     var selectedUser: User?
     
+    //MARK: VIEW PROPERTIES
     let videoView : VideoView = {
         let v = VideoView()
         v.backgroundColor = .white
@@ -155,12 +154,14 @@ class MapViewController: UIViewController {
     
     
     //MARK: VIEW DID LOAD
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         mapView.delegate = self
         mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         setupViews()
+        fetchMessages()
         
     }
     
@@ -168,16 +169,18 @@ class MapViewController: UIViewController {
         super.viewWillAppear(animated)
         determineCurrentLocation()
         print("nil or not: \(String(describing: Auth.auth().currentUser))")
-            if Auth.auth().currentUser == nil {
-        
-        let loginNav = UINavigationController()
-        //        let initialController = LoginViewController()
-        loginNav.viewControllers = [LoginViewController()]
-        present(loginNav, animated: true, completion: nil)
-        
-            }
+//        if Auth.auth().currentUser == nil {
+            
+            let loginNav = UINavigationController()
+            //        let initialController = LoginViewController()
+            loginNav.viewControllers = [LoginViewController()]
+            present(loginNav, animated: true, completion: nil)
+            
+//        }
     }
     
+    
+    //MARK: SETUP VIEWS
     func setupViews(){
         self.view.addSubview(navView)
         self.view.addSubview(centerView)
@@ -283,6 +286,9 @@ class MapViewController: UIViewController {
             ])
     }
     
+    
+    //MARK: LOAD USER AND LOCATE
+    
     func determineCurrentLocation()
     {
         locationManager = CLLocationManager()
@@ -297,6 +303,9 @@ class MapViewController: UIViewController {
     }
     
     func loadUsers(){
+//        webService.fetchUsers { (users) in
+//
+//        }
         ref.child("users").observe(.value) { (snapshot) in
             for user in snapshot.children.allObjects as! [DataSnapshot]{
                 guard let userObject = user.value as? [String:AnyObject] else{return}
@@ -312,6 +321,29 @@ class MapViewController: UIViewController {
                 self.users.append(user)
             }
         }
+    }
+    
+    fileprivate func fetchMessages() {
+        webService.fetchAllMessages { (msgs) -> (Void) in
+            guard let msgs = msgs else {
+                print("cant fetch messages")
+                return
+            }
+            self.messages = msgs
+        }
+        messageTableView.reloadData()
+    }
+    
+    func updateLocationToFirebase(){
+        guard let uid = currentUser?.uid else{return}
+        UserDefaults.standard.set(uid, forKey: "currentUserID")
+        guard let location = userLocation else{return}
+        let lat = String(format: "%f", location.coordinate.latitude)
+        let lon = String(format: "%f", location.coordinate.longitude)
+        self.ref.child("users").child(uid).updateChildValues(["latitude":lat])
+        self.ref.child("users").child(uid).updateChildValues(["longitude":lon])
+        
+        loadUsers()
     }
     
     //MARK: ACTIONS
@@ -330,18 +362,6 @@ class MapViewController: UIViewController {
     @objc func settingTapped(){
         let settingsVC = SettingViewController()
         self.present(settingsVC, animated: true, completion: nil)
-    }
-    
-    func updateLocationToFirebase(){
-        guard let uid = currentUser?.uid else{return}
-        UserDefaults.standard.set(uid, forKey: "currentUserID")
-        guard let location = userLocation else{return}
-        let lat = String(format: "%f", location.coordinate.latitude)
-        let lon = String(format: "%f", location.coordinate.longitude)
-        self.ref.child("users").child(uid).updateChildValues(["latitude":lat])
-        self.ref.child("users").child(uid).updateChildValues(["longitude":lon])
-        
-        loadUsers()
     }
     
     
@@ -401,7 +421,7 @@ class MapViewController: UIViewController {
         guard let user = self.selectedUser else { return }
         let recordMessageVC = RecordVideoViewController()
         recordMessageVC.mode = .messageMode
-        recordMessageVC.user = user
+        recordMessageVC.toUser = user
         present(recordMessageVC, animated: true, completion: nil)
         
     }
@@ -498,19 +518,19 @@ extension MapViewController : MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
         self.selectedUser = view.annotation as? User
-        
         videoView.isHidden = false
+        videoView.setUpViews()
         UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
             self.videoView.alpha = 1
         }, completion: nil)
-        videoView.setUpViews()
+        
         videoView.configure(url: selectedUser!.profileVideoUrl)
         videoView.play()
     }
     
 }
 
-
+// MARK: TABLE/COLLECTION VIEW DELEGATE
 extension MapViewController: UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -520,13 +540,14 @@ extension MapViewController: UITableViewDelegate{
 
 extension MapViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return messages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
         cell.nameLabel.text = "name"
         cell.distanceLabel.text = "10km"
+        //need to change message model to store sender name 
         return cell
     }
 }

@@ -10,13 +10,12 @@ import Foundation
 
 class Messages {
     
-    var recieverID = String()
+    var sender = String()
     var messageID = String()
     var senderID = String()
     var messageURL = String()
     
-    init(recieverID: String, messageID: String, senderID: String, messageURL: String) {
-        self.recieverID = recieverID
+    init(messageID: String, senderID: String, messageURL: String) {
         self.messageID = messageID
         self.senderID = senderID
         self.messageURL = messageURL

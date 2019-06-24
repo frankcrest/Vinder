@@ -15,6 +15,7 @@ protocol UpdateProgressDelegate: AnyObject {
     func updateProgress(progress: Double)
 }
 
+
 class WebService {
     
     //MARK: PROPERTIES
@@ -25,6 +26,8 @@ class WebService {
     private let ref = Database.database().reference()
     private let ud = UserDefaults.standard
     
+    let currentUserID = UserDefaults.standard.string(forKey: "currentUserID")
+  
     private var storageRef: StorageReference {
         return Storage.storage().reference(forURL: "gs://vinder-2a778.appspot.com")
     }
@@ -41,14 +44,26 @@ class WebService {
     }()
     
     
-    //MARK: UPLOAD VIDEO AND REGISTER
+    
+    //MARK: FIREBASE DATABASE AND STORAGE
+    
+    func changeProfile(_ url: String, completion: @escaping (Error?) -> Void) {
+        guard let userID = currentUserID else {
+            return
+        }
+        ref.child("users").child(userID).setValue(["profileVideo": url]) { (err, ref) in
+            completion(err)
+        }
+    }
     
     func sendMessage(_ url: String, to user: User,completion: @escaping  (Error?) -> Void)  {
         
-        guard let senderID = UserDefaults.standard.string(forKey: "currentUserID") else { return }
+        guard let senderID = currentUserID else {
+            return
+        }
         let messageID = UUID().uuidString
         
-        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url]) { (err, ref) in
+        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "messageID": messageID]) { (err, ref) in
             completion(err)
         }
         
@@ -131,6 +146,47 @@ class WebService {
             let percent = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
             print("downloading: \(percent)%")
         }
+    }
+    
+    func fetchAllMessages(completion: @escaping ([Messages]?) ->(Void)) {
+        
+        guard let userID = currentUserID else {
+            return
+        }
+        var messages: [Messages] = []
+        ref.child("messages").child(userID).observe(DataEventType.value) { (snapshot) in
+                        for messageID in snapshot.children.allObjects as! [DataSnapshot] {
+                guard let message = messageID.value as? [String: String] else { return }
+                guard let messageURL = message["messageURL"] else { return }
+                guard let senderID = message["senderID"] else { return }
+                guard let msgID = message["messageID"] else {return}
+                
+                let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL)
+                messages.append(msg)
+            }
+            completion(messages)
+        }
+    }
+    
+    func fetchUsers(completion: @escaping ([User]?) -> Void) {
+        
+        var users: [User] = []
+        ref.child("users").observe(.value) { (snapshot) in
+            for user in snapshot.children.allObjects as! [DataSnapshot]{
+                guard let userObject = user.value as? [String:AnyObject] else{return}
+                
+                guard let name = userObject["name"] as? String else {return}
+                guard let username = userObject["username"] as? String else{return}
+                guard let uid = userObject["uid"] as? String else {return}
+                guard let lat = userObject["latitude"] as? String else {return}
+                guard let lon = userObject["longitude"] as? String else{return}
+                
+                let user = User(uid: uid, token: "" , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
+                users.append(user)
+            }
+            completion(users)
+        }
+        
         
     }
     

@@ -41,7 +41,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     let cameraController = CameraController()
     var isTutorialMode = false
     var mode: Mode!
-    var user: User!
+    var toUser: User!
     
     //MARK: ViewWDidLoad
     
@@ -265,11 +265,11 @@ extension RecordVideoViewController {
                     
                     self.loading.removeFromSuperview()
                     
-                    let pvc = self.presentingViewController
-                    
-                    self.dismiss(animated: true) {
-                        pvc?.dismiss(animated: false, completion: nil)
-                    }
+//                    let pvc = self.presentingViewController
+                    self.dismiss(animated: true, completion: nil)
+//                    self.dismiss(animated: true) {
+//                        pvc?.dismiss(animated: false, completion: nil)
+//                    }
                     
                 } else {
                     print("error:\(String(describing: error))")
@@ -281,7 +281,7 @@ extension RecordVideoViewController {
     
     func messageMode() {
         
-        guard let user = self.user else { return }
+        guard let user = self.toUser else { return }
         
         webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
             
@@ -290,14 +290,24 @@ extension RecordVideoViewController {
                     print("cant send message : \(String(describing: err))")
                     return
                 }
+//                 let pvc = self.presentingViewController
+                self.dismiss(animated: true, completion: nil)
             }
-            
         }
-        
     }
     
     func profileMode() {
         
+        webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
+            
+            self.webService.changeProfile("\(url)") { (err) in
+                guard err == nil else {
+                    print("cant change video profile: \(String(describing: err))")
+                    return
+                }
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     
