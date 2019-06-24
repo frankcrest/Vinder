@@ -341,9 +341,7 @@ class MapViewController: UIViewController {
         guard let lon = userObject["longitude"] as? String else{return}
         guard let token = userObject["token"] as? String else{return}
         guard let profileUrl = userObject["profileVideo"] as? String else {return}
-        print(profileUrl)
         let user = User(uid: uid, token: token , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: profileUrl)
-        print("user:\(user)")
         self.mapView.addAnnotation(user)
         self.users.append(user)
       }
@@ -356,10 +354,10 @@ class MapViewController: UIViewController {
     do{
       try Auth.auth().signOut()
       
-      let navController = self.presentingViewController as? UINavigationController
-      self.dismiss(animated: true) {
-        let _ = navController?.popToRootViewController(animated: true)
-      }
+      let loginController = LoginFormViewController()
+      let navController = UINavigationController(rootViewController: loginController)
+      self.present(navController, animated: true, completion: nil)
+      
     }catch let err{
       print(err)
     }

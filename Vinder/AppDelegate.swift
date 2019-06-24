@@ -46,7 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     self.window = UIWindow(frame:UIScreen.main.bounds)
 
     let initialController = LoginViewController()
-//    let initialController = VideoViewController()
     let loginNav = UINavigationController()
     loginNav.viewControllers = [initialController]
     let mapviewController = MapViewController()
@@ -100,7 +99,6 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     let userInfo = response.notification.request.content.userInfo
     guard let callerId = userInfo["callerId"] as? String else {return}
     print(callerId)
-    
     guard let currentUserUid = Auth.auth().currentUser?.uid else {return}
     
     guard let databaseRef = ref else {return}
@@ -134,4 +132,13 @@ extension AppDelegate : MessagingDelegate {
     print("Received data message: \(remoteMessage.appData)")
   }
   // [END ios_10_data_message]
+  
+  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    
+    guard let callerId = userInfo["callerId"] as? String else {return}
+    print("got a respone from \(callerId)")
+    guard let status = userInfo["rejected"] as? String else {return}
+    print("status:\(status)")
+
+  }
 }

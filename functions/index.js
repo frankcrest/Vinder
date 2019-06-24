@@ -48,37 +48,44 @@ exports.observeCalling = functions.database.ref('/calling/{uid}/{callingId}').on
     });
 
 exports.observeCallResponse = functions.database.ref('/callResponse/{callerId}/{uid}').onCreate((snapshot, context) => {
+  const uppercase = "hello";
   var callerId = context.params.callerId;
+  console.log(callerId);
   var uid = context.params.uid;
 
-  console.log('User' + callerId + 'is calling' + uid);
+  console.log('User ' + callerId + 'is calling ' + uid);
 
   return admin.database().ref('/users/' + callerId).once('value',snapshot => {
     var userDoingCalling = snapshot.val();
-
+    console.log(userDoingCalling);
     return admin.database().ref('/users/' + uid).once('value', snapshot => {
       var userWeAreCalling = snapshot.val();
+      console.log(userWeAreCalling);
 
-      var payload = {
-        "aps" : {
-        "content-available" : 1
-        },
-        "callerId" : callerId.uid
-      };
+      const payload = {
+     data: {
+       "callerId": userDoingCalling.uid,
+       "rejected": "true"
+     }
+   };
 
-      admin.messaging().sendToDevice(userDoingCalling.token, payload).then(function(response){
-        console.log("succesfully send message:", response);
-      })
-      .catch(function(errror){
-        console.log("Error sending message:",error);
-      });
+   const options = {
+     content_available: true
+   }
 
-
+    admin.messaging().sendToDevice(userDoingCalling.token, payload,options).then(function(response){
+      console.log("succesfully send message:", response);
     })
+    .catch(function(errror){
+      console.log("Error sending message:",error);
+    });
+
+
   })
-
-
 })
+
+   return snapshot.ref.parent.child('uppercase').set(uppercase);
+});
 
 exports.sendNotifications = functions.https.onRequest((req,res) => {
   res.send("attempting to send notifications");

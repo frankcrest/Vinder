@@ -171,6 +171,9 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     
     if sender.titleLabel?.text == "confirm" {
       
+      videoReviewer.player?.pause()
+      videoReviewer.player = nil
+      
       presentLoadingView()
       
       register.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
@@ -180,7 +183,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
           if succeeded {
             let mapViewVC = MapViewController()
             self.loading.removeFromSuperview()
-            self.videoReviewer.player?.pause()
+           
             self.present(mapViewVC, animated: true, completion: nil)
             
           } else {
