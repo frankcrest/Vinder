@@ -12,36 +12,48 @@ class IncomeCallViewController: UIViewController {
     
     var callingUser : User!
     
-    let videoView : VideoView = {
+    lazy var videoView : VideoView = {
         let v = VideoView()
         v.backgroundColor = .white
         v.layer.cornerRadius = 20
-        v.isHidden = true
+        v.isHidden = false
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        videoView.setUpViews(callType: .IncomeCall)
-        videoView.configure(url: callingUser.profileVideoUrl)
-        videoView.play()
+        self.view.backgroundColor = .white
+        setUpViews()
+        videoView.configure(url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
     }
     
     func setUpViews(){
         self.view.addSubview(videoView)
+        
+        videoView.leftButton.setImage(UIImage(named: "reject"), for: .normal)
+        videoView.rightButton.setImage(UIImage(named: "call"), for: .normal)
+        
+        videoView.leftButton.addTarget(self, action: #selector(rejectCallTapped), for: .touchUpInside)
+        videoView.rightButton.addTarget(self, action: #selector(pickUpCallTapped), for: .touchUpInside)
+        
         NSLayoutConstraint.activate([
-            videoView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 50),
-            videoView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            videoView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor ,constant: -20),
-            videoView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -200)
+            videoView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            videoView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            videoView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            videoView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ])
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    
+    @objc func pickUpCallTapped(){
+        print("pick up")
         
     }
     
-    
+    @objc func rejectCallTapped(){
+        print("reject call")
+        
+    }
 
 }

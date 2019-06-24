@@ -295,12 +295,14 @@ class MapViewController: UIViewController {
   @objc func logoutTapped(){
     print("logout")
     videoView.isHidden = true
-    do{
-      try Auth.auth().signOut()
-      self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
-    }catch let err{
-      print(err)
-    }
+    let incomeCall = IncomeCallViewController()
+    self.present(incomeCall, animated: true, completion: nil)
+//    do{
+//      try Auth.auth().signOut()
+//      self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
+//    }catch let err{
+//      print(err)
+//    }
   }
   
   @objc func settingTapped(){
@@ -468,7 +470,7 @@ extension MapViewController : MKMapViewDelegate {
     UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
       self.videoView.alpha = 1
     }, completion: nil)
-    videoView.setUpViews(callType: .Default)
+    videoView.setUpViews()
     videoView.configure(url: selectedUser!.profileVideoUrl)
     videoView.play()
   }

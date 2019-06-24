@@ -57,27 +57,22 @@ class VideoView: UIView {
         return b
     }()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUpViews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+  
     //UI setup
-    func setUpViews(callType : CallType){
+    func setUpViews(){
         self.addSubview(buttonContainer)
         self.addSubview(videoContainer)
         self.buttonContainer.addSubview(rightButton)
         self.buttonContainer.addSubview(leftButton)
-        
-        switch callType {
-        case .IncomeCall:
-            self.leftButton.setImage(UIImage(named: "reject"), for: .normal)
-            self.leftButton.addTarget(self, action: #selector(rejectCallTapped), for: .touchUpInside)
-            self.rightButton.setImage(UIImage(named: "call"), for: .normal)
-            self.rightButton.addTarget(self, action: #selector(pickUpCallTapped), for: .touchUpInside)
-        case .Default:
-            self.leftButton.setImage(UIImage(named: "message"), for: .normal)
-            self.leftButton.addTarget(self, action: #selector(sendMessageTapped), for: .touchUpInside)
-            self.rightButton.setImage(UIImage(named: "call"), for: .normal)
-            self.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
-        default:
-            break
-        }
         
         NSLayoutConstraint.activate([
             buttonContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
@@ -135,25 +130,5 @@ class VideoView: UIView {
             player.play()
         }
     }
-    
-    //handle button tapped
-    @objc func callTapped(){
-        print("call")
-        
-    }
-    
-    @objc func sendMessageTapped(){
-        print("send video message")
-        
-    }
-    
-    @objc func pickUpCallTapped(){
-        print("pick up")
-        
-    }
-    
-    @objc func rejectCallTapped(){
-        print("reject call")
-        
-    }
+
 }
