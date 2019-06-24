@@ -20,15 +20,14 @@ class MapViewController: UIViewController {
   
   
   var users : [User] = []
-  var videoView : VideoView!
   
   let maleColor : UIColor = UIColor(red: 98, green: 98, blue: 247, alpha: 1)
   let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
   
   var selectedUser: User?
   
-  let container : UIView = {
-    let v = UIView()
+  let videoView : VideoView = {
+    let v = VideoView()
     v.backgroundColor = .white
     v.layer.cornerRadius = 20
     v.isHidden = true
@@ -43,37 +42,37 @@ class MapViewController: UIViewController {
     return v
   }()
   
-  let videoContainer:UIView = {
-    let v = UIView()
-    v.backgroundColor = .green
-    v.translatesAutoresizingMaskIntoConstraints = false
-    return v
-  }()
-  
-  let sendMessageButton:UIButton = {
-    let b = UIButton()
-    b.layer.cornerRadius = 0.5 * 50
-    b.clipsToBounds = true
-    b.backgroundColor = UIColor.yellow
-    b.imageView?.contentMode = .scaleAspectFit
-    b.setImage(UIImage(named: "message"), for: .normal)
-    b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
-    b.translatesAutoresizingMaskIntoConstraints = false
-    return b
-  }()
-  
-  let callButton:UIButton = {
-    let b = UIButton()
-    b.layer.cornerRadius = 0.5 * 50
-    b.clipsToBounds = true
-    b.backgroundColor = UIColor.red
-    b.setImage(UIImage(named: "call"), for: .normal)
-    b.imageView?.contentMode = .scaleAspectFit
-    b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
-    b.translatesAutoresizingMaskIntoConstraints = false
-    b.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
-    return b
-  }()
+//  let videoContainer:UIView = {
+//    let v = UIView()
+//    v.backgroundColor = .green
+//    v.translatesAutoresizingMaskIntoConstraints = false
+//    return v
+//  }()
+//
+//  let sendMessageButton:UIButton = {
+//    let b = UIButton()
+//    b.layer.cornerRadius = 0.5 * 50
+//    b.clipsToBounds = true
+//    b.backgroundColor = UIColor.yellow
+//    b.imageView?.contentMode = .scaleAspectFit
+//    b.setImage(UIImage(named: "message"), for: .normal)
+//    b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
+//    b.translatesAutoresizingMaskIntoConstraints = false
+//    return b
+//  }()
+//
+//  let callButton:UIButton = {
+//    let b = UIButton()
+//    b.layer.cornerRadius = 0.5 * 50
+//    b.clipsToBounds = true
+//    b.backgroundColor = UIColor.red
+//    b.setImage(UIImage(named: "call"), for: .normal)
+//    b.imageView?.contentMode = .scaleAspectFit
+//    b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
+//    b.translatesAutoresizingMaskIntoConstraints = false
+//    b.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
+//    return b
+//  }()
   
   let navView: UIView = {
     let v = UIView()
@@ -220,11 +219,11 @@ class MapViewController: UIViewController {
     contactsCollectionView.delegate = self
     contactsCollectionView.dataSource = self
     
-    self.centerView.addSubview(container)
-    self.container.addSubview(buttonContainer)
-    self.container.addSubview(videoContainer)
-    self.buttonContainer.addSubview(callButton)
-    self.buttonContainer.addSubview(sendMessageButton)
+    self.centerView.addSubview(videoView)
+//    self.container.addSubview(buttonContainer)
+//    self.container.addSubview(videoContainer)
+//    self.buttonContainer.addSubview(callButton)
+//    self.buttonContainer.addSubview(sendMessageButton)
     
     leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
     rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
@@ -289,30 +288,30 @@ class MapViewController: UIViewController {
       contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
       contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
       
-      container.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: 50),
-      container.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 20),
-      container.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -20),
-      container.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -200),
+      videoView.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: 50),
+      videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 20),
+      videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -20),
+      videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -200),
       
-      buttonContainer.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -5),
-      buttonContainer.heightAnchor.constraint(equalToConstant: 80),
-      buttonContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 5),
-      buttonContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -5),
-      
-      videoContainer.topAnchor.constraint(equalTo: container.topAnchor, constant: 5),
-      videoContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 5),
-      videoContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -5),
-      videoContainer.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -5),
-      
-      callButton.heightAnchor.constraint(equalToConstant: 50),
-      callButton.widthAnchor.constraint(equalToConstant: 50),
-      callButton.trailingAnchor.constraint(equalTo: buttonContainer.trailingAnchor, constant: -50),
-      callButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
-      
-      sendMessageButton.heightAnchor.constraint(equalToConstant: 50),
-      sendMessageButton.widthAnchor.constraint(equalToConstant: 50),
-      sendMessageButton.leadingAnchor.constraint(equalTo: buttonContainer.leadingAnchor, constant: 50),
-      sendMessageButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
+//      buttonContainer.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -5),
+//      buttonContainer.heightAnchor.constraint(equalToConstant: 80),
+//      buttonContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 5),
+//      buttonContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -5),
+//
+//      videoContainer.topAnchor.constraint(equalTo: container.topAnchor, constant: 5),
+//      videoContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 5),
+//      videoContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -5),
+//      videoContainer.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -5),
+//
+//      callButton.heightAnchor.constraint(equalToConstant: 50),
+//      callButton.widthAnchor.constraint(equalToConstant: 50),
+//      callButton.trailingAnchor.constraint(equalTo: buttonContainer.trailingAnchor, constant: -50),
+//      callButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
+//
+//      sendMessageButton.heightAnchor.constraint(equalToConstant: 50),
+//      sendMessageButton.widthAnchor.constraint(equalToConstant: 50),
+//      sendMessageButton.leadingAnchor.constraint(equalTo: buttonContainer.leadingAnchor, constant: 50),
+//      sendMessageButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
       ])
   }
   
@@ -339,7 +338,8 @@ class MapViewController: UIViewController {
         guard let uid = userObject["uid"] as? String else {return}
         guard let lat = userObject["latitude"] as? String else {return}
         guard let lon = userObject["longitude"] as? String else{return}
-        let user = User(uid: uid, token: "", username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: "")
+        
+        let user = User(uid: uid, token: "" , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
         self.mapView.addAnnotation(user)
         self.users.append(user)
       }
@@ -348,7 +348,7 @@ class MapViewController: UIViewController {
   
   @objc func logoutTapped(){
     print("logout")
-    container.isHidden = true
+    videoView.isHidden = true
     do{
       try Auth.auth().signOut()
       self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
@@ -447,6 +447,7 @@ class MapViewController: UIViewController {
         //    videoVC.userChannelID = self.selectedUser?.uid
         self.present(videoVC, animated: true, completion: nil)
     }
+    
 
   }
   
@@ -507,12 +508,11 @@ extension MapViewController : MKMapViewDelegate {
     view.layer.borderColor = UIColor.white.cgColor
     view.layer.masksToBounds = true
     
-    //implement gender
-    //        if(view.annotation. == UserGender.male){
-    //            view.layer.borderColor = UIColor.blue.cgColor
-    //        }else{
-    //            view.layer.borderColor = UIColor.red.cgColor
-    //        }
+    if(annotation.gender == UserGender.male){
+        view.layer.borderColor = UIColor.blue.cgColor
+    }else{
+        view.layer.borderColor = UIColor.red.cgColor
+    }
     
     view.layer.borderWidth = 5
     return view
@@ -522,10 +522,13 @@ extension MapViewController : MKMapViewDelegate {
     self.selectedUser = view.annotation as? User
     print(self.selectedUser?.uid)
     
-    container.isHidden = false
+    videoView.isHidden = false
     UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
-      self.container.alpha = 1
+      self.videoView.alpha = 1
     }, completion: nil)
+    videoView.setUpViews()
+    videoView.configure(url: selectedUser!.profileVideoUrl)
+    videoView.play()
   }
 
 }
