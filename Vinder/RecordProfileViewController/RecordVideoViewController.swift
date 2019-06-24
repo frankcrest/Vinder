@@ -1,4 +1,4 @@
-
+//
 //  RecordVideoViewController.swift
 //  Vinder
 //
@@ -9,9 +9,6 @@
 import UIKit
 import AVFoundation
 import AVKit
-import FirebaseAuth
-import FirebaseDatabase
-
 
 class RecordVideoViewController: UIViewController {
     
@@ -28,8 +25,6 @@ class RecordVideoViewController: UIViewController {
     
     //MARK: PROPERTIES
     
-    var ref = Database.database().reference()
-    let ud = UserDefaults.standard
     let cameraController = CameraController()
     var buttonView = ButtonView()
     var playerLayer: AVPlayerLayer?
@@ -56,6 +51,10 @@ class RecordVideoViewController: UIViewController {
             try? self.cameraController.displayPreview(on: self.recordPreviewView)
         }
     }
+    
+
+    
+    
     
     //MARK: SETUP VIEWS
     
@@ -85,26 +84,25 @@ class RecordVideoViewController: UIViewController {
             recordPreviewView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
             
             ])
-        
+    
     }
     
     //MARK: ACTIONS
     
     @objc func switchCamera(){
-      let mapVC = MapViewController()
-      self.present(mapVC, animated: true, completion: nil)
-//        do {
-//            try cameraController.switchCameras()
-//        } catch {
-//            print("can not swict camera: \(error)")
-//        }
+        do {
+            try cameraController.switchCameras()
+        } catch {
+            print("can not swict camera: \(error)")
+        }
     }
     
+
     
     @objc func backButton(_ sender: UIButton) {
         
         if sender.titleLabel?.text == "back" {
-          self.navigationController?.popViewController(animated: true)
+            
         }
         
         if sender.titleLabel?.text == "retake" {
@@ -114,29 +112,7 @@ class RecordVideoViewController: UIViewController {
             self.playerLayer?.removeFromSuperlayer()
             self.configureCameraController()
         }
-    }
-    
-    @objc func confirmTapped(){
-        guard let email = ud.string(forKey: "email") else {return}
-        guard let password = ud.string(forKey: "password") else {return}
-        guard let name = ud.string(forKey: "name") else {return}
-        guard let username = ud.string(forKey: "username") else {return}
         
-        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
-            if let error = error{
-                print(error)
-                return
-            }
-            guard let uid = user?.user.uid else {return}
-            self.ref.child("users").child(uid).setValue((["email":email, "username":username, "name":name]), withCompletionBlock: { (error, ref) in
-                if let error = error{
-                    print(error)
-                    return
-                }
-                let mapViewVC = MapViewController()
-                self.present(mapViewVC, animated: true, completion: nil)
-            })
-        }
     }
 }
 
@@ -148,7 +124,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
     
     func configureReview() {
         let videoUrl = cameraController.fileURL
-        player = AVPlayer(url: videoUrl)
+        player = AVPlayer(url: videoUrl)                    
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.videoGravity = .resizeAspectFill
         if let playerLayer = self.playerLayer {
@@ -185,6 +161,8 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
     
     
     
+    
+    
+    
+    
 }
-
-

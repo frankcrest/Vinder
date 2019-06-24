@@ -14,6 +14,9 @@ PODS:
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 6.0.0)
   - Firebase/Storage (6.2.0):
+  - Firebase/Messaging (6.1.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 4.0.1)
     - Firebase/CoreOnly
     - FirebaseStorage (~> 3.2.1)
   - FirebaseAnalytics (6.0.1):
@@ -43,6 +46,15 @@ PODS:
     - FirebaseCore (~> 6.0)
     - GoogleUtilities/Environment (~> 6.0)
     - GoogleUtilities/UserDefaults (~> 6.0)
+  - FirebaseMessaging (4.0.1):
+    - FirebaseAnalyticsInterop (~> 1.1)
+    - FirebaseCore (~> 6.0)
+    - FirebaseInstanceID (~> 4.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/Environment (~> 6.0)
+    - GoogleUtilities/Reachability (~> 6.0)
+    - GoogleUtilities/UserDefaults (~> 6.0)
+    - Protobuf (~> 3.1)
   - FirebaseStorage (3.2.1):
     - FirebaseAuthInterop (~> 1.0)
     - FirebaseCore (~> 6.0)
@@ -78,6 +90,7 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - Protobuf (3.7.0)
   - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
@@ -86,6 +99,7 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
+  - Firebase/Messaging
   - Firebase/Storage
   - SwiftyJSON
 
@@ -94,17 +108,20 @@ SPEC REPOS:
     - AgoraRtcEngine_iOS
     - Firebase
     - FirebaseAnalytics
+    - FirebaseAnalyticsInterop
     - FirebaseAuth
     - FirebaseAuthInterop
     - FirebaseCore
     - FirebaseDatabase
     - FirebaseInstanceID
+    - FirebaseMessaging
     - FirebaseStorage
     - GoogleAppMeasurement
     - GoogleUtilities
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - Protobuf
     - SwiftyJSON
 
 SPEC CHECKSUMS:
@@ -112,18 +129,21 @@ SPEC CHECKSUMS:
   Firebase: 5965bac23e7fcb5fa6d926ed429c9ecef8a2014e
   FirebaseAnalytics: 629301c2b9925f3537d4093a17a72751ae5b7084
   FirebaseAuth: 80879f0e9f2c5f40686d5b42f6ccb3cd5dce78ea
+  FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
   FirebaseCore: b0f0262acebfa540e5f97b3832dbb13186980822
   FirebaseDatabase: f48e067716864be2b855cf716b927ef375d6cfa0
   FirebaseInstanceID: cdb3827746d53ece7ae87a5c51c25c3055443366
+  FirebaseMessaging: 31377e05331d16dc6c9fd82554f9a5c49aa70aed
   FirebaseStorage: 926d41552072b9fee67aa645760f05f87b7ce604
   GoogleAppMeasurement: 51d8d9ea48f0ca44484d29cfbdef976fbd4fc336
   GoogleUtilities: 996e0db07153674fd1b54b220fda3a3dc3547cba
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 4537bd46b24481cf2e2012f956bfced3519dbe18
+PODFILE CHECKSUM: ea947540871f33dcf473159c370fe585feb0ce7e
 
 COCOAPODS: 1.7.0

@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<<<<<<< HEAD
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow app to access your album?</string>
 	<key>NSAppTransportSecurity</key>
@@ -15,6 +16,8 @@
 	<string>Need to use microphone to chat</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Need to use camera do to video chat</string>
+=======
+>>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -33,6 +36,25 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Need to use camera do to video chat</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Do you allow this app to know your current location?</string>
+	<key>NSLocationUsageDescription</key>
+	<string>We need your location to find other users.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to find other users.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need to use microphone to chat</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -54,9 +76,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Will you allow this app to always know your location?</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Do you allow this app to know your current location?</string>
 </dict>
 </plist>

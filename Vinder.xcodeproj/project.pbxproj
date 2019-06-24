@@ -10,9 +10,13 @@
 		0D3E98D422BAA60200D02311 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98D322BAA60200D02311 /* MapViewController.swift */; };
 		0D3E98D622BAA84E00D02311 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3E98D522BAA84E00D02311 /* MapKit.framework */; };
 		0D3E98D822BAA87B00D02311 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3E98D722BAA87B00D02311 /* CoreLocation.framework */; };
+<<<<<<< HEAD
 		0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */; };
 		0D91629422BD6D6300C58DCF /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */; };
 		0D91629722BF266500C58DCF /* IncomeCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629622BF266500C58DCF /* IncomeCallView.swift */; };
+=======
+		0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98DB22BAC5CA00D02311 /* User.swift */; };
+>>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
 		2829F008C558904A7F28D088 /* Pods_Vinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */; };
 		E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543422B9735F00CD7958 /* AppDelegate.swift */; };
 		E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* LoginViewController.swift */; };
@@ -28,19 +32,26 @@
 		E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F322BC313800AE8155 /* SettingViewController.swift */; };
 		E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F622BC3F0000AE8155 /* VideoView.swift */; };
 		E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */; };
+		ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE84122BBF89F0046E35C /* ButtonView.swift */; };
+		ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86522BC1F330046E35C /* RecordButtonView.swift */; };
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
 		EDF4474322BAA5E60048BAE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */; };
+		EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4476222BABFBA0048BAE2 /* CameraController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0D3E98D322BAA60200D02311 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0D3E98D522BAA84E00D02311 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0D3E98D722BAA87B00D02311 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+<<<<<<< HEAD
 		0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyUser.swift; sourceTree = "<group>"; };
 		0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
 		0D91629522BED8EC00C58DCF /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		0D91629622BF266500C58DCF /* IncomeCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeCallView.swift; sourceTree = "<group>"; };
+=======
+		0D3E98DB22BAC5CA00D02311 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+>>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
 		1E180473BECC247993331594 /* Pods-Vinder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.release.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.release.xcconfig"; sourceTree = "<group>"; };
 		538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543122B9735F00CD7958 /* Vinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,15 +64,19 @@
 		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
 		E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVideoViewController.swift; sourceTree = "<group>"; };
 		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVideoViewController.swift; sourceTree = "<group>"; };
+		E972D7AB22BD84520058D54E /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		E97F74F322BC313800AE8155 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		E97F74F622BC3F0000AE8155 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbyUserView.swift; sourceTree = "<group>"; };
+		ED3BE84122BBF89F0046E35C /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		ED3BE86522BC1F330046E35C /* RecordButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButtonView.swift; sourceTree = "<group>"; };
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		EDF4474222BAA5E60048BAE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		EDF4476222BABFBA0048BAE2 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		F0C8F18A0138C4DE55983CB0 /* Pods-Vinder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.debug.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -110,9 +125,16 @@
 		E935543322B9735F00CD7958 /* Vinder */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				0D91629522BED8EC00C58DCF /* Vinder.entitlements */,
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,
 				0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */,
+=======
+				E972D7AB22BD84520058D54E /* Vinder.entitlements */,
+				E935543422B9735F00CD7958 /* AppDelegate.swift */,
+				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
+				0D3E98DB22BAC5CA00D02311 /* User.swift */,
+>>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
 				E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */,
 				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
 				0D91629622BF266500C58DCF /* IncomeCallView.swift */,
@@ -122,19 +144,33 @@
 				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
 				E935544622B987BF00CD7958 /* SignUpViewController.swift */,
 				E935544A22B99EB100CD7958 /* SignUpVideoViewController.swift */,
-				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
 				0D3E98D322BAA60200D02311 /* MapViewController.swift */,
 				E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */,
 				E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */,
 				E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */,
 				E97F74F322BC313800AE8155 /* SettingViewController.swift */,
+<<<<<<< HEAD
 				0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */,
+=======
+				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
+				EDF4476622BAD6130048BAE2 /* RecordProfileViewController */,
+>>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
 				E935543B22B9736000CD7958 /* Assets.xcassets */,
 				E935543D22B9736000CD7958 /* LaunchScreen.storyboard */,
 				ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */,
 				E935544022B9736000CD7958 /* Info.plist */,
 			);
 			path = Vinder;
+			sourceTree = "<group>";
+		};
+		EDF4476622BAD6130048BAE2 /* RecordProfileViewController */ = {
+			isa = PBXGroup;
+			children = (
+				ED3BE86522BC1F330046E35C /* RecordButtonView.swift */,
+				ED3BE84122BBF89F0046E35C /* ButtonView.swift */,
+				EDF4476222BABFBA0048BAE2 /* CameraController.swift */,
+			);
+			path = RecordProfileViewController;
 			sourceTree = "<group>";
 		};
 		F2E6C00A1AF2E58EEC06126B /* Pods */ = {
@@ -181,6 +217,9 @@
 					E935543022B9735F00CD7958 = {
 						CreatedOnToolsVersion = 10.2.1;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Maps.iOS = {
 								enabled = 1;
 							};
@@ -276,14 +315,21 @@
 				E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */,
 				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
 				E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */,
+				EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */,
 				E935544B22B99EB100CD7958 /* SignUpVideoViewController.swift in Sources */,
+				ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */,
 				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
 				E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */,
+				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */,
+<<<<<<< HEAD
 				0D91629422BD6D6300C58DCF /* SettingTableViewCell.swift in Sources */,
 				0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */,
+=======
+				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
+>>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
 				E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
 				E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */,
@@ -431,6 +477,7 @@
 				DEVELOPMENT_TEAM = WPKBU3MB67;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Vinder/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -452,6 +499,7 @@
 				DEVELOPMENT_TEAM = WPKBU3MB67;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Vinder/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -23,8 +23,6 @@ class VideoViewController: UIViewController {
     private let appID = "007d7c78a4cc4fe48b838110bde1cd0c"
     private var agoraKit: AgoraRtcEngineKit!
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,6 +65,18 @@ class VideoViewController: UIViewController {
         
     }
     
+    @objc private func moveLocalVideoview(_ sender: UIPanGestureRecognizer) {
+        
+        let translation = sender.translation(in: view)
+        if let oldCenter = sender.view?.center {
+            let newCenter = CGPoint(x: oldCenter.x + translation.x, y: oldCenter.y + translation.y)
+            sender.view?.center = newCenter
+        }
+        sender.setTranslation(CGPoint.zero, in: view)
+    }
+    
+    
+    
     
     
     //MARK: UI SETUPS
@@ -76,8 +86,8 @@ class VideoViewController: UIViewController {
         localVideoView = UIView()
         remoteVideoView.translatesAutoresizingMaskIntoConstraints = false
         localVideoView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(remoteVideoView)
-        self.view.addSubview(localVideoView)
+        view.addSubview(remoteVideoView)
+        view.addSubview(localVideoView)
         
         NSLayoutConstraint.activate([
             remoteVideoView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -86,15 +96,15 @@ class VideoViewController: UIViewController {
             remoteVideoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             ])
         
-        NSLayoutConstraint.activate([
-            localVideoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 44),
-            localVideoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            localVideoView.widthAnchor.constraint(equalToConstant: 180),
-            localVideoView.heightAnchor.constraint(equalToConstant: 240.0)
-            ])
+        localVideoView.frame = CGRect(x: view.bounds.maxX - 170.0 , y: 44.0, width: 150, height: 200)
+        localVideoView.layer.cornerRadius = 10
+        localVideoView.layer.masksToBounds = true
         
         remoteVideoView.backgroundColor = .black
         localVideoView.backgroundColor = .black
+        
+        localVideoView.isUserInteractionEnabled = true
+        localVideoView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(moveLocalVideoview(_:))))
         
     }
     
@@ -187,6 +197,7 @@ extension VideoViewController: AgoraRtcEngineDelegate {
         remoteVideoCanvas.view = remoteVideoView
         remoteVideoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(remoteVideoCanvas)
+        view.bringSubviewToFront(localVideoView)
     }
     
     
