@@ -15,7 +15,6 @@ class IncomeCallView: UIView {
     var playerLayer: AVPlayerLayer!
     var player: AVPlayer!
     var isLoop: Bool = false
-
     
     let pickUpCallButton:UIButton = {
         let b = UIButton()

@@ -66,6 +66,7 @@
         setupViews()
         uid = currentUser?.uid
     }
+
     
     func setupViews(){
         self.view.backgroundColor = .yellow
