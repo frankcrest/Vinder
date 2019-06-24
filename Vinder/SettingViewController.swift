@@ -18,7 +18,7 @@
     let ud = UserDefaults.standard
     let currentUser = Auth.auth().currentUser
     var uid : String!
-    var userInfo : NearbyUser!
+
     
     
     let backButton : UIButton = {

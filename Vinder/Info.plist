@@ -2,7 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<<<<<<< HEAD
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow app to access your album?</string>
 	<key>NSAppTransportSecurity</key>
@@ -16,8 +15,6 @@
 	<string>Need to use microphone to chat</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Need to use camera do to video chat</string>
-=======
->>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

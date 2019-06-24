@@ -339,8 +339,7 @@ class MapViewController: UIViewController {
         guard let uid = userObject["uid"] as? String else {return}
         guard let lat = userObject["latitude"] as? String else {return}
         guard let lon = userObject["longitude"] as? String else{return}
-        
-        let user = User(uid: uid , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon)
+        let user = User(uid: uid, token: "", username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: "")
         self.mapView.addAnnotation(user)
         self.users.append(user)
       }
@@ -443,14 +442,15 @@ class MapViewController: UIViewController {
         }
     }
     
+    @objc func callTapped(){
+        let videoVC = VideoViewController()
+        //    videoVC.userChannelID = self.selectedUser?.uid
+        self.present(videoVC, animated: true, completion: nil)
+    }
 
   }
   
-  @objc func callTapped(){
-    let videoVC = VideoViewController()
-//    videoVC.userChannelID = self.selectedUser?.uid
-    self.present(videoVC, animated: true, completion: nil)
-  }
+
   
 
     

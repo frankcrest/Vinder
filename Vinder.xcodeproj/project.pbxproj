@@ -10,34 +10,30 @@
 		0D3E98D422BAA60200D02311 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98D322BAA60200D02311 /* MapViewController.swift */; };
 		0D3E98D622BAA84E00D02311 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3E98D522BAA84E00D02311 /* MapKit.framework */; };
 		0D3E98D822BAA87B00D02311 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3E98D722BAA87B00D02311 /* CoreLocation.framework */; };
-<<<<<<< HEAD
-		0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */; };
+		0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98DB22BAC5CA00D02311 /* User.swift */; };
 		0D91629422BD6D6300C58DCF /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */; };
 		0D91629722BF266500C58DCF /* IncomeCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629622BF266500C58DCF /* IncomeCallView.swift */; };
-=======
-		0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98DB22BAC5CA00D02311 /* User.swift */; };
->>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
+		0D91629A22C1436300C58DCF /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629922C1436300C58DCF /* RecordVideoViewController.swift */; };
+		0D91629E22C1439D00C58DCF /* NearbyUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629C22C1439D00C58DCF /* NearbyUserView.swift */; };
+		0D9162A022C1476000C58DCF /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629F22C1475F00C58DCF /* SignUpViewController.swift */; };
+		0D9162A122C1479000C58DCF /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86922BD5CDE0046E35C /* VideoPlayer.swift */; };
 		2829F008C558904A7F28D088 /* Pods_Vinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */; };
 		E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543422B9735F00CD7958 /* AppDelegate.swift */; };
 		E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* LoginViewController.swift */; };
 		E935543C22B9736000CD7958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E935543B22B9736000CD7958 /* Assets.xcassets */; };
 		E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E935543D22B9736000CD7958 /* LaunchScreen.storyboard */; };
-		E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544622B987BF00CD7958 /* SignUpViewController.swift */; };
 		E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544822B99B3C00CD7958 /* LoginFormViewController.swift */; };
-		E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935545022BAA57900CD7958 /* RecordVideoViewController.swift */; };
 		E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */; };
 		E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */; };
 		E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */; };
 		E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F322BC313800AE8155 /* SettingViewController.swift */; };
 		E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F622BC3F0000AE8155 /* VideoView.swift */; };
-		E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */; };
 		ED31021B22BEAE8200D2211B /* simple loading.aep in Resources */ = {isa = PBXBuildFile; fileRef = ED31021922BEAE8200D2211B /* simple loading.aep */; };
 		ED31021C22BEAE8200D2211B /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = ED31021A22BEAE8200D2211B /* simple.json */; };
 		ED31022022BEAF1200D2211B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED31021F22BEAF1200D2211B /* LoadingView.swift */; };
 		ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE84122BBF89F0046E35C /* ButtonView.swift */; };
 		ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86522BC1F330046E35C /* RecordButtonView.swift */; };
 		ED3BE86822BD58280046E35C /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86722BD58280046E35C /* TutorialView.swift */; };
-		ED3BE86A22BD5CDE0046E35C /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86922BD5CDE0046E35C /* VideoPlayer.swift */; };
 		ED3BE86C22BD714E0046E35C /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86B22BD714E0046E35C /* WebService.swift */; };
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
@@ -48,14 +44,13 @@
 		0D3E98D322BAA60200D02311 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0D3E98D522BAA84E00D02311 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0D3E98D722BAA87B00D02311 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-<<<<<<< HEAD
-		0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyUser.swift; sourceTree = "<group>"; };
+		0D3E98DB22BAC5CA00D02311 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
 		0D91629522BED8EC00C58DCF /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		0D91629622BF266500C58DCF /* IncomeCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeCallView.swift; sourceTree = "<group>"; };
-=======
-		0D3E98DB22BAC5CA00D02311 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
->>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
+		0D91629922C1436300C58DCF /* RecordVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordVideoViewController.swift; path = Vinder/RecordVideoViewController.swift; sourceTree = SOURCE_ROOT; };
+		0D91629C22C1439D00C58DCF /* NearbyUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NearbyUserView.swift; path = Vinder/NearbyUserView.swift; sourceTree = SOURCE_ROOT; };
+		0D91629F22C1475F00C58DCF /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		1E180473BECC247993331594 /* Pods-Vinder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.release.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.release.xcconfig"; sourceTree = "<group>"; };
 		538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543122B9735F00CD7958 /* Vinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,16 +59,13 @@
 		E935543B22B9736000CD7958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E935543E22B9736000CD7958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E935544022B9736000CD7958 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E935544622B987BF00CD7958 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
-		E935545022BAA57900CD7958 /* RecordVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordVideoViewController.swift; path = ../RecordVideoViewController.swift; sourceTree = "<group>"; };
 		E972D7AB22BD84520058D54E /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		E97F74F322BC313800AE8155 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		E97F74F622BC3F0000AE8155 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
-		E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbyUserView.swift; sourceTree = "<group>"; };
 		ED31021922BEAE8200D2211B /* simple loading.aep */ = {isa = PBXFileReference; lastKnownFileType = file; path = "simple loading.aep"; sourceTree = "<group>"; };
 		ED31021A22BEAE8200D2211B /* simple.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = simple.json; sourceTree = "<group>"; };
 		ED31021F22BEAF1200D2211B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -102,6 +94,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D91629822C1433000C58DCF /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		BE8FA8EE78DA7E8F5D4D1B7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +118,7 @@
 				E935543222B9735F00CD7958 /* Products */,
 				F2E6C00A1AF2E58EEC06126B /* Pods */,
 				BE8FA8EE78DA7E8F5D4D1B7F /* Frameworks */,
+				0D91629822C1433000C58DCF /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,40 +133,27 @@
 		E935543322B9735F00CD7958 /* Vinder */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				0D91629522BED8EC00C58DCF /* Vinder.entitlements */,
-				E935543422B9735F00CD7958 /* AppDelegate.swift */,
-				0D3E98DB22BAC5CA00D02311 /* NearbyUser.swift */,
-=======
 				E972D7AB22BD84520058D54E /* Vinder.entitlements */,
 				ED31021822BEAE8200D2211B /* loading */,
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,
-				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
 				0D3E98DB22BAC5CA00D02311 /* User.swift */,
->>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
-				E97F74F822BC3F8F00AE8155 /* NearbyUserView.swift */,
 				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
 				0D91629622BF266500C58DCF /* IncomeCallView.swift */,
 				ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */,
 				E935543622B9735F00CD7958 /* LoginViewController.swift */,
 				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
-				E935544622B987BF00CD7958 /* SignUpViewController.swift */,
 				0D3E98D322BAA60200D02311 /* MapViewController.swift */,
 				E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */,
 				E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */,
 				E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */,
 				E97F74F322BC313800AE8155 /* SettingViewController.swift */,
-<<<<<<< HEAD
-<<<<<<< HEAD
+				0D91629F22C1475F00C58DCF /* SignUpViewController.swift */,
 				0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */,
-=======
-				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
-=======
+				0D91629C22C1439D00C58DCF /* NearbyUserView.swift */,
 				ED31021F22BEAF1200D2211B /* LoadingView.swift */,
 				ED3BE86D22BD715D0046E35C /* Networking */,
->>>>>>> 4551e9dcb293d831864c5964fbdcaddebc9e16c2
 				EDF4476622BAD6130048BAE2 /* RecordProfileViewController */,
->>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
 				E935543B22B9736000CD7958 /* Assets.xcassets */,
 				E935543D22B9736000CD7958 /* LaunchScreen.storyboard */,
 				ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */,
@@ -195,7 +182,7 @@
 		EDF4476622BAD6130048BAE2 /* RecordProfileViewController */ = {
 			isa = PBXGroup;
 			children = (
-				E935545022BAA57900CD7958 /* RecordVideoViewController.swift */,
+				0D91629922C1436300C58DCF /* RecordVideoViewController.swift */,
 				ED3BE86522BC1F330046E35C /* RecordButtonView.swift */,
 				ED3BE84122BBF89F0046E35C /* ButtonView.swift */,
 				EDF4476222BABFBA0048BAE2 /* CameraController.swift */,
@@ -346,30 +333,23 @@
 				0D91629722BF266500C58DCF /* IncomeCallView.swift in Sources */,
 				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
 				E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */,
-				E935545122BAA57900CD7958 /* RecordVideoViewController.swift in Sources */,
 				ED31022022BEAF1200D2211B /* LoadingView.swift in Sources */,
 				E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */,
 				EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */,
+				0D91629A22C1436300C58DCF /* RecordVideoViewController.swift in Sources */,
 				ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */,
-				E935544722B987BF00CD7958 /* SignUpViewController.swift in Sources */,
-				ED3BE86A22BD5CDE0046E35C /* VideoPlayer.swift in Sources */,
 				E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */,
 				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				ED3BE86822BD58280046E35C /* TutorialView.swift in Sources */,
-				E97F74F922BC3F8F00AE8155 /* NearbyUserView.swift in Sources */,
-<<<<<<< HEAD
 				0D91629422BD6D6300C58DCF /* SettingTableViewCell.swift in Sources */,
-				0D3E98DC22BAC5CA00D02311 /* NearbyUser.swift in Sources */,
-=======
 				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
-<<<<<<< HEAD
->>>>>>> 678ebb9f68ee3d70fb7dc4376f1a0ab6f5f918b6
-=======
+				0D9162A122C1479000C58DCF /* VideoPlayer.swift in Sources */,
 				ED3BE86C22BD714E0046E35C /* WebService.swift in Sources */,
+				0D91629E22C1439D00C58DCF /* NearbyUserView.swift in Sources */,
+				0D9162A022C1476000C58DCF /* SignUpViewController.swift in Sources */,
 				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
->>>>>>> 4551e9dcb293d831864c5964fbdcaddebc9e16c2
 				E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
 				E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */,
