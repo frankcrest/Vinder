@@ -47,7 +47,7 @@ exports.observeCalling = functions.database.ref('/calling/{uid}/{callingId}').on
       return snapshot.ref.parent.child('uppercase').set(uppercase);
     });
 
-exports.observeCallResponse = functions.database.ref('/callResponse/{callerId}/{uid}').onCreate((snapshot, context) => {
+exports.observeRejectedCall = functions.database.ref('/callRejected/{callerId}/{uid}').onCreate((snapshot, context) => {
   var callerId = context.params.callerId;
   var uid = context.params.uid;
 
@@ -64,6 +64,7 @@ exports.observeCallResponse = functions.database.ref('/callResponse/{callerId}/{
         "content-available" : 1
         },
         "callerId" : callerId.uid
+
       };
 
       admin.messaging().sendToDevice(userDoingCalling.token, payload).then(function(response){
@@ -72,12 +73,42 @@ exports.observeCallResponse = functions.database.ref('/callResponse/{callerId}/{
       .catch(function(errror){
         console.log("Error sending message:",error);
       });
-
-
     })
   })
+})
 
+exports.observeAcceptedCall = functions.database.ref('/callAccepted/{callerId}/{uid}').onCreate((snapshot, context) => {
+  var callerId = context.params.callerId;
+  var uid = context.params.uid;
 
+  console.log('User' + callerId + 'is calling' + uid);
+
+  return admin.database().ref('/users/' + callerId).once('value',snapshot => {
+    var userDoingCalling = snapshot.val();
+
+    return admin.database().ref('/users/' + uid).once('value', snapshot => {
+      var userWeAreCalling = snapshot.val();
+
+      const payload = {
+    data: {
+      title: 'An event has occurred!',
+      body: 'Please respond to this event.',
+      event_id: userDoingCalling.uid
+    }
+  };
+
+  const options = {
+    content_available: true
+  }
+
+      admin.messaging().sendToDevice(userDoingCalling.token, payload, options).then(function(response){
+        console.log("succesfully send message:", response);
+      })
+      .catch(function(errror){
+        console.log("Error sending message:",error);
+      });
+    })
+  })
 })
 
 exports.sendNotifications = functions.https.onRequest((req,res) => {

@@ -95,16 +95,11 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
   func userNotificationCenter(_ center: UNUserNotificationCenter,
                               didReceive response: UNNotificationResponse,
                               withCompletionHandler completionHandler: @escaping () -> Void) {
+    
     let userInfo = response.notification.request.content.userInfo
     guard let callerId = userInfo["callerId"] as? String else {return}
-    print(callerId)
-    
-    guard let currentUserUid = Auth.auth().currentUser?.uid else {return}
-    
-    guard let databaseRef = ref else {return}
-    
-    databaseRef.child("callResponse").child(callerId).setValue([currentUserUid : 1])
-
+    ud.set(callerId, forKey: "callerId")
+    print("the caller id is: \(callerId)")
     completionHandler()
     let presentVC = MapViewController()
     self.window?.rootViewController = presentVC
@@ -132,7 +127,8 @@ extension AppDelegate : MessagingDelegate {
     print("Received data message: \(remoteMessage.appData)")
   }
   // [END ios_10_data_message]
+  
   func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    print("received remote notification \(userInfo)")
+    print("received silent notification \(userInfo)")
   }
 }
