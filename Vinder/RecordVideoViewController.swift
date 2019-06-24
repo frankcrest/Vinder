@@ -178,9 +178,10 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
         self.register.register(withProfileURL: url) { (succeeded, error) in
           
           if succeeded {
-            let mapViewVC = MapViewController()
+            
             self.loading.removeFromSuperview()
-            self.present(mapViewVC, animated: true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
+            print("view dismissed!")
             
           } else {
             print("error:\(String(describing: error))")

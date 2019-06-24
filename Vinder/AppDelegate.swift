@@ -8,7 +8,6 @@
 
 import UIKit
 import Firebase
-import FirebaseAuth
 import UserNotifications
 import FirebaseMessaging
 import FirebaseInstanceID
@@ -19,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
   var window: UIWindow?
   let ud = UserDefaults.standard
   var ref : DatabaseReference?
+    
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
@@ -45,17 +45,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
 
-    let initialController = LoginViewController()
-//    let initialController = VideoViewController()
-    let loginNav = UINavigationController()
-    loginNav.viewControllers = [initialController]
-    let mapviewController = MapViewController()
     
-    if Auth.auth().currentUser != nil {
-      self.window?.rootViewController = mapviewController
-    } else{
-      self.window?.rootViewController = loginNav
-    }
+
+    let initialController = MapViewController()
+    
+    let nav = UINavigationController()
+    nav.viewControllers = [initialController]
+    
+    window?.rootViewController = nav
+
 
     self.window?.makeKeyAndVisible()
     
