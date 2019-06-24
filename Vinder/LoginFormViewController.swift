@@ -134,8 +134,7 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
       self.emailTextField.text = ""
       self.passwordTextfield.text = ""
       
-      let mapviewController = MapViewController()
-        self.present(mapviewController, animated: true, completion: nil)
+    self.dismiss(animated: true, completion: nil)
     }
   }
   
