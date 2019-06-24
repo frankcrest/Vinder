@@ -94,6 +94,7 @@ PODS:
   - nanopb/encode (0.3.901)
   - Protobuf (3.7.0)
   - SwiftyJSON (5.0.0)
+
 DEPENDENCIES:
   - AgoraRtcEngine_iOS
   - Firebase/Analytics
@@ -104,6 +105,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - lottie-ios
   - SwiftyJSON
+
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AgoraRtcEngine_iOS
@@ -125,6 +127,7 @@ SPEC REPOS:
     - nanopb
     - Protobuf
     - SwiftyJSON
+
 SPEC CHECKSUMS:
   AgoraRtcEngine_iOS: be7eee187e0cf9bc67d67645cd0b75cd60b9503a
   Firebase: 8d77bb33624ae9b62d745d82ec023de5f70f7e4f
@@ -145,5 +148,7 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+
 PODFILE CHECKSUM: aa9deace04a3f3e1aaccf1cedce7647c14c3dbbc
-COCOAPODS: 1.7.0
+
+COCOAPODS: 1.7.2

@@ -184,18 +184,28 @@ class MapViewController: UIViewController {
     return v
   }()
   
+    
+    //MARK: VIEW DID LOAD
   override func viewDidLoad() {
     super.viewDidLoad()
     
     mapView.delegate = self
-    //set up map view
     mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
     setupViews()
+    
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     determineCurrentLocation()
+    if Auth.auth().currentUser == nil {
+        
+        let loginNav = UINavigationController()
+        //        let initialController = LoginViewController()
+        loginNav.viewControllers = [LoginViewController()]
+        present(loginNav, animated: true, completion: nil)
+        
+    }
   }
   
   func setupViews(){
@@ -225,6 +235,11 @@ class MapViewController: UIViewController {
     self.container.addSubview(videoContainer)
     self.buttonContainer.addSubview(callButton)
     self.buttonContainer.addSubview(sendMessageButton)
+    
+    self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+    self.navigationController?.navigationBar.shadowImage = UIImage()
+    self.navigationController?.navigationBar.isTranslucent = true
+    self.navigationController?.navigationBar.isHidden = true
     
     leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
     rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
