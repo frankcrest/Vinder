@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
   var window: UIWindow?
   let ud = UserDefaults.standard
   var ref : DatabaseReference?
-    
+  let notificationCenter = NotificationCenter.default
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
@@ -130,5 +130,15 @@ extension AppDelegate : MessagingDelegate {
   
   func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
     print("received silent notification \(userInfo)")
+    guard let uid = userInfo["event_id"] as? String else {return}
+    guard let title = userInfo["title"] as? String else {return}
+    guard let body = userInfo["body"] as? String else {return}
+    
+    print("the uid is \(uid)")
+    print("the title is \(title)")
+    print("the body is\(body)")
+    let callResponse = CallResponse(uid: uid, title: title, body: body)
+    notificationCenter.post(name: NSNotification.Name.CallResponseNotification, object: callResponse)
+    
   }
 }

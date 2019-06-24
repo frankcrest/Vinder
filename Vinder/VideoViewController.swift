@@ -9,8 +9,9 @@
 import UIKit
 import AgoraRtcEngineKit
 
-
 class VideoViewController: UIViewController {
+  
+   let notificationCenter = NotificationCenter.default
     
     var remoteVideoView: UIView!
     var localVideoView: UIView!
@@ -41,10 +42,18 @@ class VideoViewController: UIViewController {
         setupLocalVideoCanvas()
         agoraKit.startPreview()
         joinChannel()
+      
+      notificationCenter.addObserver(self, selector: #selector(callResponseReceived), name: NSNotification.Name.CallResponseNotification, object: nil)
+      
     }
     
     //MARK: ACTIONS
-    
+  @objc func callResponseReceived(notification:NSNotification){
+    print("did receive local notification")
+    print(notification.object)
+    guard let callResponse = notification.object as? CallResponse else {return}
+    print(callResponse.status)
+  }
     @objc private func mute(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         agoraKit.muteLocalAudioStream(sender.isSelected)

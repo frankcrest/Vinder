@@ -59,15 +59,19 @@ exports.observeRejectedCall = functions.database.ref('/callRejected/{callerId}/{
     return admin.database().ref('/users/' + uid).once('value', snapshot => {
       var userWeAreCalling = snapshot.val();
 
-      var payload = {
-        "aps" : {
-        "content-available" : 1
-        },
-        "callerId" : callerId.uid
+      const payload = {
+    data: {
+      title: 'A call is coming!',
+      body: 'Rejected',
+      event_id: userDoingCalling.uid
+    }
+  };
 
-      };
+  const options = {
+    content_available: true
+  }
 
-      admin.messaging().sendToDevice(userDoingCalling.token, payload).then(function(response){
+      admin.messaging().sendToDevice(userDoingCalling.token, payload,options).then(function(response){
         console.log("succesfully send message:", response);
       })
       .catch(function(errror){
@@ -81,7 +85,7 @@ exports.observeAcceptedCall = functions.database.ref('/callAccepted/{callerId}/{
   var callerId = context.params.callerId;
   var uid = context.params.uid;
 
-  console.log('User' + callerId + 'is calling' + uid);
+  console.log('User' + callerId + 'is calling ' + uid);
 
   return admin.database().ref('/users/' + callerId).once('value',snapshot => {
     var userDoingCalling = snapshot.val();
@@ -91,8 +95,8 @@ exports.observeAcceptedCall = functions.database.ref('/callAccepted/{callerId}/{
 
       const payload = {
     data: {
-      title: 'An event has occurred!',
-      body: 'Please respond to this event.',
+      title: 'A call is coming',
+      body: 'Accepted',
       event_id: userDoingCalling.uid
     }
   };
