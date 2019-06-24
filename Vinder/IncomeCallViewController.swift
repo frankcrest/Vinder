@@ -52,6 +52,8 @@ class IncomeCallViewController: UIViewController {
     }
     
     @objc func rejectCallTapped(){
+      videoView.pause()
+      self.dismiss(animated: true, completion: nil)
         print("reject call")
         
     }

@@ -108,8 +108,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     completionHandler()
     let presentVC = MapViewController()
     self.window?.rootViewController = presentVC
-    let videoVC = VideoViewController()
-    presentVC.present(videoVC, animated: true, completion: nil)
+    let incomeCallVC = IncomeCallViewController()
+    presentVC.present(incomeCallVC, animated: true, completion: nil)
   }
 }
 // [END ios_10_message_handling]
@@ -132,4 +132,7 @@ extension AppDelegate : MessagingDelegate {
     print("Received data message: \(remoteMessage.appData)")
   }
   // [END ios_10_data_message]
+  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    print("received remote notification \(userInfo)")
+  }
 }

@@ -55,7 +55,7 @@ class MapViewController: UIViewController {
     mp.mapType = MKMapType.standard
     mp.isZoomEnabled = true
     mp.isScrollEnabled = true
-    mp.showsUserLocation = true
+    mp.showsUserLocation = false
     mp.translatesAutoresizingMaskIntoConstraints = false
     return mp
   }()
@@ -207,6 +207,8 @@ class MapViewController: UIViewController {
     
     leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
     rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
+    
+    self.videoView.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
     
     NSLayoutConstraint.activate([
       navView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
@@ -405,15 +407,18 @@ class MapViewController: UIViewController {
         }
     }
     
-    @objc func callTapped(){
-        let videoVC = VideoViewController()
-        //    videoVC.userChannelID = self.selectedUser?.uid
-        self.present(videoVC, animated: true, completion: nil)
-    }
+  @objc func callTapped(){
+    guard let selectedUser = selectedUser else {return}
+    guard let currentUser = currentUser else {return}
+    ref.child("calling").child(currentUser.uid).setValue([selectedUser.uid : 1])
     
-
+    let videoVC = VideoViewController()
+    self.present(videoVC, animated: true, completion: nil)
   }
   
+  
+}
+
 
 
 //MARK: CLLocationManagerDelegate
@@ -423,24 +428,18 @@ extension MapViewController : CLLocationManagerDelegate {
     {
         print("Error \(error)")
     }
+  
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    let newLocation = locations[0] as CLLocation
+    let distanceInMeters = newLocation.distance(from: userLocation ?? CLLocation(latitude: 0, longitude: 0))
+    let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
+    let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let newLocation = locations[0] as CLLocation
-        let distanceInMeters = newLocation.distance(from: userLocation ?? CLLocation(latitude: 0, longitude: 0))
-        if distanceInMeters > 100{
-            userLocation = newLocation
-        }
-        
-        let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-        mapView.setRegion(region, animated: true)
-        
-        let myAnnotation: MKPointAnnotation = MKPointAnnotation()
-        myAnnotation.coordinate = CLLocationCoordinate2DMake(newLocation.coordinate.latitude, newLocation.coordinate.longitude);
-        myAnnotation.title = "Current location"
-        mapView.addAnnotation(myAnnotation)
+    if distanceInMeters > 100{
+      userLocation = newLocation
+      mapView.setRegion(region, animated: true)
     }
-    
+  }
 }
 
 //MARK: MKMapViewDelegate
