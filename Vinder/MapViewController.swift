@@ -18,8 +18,8 @@ class MapViewController: UIViewController {
     var leftViewTrailing :NSLayoutConstraint!
     var rightViewLeading: NSLayoutConstraint!
     
-    let user1 = NearbyUser(username: "adamck6302438", imageName: "Ray.jpg", coordinate: CLLocationCoordinate2D(latitude: 43.644311, longitude: -79.402225), introURL: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", gender:.female)
-    let user2 = NearbyUser(username: "myley_cyrus", imageName: "miley-cyrus.jpg", coordinate: CLLocationCoordinate2D(latitude: 32.444311, longitude: -59.402225), introURL: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", gender:.male)
+    let user1 = NearbyUser(username: "adamck6302438", imageName: "Ray.jpg", coordinate: CLLocationCoordinate2D(latitude: 43.644311, longitude: -79.402225), introURL: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", gender:.male)
+    let user2 = NearbyUser(username: "myley_cyrus", imageName: "miley-cyrus.jpg", coordinate: CLLocationCoordinate2D(latitude: 32.444311, longitude: -59.402225), introURL: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", gender:.female)
     let user3 = NearbyUser(username: "kawhi", imageName: "kawhi.jpg", coordinate: CLLocationCoordinate2D(latitude: 35.444311, longitude: -79.666666), introURL: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",gender:.male)
     
     var nearbyUsers : [NearbyUser] = []
@@ -356,7 +356,8 @@ class MapViewController: UIViewController {
     
     //MARK: Fetch nearby users
     func fetchUsers(){
-        //TODO: network call to fetch nearby user locatino
+        //TODO: network call to fetch nearby user location
+        
     }
 
     

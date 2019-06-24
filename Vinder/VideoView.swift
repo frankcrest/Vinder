@@ -38,6 +38,7 @@ class VideoView: UIView {
         b.imageView?.contentMode = .scaleAspectFit
         b.setImage(UIImage(named: "message"), for: .normal)
         b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
+        b.addTarget(self, action: #selector(sendMessageTapped), for: .touchUpInside)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
@@ -50,11 +51,12 @@ class VideoView: UIView {
         b.setImage(UIImage(named: "call"), for: .normal)
         b.imageView?.contentMode = .scaleAspectFit
         b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
+        b.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
     
-    
+    //UI setup
     func setUpViews(){
         self.addSubview(buttonContainer)
         self.addSubview(videoContainer)
@@ -85,7 +87,7 @@ class VideoView: UIView {
         
     }
 
-
+    //AVPlayer methods
     func configure(url: String) {
         let videoURL = URL(string: url)
         player = AVPlayer(url: videoURL!)
@@ -116,5 +118,14 @@ class VideoView: UIView {
             player.seek(to: CMTime.zero)
             player.play()
         }
+    }
+    
+    //handle call
+    @objc func callTapped(){
+        print("call")
+    }
+    
+    @objc func sendMessageTapped(){
+        print("send video message")
     }
 }
