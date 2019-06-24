@@ -37,6 +37,7 @@
 		ED3BE86C22BD714E0046E35C /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86B22BD714E0046E35C /* WebService.swift */; };
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
+		ED64C2C522C174170077DCF7 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED64C2C422C174170077DCF7 /* Messages.swift */; };
 		EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4476222BABFBA0048BAE2 /* CameraController.swift */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +77,7 @@
 		ED3BE86B22BD714E0046E35C /* WebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		ED64C2C422C174170077DCF7 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		EDF4476222BABFBA0048BAE2 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		F0C8F18A0138C4DE55983CB0 /* Pods-Vinder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.debug.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,6 +154,7 @@
 				0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */,
 				0D91629C22C1439D00C58DCF /* NearbyUserView.swift */,
 				ED31021F22BEAF1200D2211B /* LoadingView.swift */,
+				ED64C2C422C174170077DCF7 /* Messages.swift */,
 				ED3BE86D22BD715D0046E35C /* Networking */,
 				EDF4476622BAD6130048BAE2 /* RecordProfileViewController */,
 				E935543B22B9736000CD7958 /* Assets.xcassets */,
@@ -338,6 +341,7 @@
 				0D91629A22C1436300C58DCF /* RecordVideoViewController.swift in Sources */,
 				ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */,
 				E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */,
+				ED64C2C522C174170077DCF7 /* Messages.swift in Sources */,
 				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,

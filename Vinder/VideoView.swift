@@ -10,10 +10,6 @@ import UIKit
 import AVKit
 import AVFoundation
 
-enum CallType {
-    case IncomeCall
-    case Default
-}
 
 class VideoView: UIView {
     
@@ -58,26 +54,12 @@ class VideoView: UIView {
     }()
     
     //UI setup
-    func setUpViews(callType : CallType){
+    func setUpViews(){
         self.addSubview(buttonContainer)
         self.addSubview(videoContainer)
         self.buttonContainer.addSubview(rightButton)
         self.buttonContainer.addSubview(leftButton)
         
-        switch callType {
-        case .IncomeCall:
-            self.leftButton.setImage(UIImage(named: "reject"), for: .normal)
-            self.leftButton.addTarget(self, action: #selector(rejectCallTapped), for: .touchUpInside)
-            self.rightButton.setImage(UIImage(named: "call"), for: .normal)
-            self.rightButton.addTarget(self, action: #selector(pickUpCallTapped), for: .touchUpInside)
-        case .Default:
-            self.leftButton.setImage(UIImage(named: "message"), for: .normal)
-            self.leftButton.addTarget(self, action: #selector(sendMessageTapped), for: .touchUpInside)
-            self.rightButton.setImage(UIImage(named: "call"), for: .normal)
-            self.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
-        default:
-            break
-        }
         
         NSLayoutConstraint.activate([
             buttonContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
@@ -143,7 +125,8 @@ class VideoView: UIView {
     }
     
     @objc func sendMessageTapped(){
-        print("send video message")
+        
+        
         
     }
     

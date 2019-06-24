@@ -43,8 +43,19 @@ class WebService {
     
     //MARK: UPLOAD VIDEO AND REGISTER
     
+    func sendMessage(_ url: String, to user: User,completion: @escaping  (Error?) -> Void)  {
+        
+        guard let senderID = UserDefaults.standard.string(forKey: "currentUserID") else { return }
+        let messageID = UUID().uuidString
+        
+        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url]) { (err, ref) in
+            completion(err)
+        }
+        
+    }
+    
     func uploadVideo(atURL url: URL,  completion: @escaping (URL) -> (Void)) {
-        print("uploading")
+       
         let videoName = "\(NSUUID().uuidString)\(url)"
         let ref = profileVideosStorageRef.child(videoName)
         let metaData = StorageMetadata()

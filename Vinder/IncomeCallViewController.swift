@@ -23,7 +23,7 @@ class IncomeCallViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        videoView.setUpViews(callType: .IncomeCall)
+        videoView.setUpViews()
         videoView.configure(url: callingUser.profileVideoUrl)
         videoView.play()
     }
