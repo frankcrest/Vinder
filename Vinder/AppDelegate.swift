@@ -17,19 +17,14 @@ import FirebaseInstanceID
 class AppDelegate: UIResponder, UIApplicationDelegate{
   
   var window: UIWindow?
-  
-  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-    // If you are receiving a notification message while your app is in the background,
-    // this callback will not be fired till the user taps on the notification launching the application.
-    // TODO: Handle data of notification
-    // With swizzling disabled you must let Messaging know about the message, for Analytics
-    // Messaging.messaging().appDidReceiveMessage(userInfo)
-    // Print message ID.
-    // Print full message.
-    print(userInfo)
-  }
+  let ud = UserDefaults.standard
+  var ref : DatabaseReference?
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    
+     FirebaseApp.configure()
+    
+    self.ref = Database.database().reference()
     // Override point for customization after application launch.
     if #available(iOS 10.0, *) {
       // For iOS 10 display notification (sent via APNS)
@@ -47,7 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     application.registerForRemoteNotifications()
-    FirebaseApp.configure()
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
 
@@ -56,16 +50,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     let loginNav = UINavigationController()
     loginNav.viewControllers = [initialController]
     let mapviewController = MapViewController()
- self.window?.rootViewController = loginNav
-//    if Auth.auth().currentUser != nil {
-//      self.window?.rootViewController = mapviewController
-//    } else{
-//      self.window?.rootViewController = loginNav
-//    }
+    
+    if Auth.auth().currentUser != nil {
+      self.window?.rootViewController = mapviewController
+    } else{
+      self.window?.rootViewController = loginNav
+    }
 
     self.window?.makeKeyAndVisible()
     
     return true
+  }
+  
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    completionHandler(.alert)
   }
   
   func applicationWillResignActive(_ application: UIApplication) {
@@ -100,11 +98,20 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                               didReceive response: UNNotificationResponse,
                               withCompletionHandler completionHandler: @escaping () -> Void) {
     let userInfo = response.notification.request.content.userInfo
-    // Print message ID.
-    // Print full message.
-    print(userInfo)
+    guard let callerId = userInfo["callerId"] as? String else {return}
+    print(callerId)
     
+    guard let currentUserUid = Auth.auth().currentUser?.uid else {return}
+    
+    guard let databaseRef = ref else {return}
+    
+    databaseRef.child("callResponse").child(callerId).setValue([currentUserUid : 1])
+
     completionHandler()
+    let presentVC = MapViewController()
+    self.window?.rootViewController = presentVC
+    let videoVC = VideoViewController()
+    presentVC.present(videoVC, animated: true, completion: nil)
   }
 }
 // [END ios_10_message_handling]
@@ -113,7 +120,7 @@ extension AppDelegate : MessagingDelegate {
   // [START refresh_token]
   func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
     print("Firebase registration token: \(fcmToken)")
-    
+    ud.set(fcmToken, forKey: "fcmToken")
     let dataDict:[String: String] = ["token": fcmToken]
     NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
     // TODO: If necessary send token to application server.

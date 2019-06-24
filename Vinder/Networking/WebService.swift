@@ -44,7 +44,7 @@ class WebService {
     //MARK: UPLOAD VIDEO AND REGISTER
     
     func uploadVideo(atURL url: URL,  completion: @escaping (URL) -> (Void)) {
-        
+        print("uploading")
         let videoName = "\(NSUUID().uuidString)\(url)"
         let ref = profileVideosStorageRef.child(videoName)
         let metaData = StorageMetadata()
@@ -76,12 +76,13 @@ class WebService {
     
     func register(withProfileURL url: URL, registered: @escaping (Bool, Error?) -> Void) {
         
-        guard let email = ud.string(forKey: "email") else {return}
-        guard let password = ud.string(forKey: "password") else {return}
-        guard let name = ud.string(forKey: "name") else {return}
-        guard let username = ud.string(forKey: "username") else {return}
-        
-        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+      guard let email = ud.string(forKey: "email") else {return}
+      guard let password = ud.string(forKey: "password") else {return}
+      guard let name = ud.string(forKey: "name") else {return}
+      guard let username = ud.string(forKey: "username") else {return}
+      guard let token = ud.string(forKey: "fcmToken") else {return}
+      
+      Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             
             guard error == nil else {
                 registered(false, error)
@@ -91,7 +92,7 @@ class WebService {
             guard let uid = user?.user.uid else { return }
             registered(true, nil)
             
-            self.ref.child("users").child(uid).setValue((["email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
+        self.ref.child("users").child(uid).setValue((["id": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
                 
                 if let error = error{
                     print("can not set ref error \(error)")
@@ -103,10 +104,10 @@ class WebService {
     
     //MARK: DOWNLOAD VIDEO
     
-    func fetchProfileVideo(of user: NearbyUser, completion: @escaping (URL?, Error?) -> (Void)) {
+    func fetchProfileVideo(of user: User, completion: @escaping (URL?, Error?) -> (Void)) {
         
         let storage = Storage.storage()
-        let url = user.profileURL! //need to change this cuz I made it optional for now
+        let url = user.profileVideoUrl //need to change this cuz I made it optional for now
         /*
          testing url
          let url = "https://firebasestorage.googleapis.com/v0/b/vinder-2a778.appspot.com/o/profileVideos%2F5EBB1ED9-1380-47ED-93CB-61673D36BF05file:%2Fvar%2Fmobile%2FContainers%2FData%2FApplication%2FBF733337-2314-452A-B52F-E2975DDDD60A%2FDocuments%2Fprofile.mov?alt=media&token=f9770383-1903-435e-8903-ff2a87867f86"

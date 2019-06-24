@@ -339,8 +339,10 @@ class MapViewController: UIViewController {
         guard let uid = userObject["uid"] as? String else {return}
         guard let lat = userObject["latitude"] as? String else {return}
         guard let lon = userObject["longitude"] as? String else{return}
+        guard let token = userObject["token"] as? String else{return}
+        guard let profileUrl = userObject["profileVideo"] as? String else {return}
         
-        let user = User(uid: uid , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon)
+        let user = User(uid: uid, token: token , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: profileUrl)
         self.mapView.addAnnotation(user)
         self.users.append(user)
       }
@@ -352,7 +354,11 @@ class MapViewController: UIViewController {
     container.isHidden = true
     do{
       try Auth.auth().signOut()
-      self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
+      
+      let navController = self.presentingViewController as? UINavigationController
+      self.dismiss(animated: true) {
+        let _ = navController?.popToRootViewController(animated: true)
+      }
     }catch let err{
       print(err)
     }
@@ -462,8 +468,12 @@ class MapViewController: UIViewController {
   }
   
   @objc func callTapped(){
+    container.isHidden = true
+    guard let user = selectedUser else {return}
+    guard let currentUser = currentUser else {return}
+    ref.child("calling").child(currentUser.uid).setValue([user.uid : 1])
+    
     let videoVC = VideoViewController()
-//    videoVC.userChannelID = self.selectedUser?.uid
     self.present(videoVC, animated: true, completion: nil)
   }
   
@@ -481,13 +491,14 @@ extension MapViewController : CLLocationManagerDelegate {
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     let newLocation = locations[0] as CLLocation
     let distanceInMeters = newLocation.distance(from: userLocation ?? CLLocation(latitude: 0, longitude: 0))
-    if distanceInMeters > 100{
-      userLocation = newLocation
-    }
     
     let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
     let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-    mapView.setRegion(region, animated: true)
+    
+    if distanceInMeters > 100{
+      userLocation = newLocation
+      mapView.setRegion(region, animated: true)
+    }
     
     let myAnnotation: MKPointAnnotation = MKPointAnnotation()
     myAnnotation.coordinate = CLLocationCoordinate2DMake(newLocation.coordinate.latitude, newLocation.coordinate.longitude);
@@ -533,7 +544,6 @@ extension MapViewController : MKMapViewDelegate {
   
   func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
     self.selectedUser = view.annotation as? User
-    print(self.selectedUser?.uid)
     
     container.isHidden = false
     UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {

@@ -67,6 +67,9 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
   
   override func viewWillAppear(_ animated: Bool) {
     emailTextField.text = ud.string(forKey: "email") ?? ""
+    self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+    self.navigationController?.navigationBar.shadowImage = UIImage()
+    self.navigationController?.navigationBar.isTranslucent = true
   }
   
   func setupViews(){
@@ -76,10 +79,6 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     self.view.addSubview(emailTextField)
     self.view.addSubview(passwordTextfield)
     self.view.addSubview(loginButton)
-    
-    self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-    self.navigationController?.navigationBar.shadowImage = UIImage()
-    self.navigationController?.navigationBar.isTranslucent = true
     
     NSLayoutConstraint.activate([
       emailLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -200),
@@ -130,12 +129,13 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
         print(error)
         return
       }
+      
       self.ud.set(self.emailTextField.text, forKey: "email")
       self.emailTextField.text = ""
       self.passwordTextfield.text = ""
       
       let mapviewController = MapViewController()
-      self.present(mapviewController, animated: true, completion: nil)
+        self.present(mapviewController, animated: true, completion: nil)
     }
   }
   
