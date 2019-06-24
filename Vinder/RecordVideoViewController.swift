@@ -180,6 +180,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
           if succeeded {
             let mapViewVC = MapViewController()
             self.loading.removeFromSuperview()
+            self.videoReviewer.player?.pause()
             self.present(mapViewVC, animated: true, completion: nil)
             
           } else {
