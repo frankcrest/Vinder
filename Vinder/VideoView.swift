@@ -10,6 +10,11 @@ import UIKit
 import AVKit
 import AVFoundation
 
+enum CallType {
+    case IncomeCall
+    case Default
+}
+
 class VideoView: UIView {
     
     var playerLayer: AVPlayerLayer!
@@ -30,7 +35,7 @@ class VideoView: UIView {
         return v
     }()
     
-    let sendMessageButton:UIButton = {
+    let leftButton:UIButton = {
         let b = UIButton()
         b.layer.cornerRadius = 0.5 * 50
         b.clipsToBounds = true
@@ -43,7 +48,7 @@ class VideoView: UIView {
         return b
     }()
     
-    let callButton:UIButton = {
+    let rightButton:UIButton = {
         let b = UIButton()
         b.layer.cornerRadius = 0.5 * 50
         b.clipsToBounds = true
@@ -57,11 +62,26 @@ class VideoView: UIView {
     }()
     
     //UI setup
-    func setUpViews(){
+    func setUpViews(callType : CallType){
         self.addSubview(buttonContainer)
         self.addSubview(videoContainer)
-        self.buttonContainer.addSubview(callButton)
-        self.buttonContainer.addSubview(sendMessageButton)
+        self.buttonContainer.addSubview(rightButton)
+        self.buttonContainer.addSubview(leftButton)
+        
+        switch callType {
+        case .IncomeCall:
+            self.leftButton.setImage(UIImage(named: "reject"), for: .normal)
+            self.leftButton.addTarget(self, action: #selector(rejectCallTapped), for: .touchUpInside)
+            self.rightButton.setImage(UIImage(named: "call"), for: .normal)
+            self.leftButton.addTarget(self, action: #selector(pickUpCallTapped), for: .touchUpInside)
+        case .Default:
+            self.leftButton.setImage(UIImage(named: "message"), for: .normal)
+            self.leftButton.addTarget(self, action: #selector(sendMessageTapped), for: .touchUpInside)
+            self.rightButton.setImage(UIImage(named: "call"), for: .normal)
+            self.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
+        default:
+            break
+        }
         
         NSLayoutConstraint.activate([
             buttonContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
@@ -74,15 +94,15 @@ class VideoView: UIView {
             videoContainer.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
             videoContainer.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -5),
             
-            callButton.heightAnchor.constraint(equalToConstant: 50),
-            callButton.widthAnchor.constraint(equalToConstant: 50),
-            callButton.trailingAnchor.constraint(equalTo: buttonContainer.trailingAnchor, constant: -50),
-            callButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
+            rightButton.heightAnchor.constraint(equalToConstant: 50),
+            rightButton.widthAnchor.constraint(equalToConstant: 50),
+            rightButton.trailingAnchor.constraint(equalTo: buttonContainer.trailingAnchor, constant: -50),
+            rightButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
             
-            sendMessageButton.heightAnchor.constraint(equalToConstant: 50),
-            sendMessageButton.widthAnchor.constraint(equalToConstant: 50),
-            sendMessageButton.leadingAnchor.constraint(equalTo: buttonContainer.leadingAnchor, constant: 50),
-            sendMessageButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
+            leftButton.heightAnchor.constraint(equalToConstant: 50),
+            leftButton.widthAnchor.constraint(equalToConstant: 50),
+            leftButton.leadingAnchor.constraint(equalTo: buttonContainer.leadingAnchor, constant: 50),
+            leftButton.topAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: 15),
             ])
         
     }
@@ -127,5 +147,13 @@ class VideoView: UIView {
     
     @objc func sendMessageTapped(){
         print("send video message")
+    }
+    
+    @objc func pickUpCallTapped(){
+        print("pick up")
+    }
+    
+    @objc func rejectCallTapped(){
+        print("reject call")
     }
 }

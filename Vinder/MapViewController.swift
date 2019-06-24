@@ -526,7 +526,7 @@ extension MapViewController : MKMapViewDelegate {
     UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
       self.videoView.alpha = 1
     }, completion: nil)
-    videoView.setUpViews()
+    videoView.setUpViews(callType: .Default)
     videoView.configure(url: selectedUser!.profileVideoUrl)
     videoView.play()
   }
