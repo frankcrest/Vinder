@@ -203,7 +203,8 @@ extension VideoViewController: AgoraRtcEngineDelegate {
     }
     
     @objc private func leaveChannel() {
-        
+      
+        self.dismiss(animated: true, completion: nil)
         agoraKit.leaveChannel(nil)
         UIApplication.shared.isIdleTimerDisabled = false
     

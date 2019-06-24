@@ -6,6 +6,7 @@ target 'Vinder' do
   use_frameworks!
 
   # Pods for Vinder
+  inhibit_all_warnings! 
 
 pod 'AgoraRtcEngine_iOS'
 pod 'Firebase/Core'
