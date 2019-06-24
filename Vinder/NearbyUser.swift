@@ -18,20 +18,20 @@ class NearbyUser: NSObject , MKAnnotation{
     var coordinate: CLLocationCoordinate2D
     var username : String!
     var imageName : String!
-    var introURL : String!
     var gender : UserGender!
+    var profileURL: String?
     
     
     
-    init(username : String, imageName: String, coordinate: CLLocationCoordinate2D, introURL : String, gender : UserGender){
+    init(username : String, imageName: String, coordinate: CLLocationCoordinate2D, gender : UserGender){
         self.username = username
         self.imageName = imageName
         self.coordinate = coordinate
-        self.introURL = introURL
         self.gender = gender
     }
     
     var subtitle: String? {
         return username
     }
+
 }

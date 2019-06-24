@@ -9,15 +9,18 @@
 import UIKit
 import AVFoundation
 import AVKit
-import FirebaseAuth
-import FirebaseDatabase
 
 
-class RecordVideoViewController: UIViewController {
+
+class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
+    
     
     //MARK: UI VIEW PROPERTIES
-    
-    let recordPreviewView:UIView = {
+    var loading: LoadingView!
+    let buttonView = ButtonView()
+    let notSurebutton = UIButton()
+    let tutorialView = TutorialView()
+    let recordPreviewView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         //TODO: NEED TO CHANGE BACKGROUND
@@ -28,24 +31,38 @@ class RecordVideoViewController: UIViewController {
     
     //MARK: PROPERTIES
     
-    var ref = Database.database().reference()
-    let ud = UserDefaults.standard
+    let register = WebService()
+    let videoReviewer = VideoPlayer()
     let cameraController = CameraController()
-    var buttonView = ButtonView()
-    var playerLayer: AVPlayerLayer?
-    var player: AVPlayer?
+    var isTutorialMode = false
     
     //MARK: ViewWDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cameraController.startAnimationDelegate = self
-        setupViews()
-        configureCameraController()
-        buttonView.recordButtonView.videoHandlerDelegate = self
         
+        configureCameraController()
+        
+        cameraController.startAnimationDelegate = self
+        buttonView.recordButtonView.videoHandlerDelegate = self
+        register.updateProgressDelegate = self
+        
+        hideNavBar()
+        notSurebutton.isHidden = true
+        setupViews()
+        if isTutorialMode {
+            self.setupTutorialView()
+            self.recordPreviewView.isHidden = true
+            self.buttonView.isHidden = true
+            self.notSurebutton.isHidden = false
+            //self.videoReviewer.playVideo(atUrl:url, on: self.tutorialView)
+            
+            
+        }
         
     }
+    
+    
     //MARK: CAMERA CONTROLLER
     
     func configureCameraController() {
@@ -57,20 +74,21 @@ class RecordVideoViewController: UIViewController {
         }
     }
     
+    
     //MARK: SETUP VIEWS
     
     func setupViews(){
         
         view.addSubview(recordPreviewView)
         view.addSubview(buttonView)
+        view.addSubview(notSurebutton)
         
-        buttonView.switchCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
+        notSurebutton.translatesAutoresizingMaskIntoConstraints = false
+        notSurebutton.setTitle("NOT SURE WHAT TO DO?", for: .normal)
+        notSurebutton.addTarget(self, action: #selector(bringBackTutorial), for: .touchUpInside)
+        
+        buttonView.switchCameraButton.addTarget(self, action: #selector(switchCameraOrConfirm(_:)), for: .touchUpInside)
         buttonView.backButton.addTarget(self, action: #selector(backButton(_:)), for: .touchUpInside)
-        
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.navigationBar.isHidden = true
         
         NSLayoutConstraint.activate([
             
@@ -84,106 +102,154 @@ class RecordVideoViewController: UIViewController {
             recordPreviewView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
             recordPreviewView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
             
+            notSurebutton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            notSurebutton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            
+            ])
+    }
+    
+    func setupTutorialView() {
+        
+        view.addSubview(tutorialView)
+        tutorialView.gotItButton.addTarget(self, action: #selector(gotItTapped), for: .touchUpInside)
+        tutorialView.replayButton.addTarget(self, action: #selector(replayTapped), for: .touchUpInside)
+        NSLayoutConstraint.activate([
+            tutorialView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tutorialView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            tutorialView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            tutorialView.widthAnchor.constraint(equalTo: view.widthAnchor)
             ])
         
+        videoReviewer.playVideo(atUrl: cameraController.tutorialURL, on: tutorialView)
     }
+    
+    func hideNavBar() {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    func presentLoadingView() {
+        
+        loading = LoadingView()
+        self.view.addSubview(loading)
+        
+        NSLayoutConstraint.activate([
+            loading.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loading.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loading.widthAnchor.constraint(equalTo: view.widthAnchor),
+            loading.heightAnchor.constraint(equalTo: view.heightAnchor),
+            
+            ])
+    }
+    
     
     //MARK: ACTIONS
     
-    @objc func switchCamera(){
-      let mapVC = MapViewController()
-      self.present(mapVC, animated: true, completion: nil)
-//        do {
-//            try cameraController.switchCameras()
-//        } catch {
-//            print("can not swict camera: \(error)")
-//        }
+    @objc func bringBackTutorial() {
+        recordPreviewView.isHidden = true
+        buttonView.isHidden = true
+        setupTutorialView()
     }
     
+    @objc func switchCameraOrConfirm(_ sender: UIButton){
+        
+        if sender.titleLabel?.text == "switch"{
+            do {
+                try cameraController.switchCameras()
+            } catch {
+                print("can not swict camera: \(error)")
+            }
+        }
+        
+        //MARK: CONFIRM BUTTON
+        
+        if sender.titleLabel?.text == "confirm" {
+            
+            presentLoadingView()
+            
+            register.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
+                
+                self.register.register(withProfileURL: url) { (succeeded, error) in
+                    
+                    if succeeded {
+                        let mapViewVC = MapViewController()
+                        self.loading.removeFromSuperview()
+                        self.navigationController?.pushViewController(mapViewVC, animated: true)
+//                        self.present(mapViewVC, animated: true, completion: nil)
+                        
+                    } else {
+                        print("error:\(String(describing: error))")
+                    }
+                }
+            }
+        }
+    }
+    
+    func updateProgress(progress: Double) {
+        loading.progressLabel.text = "Uploading: \(round(progress))%"
+    }
     
     @objc func backButton(_ sender: UIButton) {
         
         if sender.titleLabel?.text == "back" {
-          self.navigationController?.popViewController(animated: true)
+            self.navigationController?.popViewController(animated: true)
         }
         
         if sender.titleLabel?.text == "retake" {
+            notSurebutton.isHidden = false
+            buttonView.switchCameraButton.setTitle("switch", for: .normal)
             sender.setTitle("back", for: .normal)
-            player?.pause()
-            player = nil
-            self.playerLayer?.removeFromSuperlayer()
+            videoReviewer.player?.pause()
+            videoReviewer.player = nil
+            self.videoReviewer.playerLayer?.removeFromSuperlayer()
             self.configureCameraController()
+            buttonView.switchCameraButton.isHidden = false
+            buttonView.recordButtonView.showCircleBar()
         }
     }
     
-    @objc func confirmTapped(){
-        guard let email = ud.string(forKey: "email") else {return}
-        guard let password = ud.string(forKey: "password") else {return}
-        guard let name = ud.string(forKey: "name") else {return}
-        guard let username = ud.string(forKey: "username") else {return}
-        
-        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
-            if let error = error{
-                print(error)
-                return
-            }
-            guard let uid = user?.user.uid else {return}
-            self.ref.child("users").child(uid).setValue((["email":email, "username":username, "name":name]), withCompletionBlock: { (error, ref) in
-                if let error = error{
-                    print(error)
-                    return
-                }
-                let mapViewVC = MapViewController()
-                self.present(mapViewVC, animated: true, completion: nil)
-            })
-        }
+    
+    @objc func gotItTapped() {
+        tutorialView.removeFromSuperview()
+        recordPreviewView.isHidden = false
+        buttonView.isHidden = false
     }
+    
+    @objc func replayTapped() {
+        
+    }
+    
 }
 
-//MARK: VIDEO RELATED
+//MARK: START/ STOP RECORDING
 
 extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegate {
-    
-    //MARK: VIDEO REVIEW
-    
-    func configureReview() {
-        let videoUrl = cameraController.fileURL
-        player = AVPlayer(url: videoUrl)
-        playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.videoGravity = .resizeAspectFill
-        if let playerLayer = self.playerLayer {
-            view.layer.insertSublayer(playerLayer, at: 1)
-            playerLayer.frame = view.layer.frame
-        }
-        player?.play()
-        NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
-    }
-    
-    @objc func playerItemDidReachEnd(notification: Notification) {
-        if let playerItem = notification.object as? AVPlayerItem {
-            playerItem.seek(to: CMTime.zero, completionHandler: nil)
-            player?.play()
-        }
-    }
     
     func startRecording() {
         cameraController.startRecording()
     }
     
     func stopRecording(){
+        
+        buttonView.recordButtonView.hideCircleBar()
+        
         cameraController.stopRecording()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            
             self.cameraController.removePreview()
-            self.configureReview()
+            self.videoReviewer.playVideo(atUrl: self.cameraController.fileURL, on: self.recordPreviewView )
+            
             self.buttonView.backButton.setTitle("retake", for: .normal)
+            self.buttonView.switchCameraButton.setTitle("confirm", for: .normal)
+            self.notSurebutton.isHidden = true
         }
     }
     
     func startAnimation() {
         buttonView.recordButtonView.startAnimation()
     }
-    
-    
     
 }
 
