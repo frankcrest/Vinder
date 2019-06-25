@@ -12,6 +12,7 @@ import Firebase
 
 class VideoViewController: UIViewController {
   
+  let ref = Database.database().reference()
   let currentUser = Auth.auth().currentUser
   let notificationCenter = NotificationCenter.default
   var remoteVideoView: UIView!
@@ -57,10 +58,12 @@ class VideoViewController: UIViewController {
     let tryingToCallUserUid = callResponse.uid
     
     if callResponse.status == .accepted {
+      ref.child("callAccepted").child(callResponse.uid).removeValue()
       print("the user you are trying to call have accepted your call")
       leaveChannel()
       joinChannel(uid: tryingToCallUserUid)
     } else {
+      ref.child("callRejected").child(callResponse.uid).removeValue()
       let uc = UIAlertController(title: "You have been rejected", message: "rejected", preferredStyle: .alert)
       let action = UIAlertAction(title: "okay man", style: .cancel, handler: nil)
       uc.addAction(action)
@@ -227,6 +230,8 @@ extension VideoViewController: AgoraRtcEngineDelegate {
   }
   
   @objc private func hangupTapped() {
+    guard let user = currentUser else {return}
+    ref.child("calling").child(user.uid).removeValue()
     agoraKit.leaveChannel(nil)
     UIApplication.shared.isIdleTimerDisabled = false
     self.dismiss(animated: true, completion: nil)

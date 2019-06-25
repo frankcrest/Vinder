@@ -160,8 +160,14 @@ class MapViewController: UIViewController {
     
     mapView.delegate = self
     mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-    setupViews()
     
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    setupViews()
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillAppear(true)
+    self.videoView.stop()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -173,7 +179,6 @@ class MapViewController: UIViewController {
         //        let initialController = LoginViewController()
         loginNav.viewControllers = [LoginViewController()]
         present(loginNav, animated: true, completion: nil)
-        
     }
   }
   
@@ -334,7 +339,6 @@ class MapViewController: UIViewController {
     let lon = String(format: "%f", location.coordinate.longitude)
     self.ref.child("users").child(uid).updateChildValues(["latitude":lat])
     self.ref.child("users").child(uid).updateChildValues(["longitude":lon])
-    
     loadUsers()
   }
   

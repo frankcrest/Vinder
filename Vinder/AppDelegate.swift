@@ -139,12 +139,7 @@ extension AppDelegate : MessagingDelegate {
     guard let uid = userInfo["event_id"] as? String else {return}
     guard let title = userInfo["title"] as? String else {return}
     guard let body = userInfo["body"] as? String else {return}
-    guard let firebaseRef = ref else {return}
-    if body == "Accepted" {
-      firebaseRef.child("callAccepted").child(uid).removeValue()
-    } else if body == "Rejected"{
-      firebaseRef.child("callRejected").child(uid).removeValue()
-    }
+    
     let callResponse = CallResponse(uid: uid, title: title, body: body)
     notificationCenter.post(name: NSNotification.Name.CallResponseNotification, object: callResponse)
     
