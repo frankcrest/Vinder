@@ -30,11 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     nav.viewControllers = [initialController]
     let mapVC = MapViewController()
     if Auth.auth().currentUser != nil {
-      window?.rootViewController = nav
-    } else{
       window?.rootViewController = mapVC
+    } else{
+      window?.rootViewController = nav
     }
-    
     
     self.window?.makeKeyAndVisible()
     
