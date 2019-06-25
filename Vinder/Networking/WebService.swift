@@ -26,7 +26,7 @@ class WebService {
     private let ref = Database.database().reference()
     private let ud = UserDefaults.standard
     
-    let currentUserID = UserDefaults.standard.string(forKey: "uid")
+    let currentUserID = Auth.auth().currentUser?.uid
     
     private var storageRef: StorageReference {
         return Storage.storage().reference(forURL: "gs://vinder-2a778.appspot.com")
@@ -55,9 +55,9 @@ class WebService {
         
     }
     
-    func isLoggedIn() -> Bool {
-        return Auth.auth().currentUser != nil
-    }
+//    func isLoggedIn() -> Bool {
+//        return Auth.auth().currentUser != nil
+//    }
     
     func logIn(withEmail email: String, password: String, completion: @escaping (AuthDataResult?, Error?) -> Void) {
         

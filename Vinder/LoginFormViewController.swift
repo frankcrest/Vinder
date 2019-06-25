@@ -140,7 +140,7 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
             
             self.emailTextField.text = ""
             self.passwordTextfield.text = ""
-            
+            UserDefaults.standard.set(true, forKey: "isLoggedIn")
             self.dismiss(animated: true, completion: nil)
         }
     }
