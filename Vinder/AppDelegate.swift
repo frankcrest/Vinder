@@ -98,6 +98,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     
     let userInfo = response.notification.request.content.userInfo
     guard let callerId = userInfo["callerId"] as? String else {return}
+    
     ud.set(callerId, forKey: "callerId")
     print("the caller id is: \(callerId)")
     completionHandler()
