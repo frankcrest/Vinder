@@ -293,6 +293,7 @@ class MapViewController: UIViewController {
   
   func loadUsers(){
     ref.child("users").observe(.value) { (snapshot) in
+      self.users.removeAll()
       for user in snapshot.children.allObjects as! [DataSnapshot]{
         guard let userObject = user.value as? [String:AnyObject] else{return}
         

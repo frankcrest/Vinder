@@ -95,16 +95,23 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                               didReceive response: UNNotificationResponse,
                               withCompletionHandler completionHandler: @escaping () -> Void) {
     
-    let userInfo = response.notification.request.content.userInfo
-    guard let callerId = userInfo["callerId"] as? String else {return}
-    
-    ud.set(callerId, forKey: "callerId")
-    print("the caller id is: \(callerId)")
     completionHandler()
-    let presentVC = MapViewController()
-    self.window?.rootViewController = presentVC
-    let incomeCallVC = IncomeCallViewController()
-    presentVC.present(incomeCallVC, animated: true, completion: nil)
+    
+    let userInfo = response.notification.request.content.userInfo
+    
+    let callerId = userInfo["callerId"] as? String
+    
+    if callerId != nil {
+      ud.set(callerId!, forKey: "callerId")
+      print("the caller id is: \(callerId!)")
+      let presentVC = MapViewController()
+      self.window?.rootViewController = presentVC
+      let incomeCallVC = IncomeCallViewController()
+      presentVC.present(incomeCallVC, animated: true, completion: nil)
+    } else{
+      print("Do nothing")
+    }
+    
   }
 }
 // [END ios_10_message_handling]

@@ -63,7 +63,7 @@ exports.observeRejectedCall = functions.database.ref('/callRejected/{callerId}/{
     data: {
       title: 'A call is coming!',
       body: 'Rejected',
-      event_id: userDoingCalling.uid
+      event_id: userWeAreCalling.uid
     }
   };
 
@@ -97,7 +97,7 @@ exports.observeAcceptedCall = functions.database.ref('/callAccepted/{callerId}/{
     data: {
       title: 'A call is coming',
       body: 'Accepted',
-      event_id: userDoingCalling.uid
+      event_id: userWeAreCalling.uid
     }
   };
 
