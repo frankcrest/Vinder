@@ -310,16 +310,14 @@ class MapViewController: UIViewController {
   }
   
   @objc func logoutTapped(){
-    print("logout")
     videoView.isHidden = true
-    let incomeCall = IncomeCallViewController()
-    self.present(incomeCall, animated: true, completion: nil)
-//    do{
-//      try Auth.auth().signOut()
-//      self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
-//    }catch let err{
-//      print(err)
-//    }
+    do{
+      try Auth.auth().signOut()
+      let loginVC = LoginViewController()
+      self.present(loginVC, animated: true, completion: nil)
+    }catch let err{
+      print(err)
+    }
   }
   
   @objc func settingTapped(){

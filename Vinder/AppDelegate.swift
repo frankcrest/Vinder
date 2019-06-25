@@ -24,6 +24,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
      FirebaseApp.configure()
     
+    self.window = UIWindow(frame:UIScreen.main.bounds)
+    let initialController = LoginFormViewController()
+    let nav = UINavigationController()
+    nav.viewControllers = [initialController]
+    let mapVC = MapViewController()
+    if Auth.auth().currentUser != nil {
+      window?.rootViewController = nav
+    } else{
+      window?.rootViewController = mapVC
+    }
+    
+    
+    self.window?.makeKeyAndVisible()
+    
     self.ref = Database.database().reference()
     // Override point for customization after application launch.
     if #available(iOS 10.0, *) {
@@ -42,20 +56,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     application.registerForRemoteNotifications()
-    
-    self.window = UIWindow(frame:UIScreen.main.bounds)
-
-    
-
-    let initialController = MapViewController()
-    
-    let nav = UINavigationController()
-    nav.viewControllers = [initialController]
-    
-    window?.rootViewController = nav
-
-
-    self.window?.makeKeyAndVisible()
     
     return true
   }
