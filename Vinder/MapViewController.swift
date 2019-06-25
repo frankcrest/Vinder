@@ -1,17 +1,14 @@
 import UIKit
 import CoreLocation
 import MapKit
-import FirebaseDatabase
-import FirebaseAuth
-import AVKit
+
 
 class MapViewController: UIViewController {
     
     //MARK: PROPERTIES
     private let webService = WebService()
     private var messages: [Messages] = []
-    let ref = Database.database().reference()
-    let currentUser = Auth.auth().currentUser
+//    let ref = Database.database().reference()
     var locationManager:CLLocationManager = CLLocationManager()
     var userLocation : CLLocation? {
         didSet{
@@ -168,15 +165,16 @@ class MapViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         determineCurrentLocation()
-        print("nil or not: \(String(describing: Auth.auth().currentUser))")
-//        if Auth.auth().currentUser == nil {
             
-            let loginNav = UINavigationController()
-            //        let initialController = LoginViewController()
-            loginNav.viewControllers = [LoginViewController()]
-            present(loginNav, animated: true, completion: nil)
-            
-//        }
+        if !webService.isLoggedIn() {
+            presentLogInNavigationController()
+        }
+    }
+    
+    private func presentLogInNavigationController() {
+         let loginNav = UINavigationController()
+        loginNav.viewControllers = [LoginViewController()]
+        present(loginNav, animated: true, completion: nil)
     }
     
     
@@ -303,24 +301,20 @@ class MapViewController: UIViewController {
     }
     
     func loadUsers(){
-//        webService.fetchUsers { (users) in
-//
-//        }
-        ref.child("users").observe(.value) { (snapshot) in
-            for user in snapshot.children.allObjects as! [DataSnapshot]{
-                guard let userObject = user.value as? [String:AnyObject] else{return}
-                
-                guard let name = userObject["name"] as? String else {return}
-                guard let username = userObject["username"] as? String else{return}
-                guard let uid = userObject["uid"] as? String else {return}
-                guard let lat = userObject["latitude"] as? String else {return}
-                guard let lon = userObject["longitude"] as? String else{return}
-                
-                let user = User(uid: uid, token: "" , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
+        webService.fetchUsers { (users) in
+            
+            guard let users = users else {
+                print("faied fetching users")
+                return
+            }
+            
+            for user in users {
                 self.mapView.addAnnotation(user)
                 self.users.append(user)
             }
+
         }
+        
     }
     
     fileprivate func fetchMessages() {
@@ -335,13 +329,12 @@ class MapViewController: UIViewController {
     }
     
     func updateLocationToFirebase(){
-        guard let uid = currentUser?.uid else{return}
-        UserDefaults.standard.set(uid, forKey: "currentUserID")
+
         guard let location = userLocation else{return}
         let lat = String(format: "%f", location.coordinate.latitude)
         let lon = String(format: "%f", location.coordinate.longitude)
-        self.ref.child("users").child(uid).updateChildValues(["latitude":lat])
-        self.ref.child("users").child(uid).updateChildValues(["longitude":lon])
+
+        webService.updateUserWithLocation(lat: lat, lon: lon)
         
         loadUsers()
     }
@@ -349,14 +342,16 @@ class MapViewController: UIViewController {
     //MARK: ACTIONS
     
     @objc func logoutTapped(){
-        print("logout")
+
         videoView.isHidden = true
         do{
-            try Auth.auth().signOut()
-            self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
+            try webService.logOut()
+            presentLogInNavigationController()
+            
         }catch let err{
-            print(err)
+            print("can not log out \(err)")
         }
+        
     }
     
     @objc func settingTapped(){
@@ -531,32 +526,37 @@ extension MapViewController : MKMapViewDelegate {
 }
 
 // MARK: TABLE/COLLECTION VIEW DELEGATE
-extension MapViewController: UITableViewDelegate{
+extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.view.bounds.width
     }
-}
-
-extension MapViewController: UITableViewDataSource{
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
-        cell.nameLabel.text = "name"
+        
+        cell.nameLabel.text = messages[indexPath.row].sender
         cell.distanceLabel.text = "10km"
+        cell.videoURL = URL(string: messages[indexPath.row].messageURL)
+        cell.startPreview()
         //need to change message model to store sender name 
         return cell
     }
-}
-
-extension MapViewController:UICollectionViewDelegate{
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let cell = tableView.cellForRow(at: indexPath) as! MessageTableViewCell
+        cell.playVideo()
+    }
     
 }
 
-extension MapViewController: UICollectionViewDataSource{
+extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 5
     }

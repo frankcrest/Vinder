@@ -26,8 +26,8 @@ class WebService {
     private let ref = Database.database().reference()
     private let ud = UserDefaults.standard
     
-    let currentUserID = UserDefaults.standard.string(forKey: "currentUserID")
-  
+    let currentUserID = UserDefaults.standard.string(forKey: "uid")
+    
     private var storageRef: StorageReference {
         return Storage.storage().reference(forURL: "gs://vinder-2a778.appspot.com")
     }
@@ -45,7 +45,36 @@ class WebService {
     
     
     
-    //MARK: FIREBASE DATABASE AND STORAGE
+    //MARK: FIREBASE UPLOADING
+    
+    func updateUserWithLocation(lat: String, lon: String) {
+        
+        guard let uid = currentUserID, !uid.isEmpty else { return }
+        ref.child("users").child(uid).updateChildValues(["latitude":lat])
+        ref.child("users").child(uid).updateChildValues(["longitude":lon])
+        
+    }
+    
+    func isLoggedIn() -> Bool {
+        return Auth.auth().currentUser != nil
+    }
+    
+    func logIn(withEmail email: String, password: String, completion: @escaping (AuthDataResult?, Error?) -> Void) {
+        
+        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+            completion(result,error)
+        }
+    }
+    
+    func logOut() throws {
+        do {
+            try Auth.auth().signOut()
+            ud.set("", forKey: "uid")
+        } catch let err {
+            throw err
+        }
+    
+    }
     
     func changeProfile(_ url: String, completion: @escaping (Error?) -> Void) {
         guard let userID = currentUserID else {
@@ -58,19 +87,18 @@ class WebService {
     
     func sendMessage(_ url: String, to user: User,completion: @escaping  (Error?) -> Void)  {
         
-        guard let senderID = currentUserID else {
-            return
-        }
+        guard let senderID = currentUserID else { return }
+        guard let name = ud.string(forKey: "name") else {return}
         let messageID = UUID().uuidString
         
-        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "messageID": messageID]) { (err, ref) in
+        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "messageID": messageID, "sender": name]) { (err, ref) in
             completion(err)
         }
         
     }
     
     func uploadVideo(atURL url: URL,  completion: @escaping (URL) -> (Void)) {
-       
+        
         let videoName = "\(NSUUID().uuidString)\(url)"
         let ref = profileVideosStorageRef.child(videoName)
         let metaData = StorageMetadata()
@@ -102,13 +130,13 @@ class WebService {
     
     func register(withProfileURL url: URL, registered: @escaping (Bool, Error?) -> Void) {
         
-      guard let email = ud.string(forKey: "email") else {return}
-      guard let password = ud.string(forKey: "password") else {return}
-      guard let name = ud.string(forKey: "name") else {return}
-      guard let username = ud.string(forKey: "username") else {return}
-      guard let token = ud.string(forKey: "fcmToken") else {return}
-      
-      Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+        guard let email = ud.string(forKey: "email") else {return}
+        guard let password = ud.string(forKey: "password") else {return}
+        guard let name = ud.string(forKey: "name") else {return}
+        guard let username = ud.string(forKey: "username") else {return}
+        guard let token = ud.string(forKey: "fcmToken") else {return}
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             
             guard error == nil else {
                 registered(false, error)
@@ -116,28 +144,26 @@ class WebService {
             }
             
             guard let uid = user?.user.uid else { return }
+            self.ud.set(uid, forKey:"uid")
             registered(true, nil)
             
-        self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
+            self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
                 
                 if let error = error{
-                    print("can not set ref error \(error)")
+                    print("can not set ref\(error)")
                     return
                 }
+            
             })
         }
     }
     
-    //MARK: DOWNLOAD VIDEO
+    //MARK: FIREBASE DOWNLOADING
     
     func fetchProfileVideo(of user: User, completion: @escaping (URL?, Error?) -> (Void)) {
         
         let storage = Storage.storage()
-        let url = user.profileVideoUrl //need to change this cuz I made it optional for now
-        /*
-         testing url
-         let url = "https://firebasestorage.googleapis.com/v0/b/vinder-2a778.appspot.com/o/profileVideos%2F5EBB1ED9-1380-47ED-93CB-61673D36BF05file:%2Fvar%2Fmobile%2FContainers%2FData%2FApplication%2FBF733337-2314-452A-B52F-E2975DDDD60A%2FDocuments%2Fprofile.mov?alt=media&token=f9770383-1903-435e-8903-ff2a87867f86"
-         */
+        let url = user.profileVideoUrl 
         let httpReference = storage.reference(forURL: url)
         let downloadTask = httpReference.write(toFile: fileURL) { (url, error) in
             completion(url,error)
@@ -155,13 +181,14 @@ class WebService {
         }
         var messages: [Messages] = []
         ref.child("messages").child(userID).observe(DataEventType.value) { (snapshot) in
-                        for messageID in snapshot.children.allObjects as! [DataSnapshot] {
+            for messageID in snapshot.children.allObjects as! [DataSnapshot] {
                 guard let message = messageID.value as? [String: String] else { return }
                 guard let messageURL = message["messageURL"] else { return }
                 guard let senderID = message["senderID"] else { return }
                 guard let msgID = message["messageID"] else {return}
+                guard let sender = message["sender"] else {return}
                 
-                let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL)
+                let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL, sender: sender)
                 messages.append(msg)
             }
             completion(messages)
@@ -180,8 +207,10 @@ class WebService {
                 guard let uid = userObject["uid"] as? String else {return}
                 guard let lat = userObject["latitude"] as? String else {return}
                 guard let lon = userObject["longitude"] as? String else{return}
+                guard let profileVideo = userObject["profileVideo"] as? String else {return}
+                guard let token = userObject["token"] as? String else {return}
                 
-                let user = User(uid: uid, token: "" , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
+                let user = User(uid: uid, token:token , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
                 users.append(user)
             }
             completion(users)

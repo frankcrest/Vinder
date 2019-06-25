@@ -173,6 +173,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   }
   
   @objc func signUpTapped(){
+    
     ud.set(emailTextfield.text, forKey: "email")
     ud.set(usernameTextfield.text, forKey: "username")
     ud.set(nameTextfield.text, forKey: "name")
@@ -180,7 +181,6 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     let recordProfileVideoController = RecordVideoViewController()
     recordProfileVideoController.isTutorialMode = true
     recordProfileVideoController.mode = .signupMode
-//    present(recordProfileVideoController, animated: true, completion: nil)
     navigationController?.pushViewController(recordProfileVideoController, animated: true)
     
    

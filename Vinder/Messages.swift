@@ -15,10 +15,11 @@ class Messages {
     var senderID = String()
     var messageURL = String()
     
-    init(messageID: String, senderID: String, messageURL: String) {
+    init(messageID: String, senderID: String, messageURL: String, sender: String) {
         self.messageID = messageID
         self.senderID = senderID
         self.messageURL = messageURL
+        self.sender = sender
     }
     
     
