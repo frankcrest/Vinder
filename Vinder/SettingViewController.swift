@@ -139,9 +139,10 @@
         let confirm = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: {
             UIAlertAction in
             let cell = self.tableView.cellForRow(at: indexPath) as! SettingTableViewCell
-            cell.subtitleLabel.text = alert.textFields!.first!.text
+          guard let alertText = alert.textFields?.first?.text else {return}
+            cell.subtitleLabel.text = alertText
             print("OK")
-            self.ref.child("users").child(self.uid).updateChildValues(["name": cell.subtitleLabel.text])
+            self.ref.child("users").child(self.uid).updateChildValues(["name": alertText])
         })
         let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {
             UIAlertAction in
@@ -184,9 +185,10 @@
         let confirm = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: {
             UIAlertAction in
             let cell = self.tableView.cellForRow(at: indexPath) as! SettingTableViewCell
-            cell.subtitleLabel.text = alert.textFields!.first!.text
+          guard let alertText = alert.textFields?.first?.text else {return}
+            cell.subtitleLabel.text = alertText
             print("OK")
-            self.ref.child("users").child(self.uid).updateChildValues(["email": cell.subtitleLabel.text])
+            self.ref.child("users").child(self.uid).updateChildValues(["email": alertText])
         })
         let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {
             UIAlertAction in

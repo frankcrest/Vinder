@@ -57,8 +57,10 @@ class IncomeCallViewController: UIViewController {
       ref.child("callAccepted").child(user.uid).setValue([callerId : 1])
       //create video vc and join call
       let videoVC = VideoViewController()
-      self.present(videoVC, animated: true, completion: nil)
-        
+        let rootVC = UIApplication.shared.delegate!.window!?.rootViewController!
+      rootVC!.dismiss(animated: false, completion: {
+        rootVC!.present(videoVC, animated: true, completion: nil)
+      })
     }
     
     @objc func rejectCallTapped(){

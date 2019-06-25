@@ -52,7 +52,6 @@ class VideoViewController: UIViewController {
   //MARK: ACTIONS
   @objc func callResponseReceived(notification:NSNotification){
     print("did receive local notification")
-    print(notification.object)
     guard let callResponse = notification.object as? CallResponse else {return}
     print(callResponse.status)
     let tryingToCallUserUid = callResponse.uid
@@ -64,6 +63,7 @@ class VideoViewController: UIViewController {
     } else {
       let uc = UIAlertController(title: "You have been rejected", message: "rejected", preferredStyle: .alert)
       let action = UIAlertAction(title: "okay man", style: .cancel, handler: nil)
+      uc.addAction(action)
       self.present(uc, animated: true, completion: nil)
       print("the user you are trying to call have rejected your call")
     }
@@ -160,7 +160,7 @@ class VideoViewController: UIViewController {
     
     hangupButton = UIButton()
     hangupButton.setTitle("Hangup", for: .normal)
-    hangupButton.addTarget(self, action: #selector(self.leaveChannel), for: .touchUpInside)
+    hangupButton.addTarget(self, action: #selector(self.hangupTapped), for: .touchUpInside)
     
     muteButton = UIButton()
     muteButton.setTitle("Mute", for: .normal)
@@ -226,12 +226,15 @@ extension VideoViewController: AgoraRtcEngineDelegate {
     }
   }
   
-  @objc private func leaveChannel() {
-    
-    self.dismiss(animated: true, completion: nil)
+  @objc private func hangupTapped() {
     agoraKit.leaveChannel(nil)
     UIApplication.shared.isIdleTimerDisabled = false
-    
+    self.dismiss(animated: true, completion: nil)
+  }
+  
+  func leaveChannel(){
+    agoraKit.leaveChannel(nil)
+    UIApplication.shared.isIdleTimerDisabled = false
   }
   
   func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteVideoDecodedOfUid uid: UInt, size: CGSize, elapsed: Int) {

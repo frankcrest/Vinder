@@ -10,6 +10,7 @@ class MapViewController: UIViewController {
   let ref = Database.database().reference()
   let currentUser = Auth.auth().currentUser
   var locationManager:CLLocationManager = CLLocationManager()
+
   var userLocation : CLLocation? {
     didSet{
       updateLocationToFirebase()
@@ -433,7 +434,7 @@ extension MapViewController : CLLocationManagerDelegate {
     let distanceInMeters = newLocation.distance(from: userLocation ?? CLLocation(latitude: 0, longitude: 0))
     let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
     let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-    
+    print(distanceInMeters)
     if distanceInMeters > 100{
       userLocation = newLocation
       mapView.setRegion(region, animated: true)
@@ -477,7 +478,6 @@ extension MapViewController : MKMapViewDelegate {
   
   func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
     self.selectedUser = view.annotation as? User
-    print(self.selectedUser?.uid)
     
     videoView.isHidden = false
     UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {

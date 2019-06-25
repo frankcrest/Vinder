@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
      FirebaseApp.configure()
     
+    ref = Database.database().reference()
     self.window = UIWindow(frame:UIScreen.main.bounds)
     let initialController = LoginViewController()
     let nav = UINavigationController()
@@ -37,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     self.window?.makeKeyAndVisible()
     
-    self.ref = Database.database().reference()
     // Override point for customization after application launch.
     if #available(iOS 10.0, *) {
       // For iOS 10 display notification (sent via APNS)
@@ -98,21 +98,20 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     completionHandler()
     
     let userInfo = response.notification.request.content.userInfo
-    
     let callerId = userInfo["callerId"] as? String
-    
+    guard let firebaseRef = ref else {return}
     if callerId != nil {
       ud.set(callerId!, forKey: "callerId")
       print("the caller id is: \(callerId!)")
-      let presentVC = MapViewController()
-      self.window?.rootViewController = presentVC
+      firebaseRef.child("calling").child(callerId!).removeValue()
+      let presentVC = self.window!.rootViewController!
       let incomeCallVC = IncomeCallViewController()
       presentVC.present(incomeCallVC, animated: true, completion: nil)
     } else{
       print("Do nothing")
     }
-    
   }
+  
 }
 // [END ios_10_message_handling]
 
@@ -140,10 +139,12 @@ extension AppDelegate : MessagingDelegate {
     guard let uid = userInfo["event_id"] as? String else {return}
     guard let title = userInfo["title"] as? String else {return}
     guard let body = userInfo["body"] as? String else {return}
-    
-    print("the uid is \(uid)")
-    print("the title is \(title)")
-    print("the body is\(body)")
+    guard let firebaseRef = ref else {return}
+    if body == "Accepted" {
+      firebaseRef.child("callAccepted").child(uid).removeValue()
+    } else if body == "Rejected"{
+      firebaseRef.child("callRejected").child(uid).removeValue()
+    }
     let callResponse = CallResponse(uid: uid, title: title, body: body)
     notificationCenter.post(name: NSNotification.Name.CallResponseNotification, object: callResponse)
     
