@@ -98,7 +98,7 @@ class VideoView: UIView {
     //AVPlayer methods
 //    *************************************************************************************************
     //need change 
-    func configure(url: String) {
+    func configureView(url: String) {
         let videoURL = URL(string: url)
         player = AVPlayer(url: videoURL!)
         playerLayer = AVPlayerLayer(player: player)

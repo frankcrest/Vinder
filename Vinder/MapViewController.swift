@@ -166,7 +166,7 @@ class MapViewController: UIViewController {
         super.viewWillAppear(animated)
         determineCurrentLocation()
             
-        if !webService.isLoggedIn() {
+        if !UserDefaults.standard.bool(forKey: "isLoggedIn") {
             presentLogInNavigationController()
         }
     }
@@ -347,6 +347,7 @@ class MapViewController: UIViewController {
         videoView.isHidden = true
         do{
             try webService.logOut()
+            UserDefaults.standard.set(false, forKey: "isLoggedIn")
             presentLogInNavigationController()
             
         }catch let err{
@@ -420,7 +421,6 @@ class MapViewController: UIViewController {
         let recordMessageVC = RecordVideoViewController()
         recordMessageVC.mode = .messageMode
         recordMessageVC.toUser = user
-//        present(recordMessageVC, animated: true, completion: nil)
         navigationController?.pushViewController(recordMessageVC, animated: true)
         
     }
@@ -517,14 +517,19 @@ extension MapViewController : MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
         self.selectedUser = view.annotation as? User
+        guard self.selectedUser != nil else {
+            return
+        }
         videoView.isHidden = false
         videoView.setUpViews()
         UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
             self.videoView.alpha = 1
         }, completion: nil)
-        
-//        videoView.configure(url: selectedUser!.profileVideoUrl)
-//        videoView.play()
+        webService.fetchProfileVideo(of: self.selectedUser!) { (url, err) -> (Void) in
+            self.videoView.configureView(url: self.selectedUser!.profileVideoUrl)
+            self.videoView.play()
+        }
+
     }
     
 }

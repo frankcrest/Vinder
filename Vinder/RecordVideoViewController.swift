@@ -281,6 +281,7 @@ extension RecordVideoViewController {
                     
                     self.loading.removeFromSuperview()
                     self.clearVideoReviewLayer()
+                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     self.dismiss(animated: true, completion: nil)
      
                 } else {

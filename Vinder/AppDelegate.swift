@@ -22,6 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
+    let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+    print("isloggedIn\(isLoggedIn)")
+    if !isLoggedIn {
+        print("isloggedIn: setting false")
+        UserDefaults.standard.set(false, forKey: "isLoggedIn")
+    }
      FirebaseApp.configure()
     
     self.ref = Database.database().reference()
@@ -44,16 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     application.registerForRemoteNotifications()
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
-
-    
-
     let initialController = MapViewController()
-//    let initialController = RecordVideoViewController()
-//    initialController.mode = .messageMode
-    
     let nav = UINavigationController()
     nav.viewControllers = [initialController]
-    
     window?.rootViewController = nav
 
 

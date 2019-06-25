@@ -25,7 +25,7 @@ class IncomeCallViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         setUpViews()
-        videoView.configure(url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+        videoView.configureView(url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
     }
     
     func setUpViews(){
