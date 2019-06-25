@@ -33,6 +33,9 @@ class MessageTableViewCell: UITableViewCell {
         return label
     }()
     
+    var videoURL: URL!
+    var videoPlayer = VideoPlayer()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -72,5 +75,21 @@ class MessageTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func startPreview() {
+        guard videoURL != nil else {
+            print("invalid url cant play video on cell")
+            return
+        }
+        videoPlayer.playVideo(atUrl: videoURL, on: videoView)
+        videoPlayer.player?.pause()
+    }
+    
+    func playVideo() {
+        videoPlayer.isLoop = false
+        videoPlayer.player?.play()
+    }
+    
+    
     
 }

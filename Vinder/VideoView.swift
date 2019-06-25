@@ -10,10 +10,6 @@ import UIKit
 import AVKit
 import AVFoundation
 
-enum CallType {
-    case IncomeCall
-    case Default
-}
 
 class VideoView: UIView {
     
@@ -74,6 +70,7 @@ class VideoView: UIView {
         self.buttonContainer.addSubview(rightButton)
         self.buttonContainer.addSubview(leftButton)
         
+
         NSLayoutConstraint.activate([
             buttonContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
             buttonContainer.heightAnchor.constraint(equalToConstant: 80),
@@ -99,6 +96,8 @@ class VideoView: UIView {
     }
 
     //AVPlayer methods
+//    *************************************************************************************************
+    //need change 
     func configure(url: String) {
         let videoURL = URL(string: url)
         player = AVPlayer(url: videoURL!)
@@ -130,5 +129,4 @@ class VideoView: UIView {
             player.play()
         }
     }
-
 }

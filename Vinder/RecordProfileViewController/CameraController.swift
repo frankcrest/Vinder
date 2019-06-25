@@ -30,7 +30,7 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
     
     var fileURL: URL = {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let fileURL = paths[0].appendingPathComponent("profile.mov")
+        let fileURL = paths[0].appendingPathComponent("video.mov")
         try? FileManager.default.removeItem(at: fileURL)
         return fileURL
     }()
@@ -114,7 +114,7 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
     
     //MARK: RECORD AND SAVE VIDEO 
     
-    func startRecording() {
+    func startRecording(toURL url: URL) {
         
         videoOutput?.startRecording(to: fileURL, recordingDelegate: self)
     

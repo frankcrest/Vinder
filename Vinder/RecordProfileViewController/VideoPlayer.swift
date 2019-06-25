@@ -13,6 +13,7 @@ class VideoPlayer {
     
     var playerLayer: AVPlayerLayer?
     var player: AVPlayer?
+    var isLoop = true
     
     func playVideo(atUrl videoUrl: URL, on view: UIView) {
 
@@ -28,10 +29,13 @@ class VideoPlayer {
     }
     
     @objc func playerItemDidReachEnd(notification: Notification) {
-        if let playerItem = notification.object as? AVPlayerItem {
-            playerItem.seek(to: CMTime.zero, completionHandler: nil)
-            player?.play()
+//        if isLoop {
+            if let playerItem = notification.object as? AVPlayerItem {
+                playerItem.seek(to: CMTime.zero, completionHandler: nil)
+                player?.play()
+//            }
         }
+
     }
     
     

@@ -48,6 +48,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
 
     let initialController = MapViewController()
+//    let initialController = RecordVideoViewController()
+//    initialController.mode = .messageMode
     
     let nav = UINavigationController()
     nav.viewControllers = [initialController]

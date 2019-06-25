@@ -173,13 +173,17 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   }
   
   @objc func signUpTapped(){
-    let recordProfileVideoController = RecordVideoViewController()
-    recordProfileVideoController.isTutorialMode = true
+    
     ud.set(emailTextfield.text, forKey: "email")
     ud.set(usernameTextfield.text, forKey: "username")
     ud.set(nameTextfield.text, forKey: "name")
     ud.set(passwordTextfield.text, forKey: "password")
+    let recordProfileVideoController = RecordVideoViewController()
+    recordProfileVideoController.isTutorialMode = true
+    recordProfileVideoController.mode = .signupMode
     navigationController?.pushViewController(recordProfileVideoController, animated: true)
+    
+   
   }
   
   @objc func screenTapped(){
