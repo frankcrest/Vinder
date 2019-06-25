@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
      FirebaseApp.configure()
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
-    let initialController = LoginFormViewController()
+    let initialController = LoginViewController()
     let nav = UINavigationController()
     nav.viewControllers = [initialController]
     let mapVC = MapViewController()

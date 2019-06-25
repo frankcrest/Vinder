@@ -47,7 +47,6 @@
 		0D3E98D722BAA87B00D02311 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		0D3E98DB22BAC5CA00D02311 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
-		0D91629522BED8EC00C58DCF /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		0D91629922C1436300C58DCF /* RecordVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordVideoViewController.swift; path = Vinder/RecordVideoViewController.swift; sourceTree = SOURCE_ROOT; };
 		0D91629C22C1439D00C58DCF /* NearbyUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NearbyUserView.swift; path = Vinder/NearbyUserView.swift; sourceTree = SOURCE_ROOT; };
 		0D91629F22C1475F00C58DCF /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -135,7 +134,6 @@
 		E935543322B9735F00CD7958 /* Vinder */ = {
 			isa = PBXGroup;
 			children = (
-				0D91629522BED8EC00C58DCF /* Vinder.entitlements */,
 				E972D7AB22BD84520058D54E /* Vinder.entitlements */,
 				ED31021822BEAE8200D2211B /* loading */,
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,

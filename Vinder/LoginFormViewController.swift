@@ -133,8 +133,8 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
       self.ud.set(self.emailTextField.text, forKey: "email")
       self.emailTextField.text = ""
       self.passwordTextfield.text = ""
-      
-    self.dismiss(animated: true, completion: nil)
+      let mapVC = MapViewController()
+      self.navigationController?.pushViewController(mapVC, animated: true)
     }
   }
   
