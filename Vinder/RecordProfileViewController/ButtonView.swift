@@ -81,17 +81,12 @@ class ButtonView: UIStackView {
         self.alignment = .fill
         self.distribution = .fillEqually
         self.spacing = 8.0
-        //        if !didFinishRecording {
         recordButtonView.setupCircleProgressBar()
-        //        }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        //        if !didFinishRecording {
-        recordButtonView.setupCircleProgressBar()
-        //        }
-        
+       recordButtonView.setupCircleProgressBar()
     }
     
 }
