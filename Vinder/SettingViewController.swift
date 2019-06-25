@@ -118,15 +118,18 @@
     }
     
     @objc func editTapped(){
-        let alert = UIAlertController(title: "Choose Photo From", message: "", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
-            self.getImage(fromSourceType: .camera)
-        }))
-        alert.addAction(UIAlertAction(title: "Photo Album", style: .default, handler: {(action: UIAlertAction) in
-            self.getImage(fromSourceType: .photoLibrary)
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+//        let alert = UIAlertController(title: "Choose Photo From", message: "", preferredStyle: .actionSheet)
+//        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
+//            self.getImage(fromSourceType: .camera)
+//        }))
+//        alert.addAction(UIAlertAction(title: "Photo Album", style: .default, handler: {(action: UIAlertAction) in
+//            self.getImage(fromSourceType: .photoLibrary)
+//        }))
+//        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+//        self.present(alert, animated: true, completion: nil)
+        let recordController = RecordVideoViewController()
+        recordController.mode = .profileMode
+        navigationController?.pushViewController(recordController, animated: true)
     }
     
     @objc func changeNameTapped(){

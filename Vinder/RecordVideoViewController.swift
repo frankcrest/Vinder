@@ -172,7 +172,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             
             presentLoadingView()
             
-            switch mode {
+            switch mode! {
             case .signupMode:
                 registerMode()
             case .messageMode:
