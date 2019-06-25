@@ -180,7 +180,8 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
           if succeeded {
             
             self.loading.removeFromSuperview()
-            self.dismiss(animated: true, completion: nil)
+            let mapVC = MapViewController()
+            self.present(mapVC, animated: true, completion: nil)
             print("view dismissed!")
             
           } else {

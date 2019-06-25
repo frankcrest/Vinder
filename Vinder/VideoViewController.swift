@@ -62,6 +62,9 @@ class VideoViewController: UIViewController {
       leaveChannel()
       joinChannel(uid: tryingToCallUserUid)
     } else {
+      let uc = UIAlertController(title: "You have been rejected", message: "rejected", preferredStyle: .alert)
+      let action = UIAlertAction(title: "okay man", style: .cancel, handler: nil)
+      self.present(uc, animated: true, completion: nil)
       print("the user you are trying to call have rejected your call")
     }
    
