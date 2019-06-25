@@ -168,7 +168,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
         
         //MARK: CONFIRM BUTTON
         
-        if sender.titleLabel?.text == "confirm" {
+        if sender.titleLabel?.text == "confirm" || sender.titleLabel?.text == "send"{
             
             presentLoadingView()
             
@@ -193,15 +193,17 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
         
         if sender.titleLabel?.text == "back" {
             self.dismiss(animated: true, completion: nil)
+            navigationController?.popViewController(animated: true)
         }
         
         if sender.titleLabel?.text == "retake" {
-            notSurebutton.isHidden = false
+            if isTutorialMode {
+                notSurebutton.isHidden = false
+            }
+
             buttonView.switchCameraButton.setTitle("switch", for: .normal)
             sender.setTitle("back", for: .normal)
-            videoReviewer.player?.pause()
-            videoReviewer.player = nil
-            self.videoReviewer.playerLayer?.removeFromSuperlayer()
+            clearVideoReviewLayer()
             self.configureCameraController()
             buttonView.switchCameraButton.isHidden = false
             buttonView.recordButtonView.showCircleBar()
@@ -217,6 +219,13 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     
     @objc func replayTapped() {
         
+    }
+    
+    //MARK: HELPER
+    func clearVideoReviewLayer() {
+        videoReviewer.player?.pause()
+        videoReviewer.player = nil
+        self.videoReviewer.playerLayer?.removeFromSuperlayer()
     }
     
     
@@ -241,7 +250,14 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
             self.videoReviewer.playVideo(atUrl: self.cameraController.fileURL, on: self.recordPreviewView )
             
             self.buttonView.backButton.setTitle("retake", for: .normal)
-            self.buttonView.switchCameraButton.setTitle("confirm", for: .normal)
+            
+            switch self.mode {
+            case .messageMode:
+                self.buttonView.switchCameraButton.setTitle("send", for: .normal)
+            default:
+                self.buttonView.switchCameraButton.setTitle("confirm", for: .normal)
+            }
+          
             self.notSurebutton.isHidden = true
         }
     }
@@ -264,13 +280,9 @@ extension RecordVideoViewController {
                 if succeeded {
                     
                     self.loading.removeFromSuperview()
-                    
-//                    let pvc = self.presentingViewController
+                    self.clearVideoReviewLayer()
                     self.dismiss(animated: true, completion: nil)
-//                    self.dismiss(animated: true) {
-//                        pvc?.dismiss(animated: false, completion: nil)
-//                    }
-                    
+     
                 } else {
                     print("error:\(String(describing: error))")
                 }
@@ -290,8 +302,11 @@ extension RecordVideoViewController {
                     print("cant send message : \(String(describing: err))")
                     return
                 }
-//                 let pvc = self.presentingViewController
-                self.dismiss(animated: true, completion: nil)
+                let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
+                mapVC.videoView.isHidden = true
+                self.clearVideoReviewLayer()
+                self.navigationController?.popViewController(animated: true)
+                
             }
         }
     }

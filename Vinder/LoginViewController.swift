@@ -39,7 +39,6 @@ class LoginViewController: UIViewController {
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.

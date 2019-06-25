@@ -45,7 +45,7 @@ class WebService {
     
     
     
-    //MARK: FIREBASE UPLOADING
+    //MARK: AUTH AND UPDATE
     
     func updateUserWithLocation(lat: String, lon: String) {
         
@@ -76,18 +76,9 @@ class WebService {
     
     }
     
-    func changeProfile(_ url: String, completion: @escaping (Error?) -> Void) {
-        guard let userID = currentUserID else {
-            return
-        }
-        ref.child("users").child(userID).setValue(["profileVideo": url]) { (err, ref) in
-            completion(err)
-        }
-    }
-    
     func sendMessage(_ url: String, to user: User,completion: @escaping  (Error?) -> Void)  {
         
-        guard let senderID = currentUserID else { return }
+        guard let senderID = Auth.auth().currentUser?.uid else { return }
         guard let name = ud.string(forKey: "name") else {return}
         let messageID = UUID().uuidString
         
@@ -95,6 +86,48 @@ class WebService {
             completion(err)
         }
         
+    }
+    
+    func register(withProfileURL url: URL, registered: @escaping (Bool, Error?) -> Void) {
+        
+        guard let email = ud.string(forKey: "email") else {return}
+        guard let password = ud.string(forKey: "password") else {return}
+        guard let name = ud.string(forKey: "name") else {return}
+        guard let username = ud.string(forKey: "username") else {return}
+        guard let token = ud.string(forKey: "fcmToken") else {return}
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+            
+            guard error == nil else {
+                registered(false, error)
+                return
+            }
+            
+            guard let uid = user?.user.uid else { return }
+            self.ud.set(uid, forKey:"uid")
+            registered(true, nil)
+            
+            self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
+                
+                if let error = error{
+                    print("can not set ref\(error)")
+                    return
+                }
+                
+            })
+        }
+    }
+    
+    
+    //MARK: UPLOADING
+    
+    func changeProfile(_ url: String, completion: @escaping (Error?) -> Void) {
+        guard let userID = currentUserID else {
+            return
+        }
+        ref.child("users").child(userID).setValue(["profileVideo": url]) { (err, ref) in
+            completion(err)
+        }
     }
     
     func uploadVideo(atURL url: URL,  completion: @escaping (URL) -> (Void)) {
@@ -128,44 +161,23 @@ class WebService {
         }
     }
     
-    func register(withProfileURL url: URL, registered: @escaping (Bool, Error?) -> Void) {
-        
-        guard let email = ud.string(forKey: "email") else {return}
-        guard let password = ud.string(forKey: "password") else {return}
-        guard let name = ud.string(forKey: "name") else {return}
-        guard let username = ud.string(forKey: "username") else {return}
-        guard let token = ud.string(forKey: "fcmToken") else {return}
-        
-        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
-            
-            guard error == nil else {
-                registered(false, error)
-                return
-            }
-            
-            guard let uid = user?.user.uid else { return }
-            self.ud.set(uid, forKey:"uid")
-            registered(true, nil)
-            
-            self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
-                
-                if let error = error{
-                    print("can not set ref\(error)")
-                    return
-                }
-            
-            })
-        }
-    }
+
     
-    //MARK: FIREBASE DOWNLOADING
+    //MARK: FIREBASE FECTHING
     
     func fetchProfileVideo(of user: User, completion: @escaping (URL?, Error?) -> (Void)) {
+        
+        let profileFileURL: URL = {
+            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            let fileURL = paths[0].appendingPathComponent("userProfile/\(user.uid).mov")
+            try? FileManager.default.removeItem(at: fileURL)
+            return fileURL
+        }()
         
         let storage = Storage.storage()
         let url = user.profileVideoUrl 
         let httpReference = storage.reference(forURL: url)
-        let downloadTask = httpReference.write(toFile: fileURL) { (url, error) in
+        let downloadTask = httpReference.write(toFile: profileFileURL) { (url, error) in
             completion(url,error)
         }
         downloadTask.observe(.progress) { (snapshot) in

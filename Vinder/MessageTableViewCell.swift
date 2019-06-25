@@ -86,6 +86,7 @@ class MessageTableViewCell: UITableViewCell {
     }
     
     func playVideo() {
+        videoPlayer.isLoop = false
         videoPlayer.player?.play()
     }
     

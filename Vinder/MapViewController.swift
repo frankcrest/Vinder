@@ -174,6 +174,7 @@ class MapViewController: UIViewController {
     private func presentLogInNavigationController() {
          let loginNav = UINavigationController()
         loginNav.viewControllers = [LoginViewController()]
+        loginNav.modalPresentationStyle = .fullScreen
         present(loginNav, animated: true, completion: nil)
     }
     
@@ -390,7 +391,7 @@ class MapViewController: UIViewController {
             }
         }
     }
-    
+
     @objc func meTapped(){
         if leftViewTrailing.constant == self.view.bounds.width{
             
@@ -409,6 +410,8 @@ class MapViewController: UIViewController {
                 self.view.layoutIfNeeded()
             }
         }
+        
+        fetchMessages()
     }
     
     @objc func sendMessage() {
@@ -417,7 +420,8 @@ class MapViewController: UIViewController {
         let recordMessageVC = RecordVideoViewController()
         recordMessageVC.mode = .messageMode
         recordMessageVC.toUser = user
-        present(recordMessageVC, animated: true, completion: nil)
+//        present(recordMessageVC, animated: true, completion: nil)
+        navigationController?.pushViewController(recordMessageVC, animated: true)
         
     }
     
@@ -519,8 +523,8 @@ extension MapViewController : MKMapViewDelegate {
             self.videoView.alpha = 1
         }, completion: nil)
         
-        videoView.configure(url: selectedUser!.profileVideoUrl)
-        videoView.play()
+//        videoView.configure(url: selectedUser!.profileVideoUrl)
+//        videoView.play()
     }
     
 }
