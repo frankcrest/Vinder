@@ -10,7 +10,7 @@ import UIKit
 import AgoraRtcEngineKit
 
 
-class VideoViewController: UIViewController {
+class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var remoteVideoView: UIView!
     var localVideoView: UIView!
@@ -20,22 +20,50 @@ class VideoViewController: UIViewController {
     var muteButton: UIButton!
     var turnOffCameraButton: UIButton!
     var buttonStackView: UIStackView!
-
+    var jokeIndex : Int!
+    var swipeRightGesture : UISwipeGestureRecognizer!
+    var swipeLeftGesture : UISwipeGestureRecognizer!
+    
+    let webService = WebService()
+    
+    var jokes : [String] = []
+    
+    let jokeLabel : UILabel = {
+        let l = UILabel()
+        l.alpha = 0.3
+        l.layer.masksToBounds = true
+        l.layer.cornerRadius = 15
+        l.backgroundColor = .white
+        l.adjustsFontSizeToFitWidth = true
+        l.minimumScaleFactor = 0.7
+        l.numberOfLines = 0
+        l.textAlignment = NSTextAlignment.center
+        l.isUserInteractionEnabled = true
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
+    }()
+    
+    
     private let appID = "007d7c78a4cc4fe48b838110bde1cd0c"
     private var agoraKit: AgoraRtcEngineKit!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        jokeIndex = 0
         setupVideoViews()
+        fetchJokes()
         setupButtons()
-        
-
+        setUpJokeView()
+        swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(recog:)))
+        swipeLeftGesture.direction = .left
+        swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(recog:)))
+        swipeRightGesture.direction = .right
+        jokeLabel.addGestureRecognizer(swipeLeftGesture)
+        jokeLabel.addGestureRecognizer(swipeRightGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
         initEngine()
         setupVideo()
         setupLocalVideoCanvas()
@@ -96,8 +124,6 @@ class VideoViewController: UIViewController {
     
     
     
-    
-    
     //MARK: UI SETUPS
     
     private func setupVideoViews() {
@@ -127,12 +153,24 @@ class VideoViewController: UIViewController {
         
     }
     
+    private func setUpJokeView(){
+        self.view.addSubview(jokeLabel)
+        
+        NSLayoutConstraint.activate([
+            jokeLabel.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -10),
+            jokeLabel.heightAnchor.constraint(equalToConstant: 60),
+            jokeLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
+            jokeLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10)
+            ])
+        
+    }
+    
     private func setupButtons() {
-
+        
         switchButton = UIButton()
         switchButton.setTitle("Switch", for: .normal)
         switchButton.addTarget(self, action: #selector(self.switchCamera(_:)), for: .touchUpInside)
-
+        
         hangupButton = UIButton()
         hangupButton.setTitle("Hangup", for: .normal)
         hangupButton.addTarget(self, action: #selector(self.leaveChannel), for: .touchUpInside)
@@ -140,13 +178,11 @@ class VideoViewController: UIViewController {
         muteButton = UIButton()
         muteButton.setTitle("Mute", for: .normal)
         muteButton.addTarget(self, action: #selector(self.mute(_:)), for: .touchUpInside)
-
+        
         turnOffCameraButton = UIButton()
         turnOffCameraButton.setTitle("Turn Off", for: .normal)
         turnOffCameraButton.addTarget(self, action: #selector(self.turnOffCamera(_:)), for: .touchUpInside)
-
-
-
+        
         buttonStackView = UIStackView(arrangedSubviews: [switchButton, hangupButton,turnOffCameraButton,muteButton])
         buttonStackView.axis = .horizontal
         buttonStackView.distribution = .fillEqually
@@ -154,21 +190,60 @@ class VideoViewController: UIViewController {
         buttonStackView.spacing = 8.0
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(buttonStackView)
-
+        
         NSLayoutConstraint.activate([
             buttonStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             buttonStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            buttonStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            buttonStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             buttonStackView.heightAnchor.constraint(equalToConstant: 44.0)
             ])
-
+        
         buttonStackView.backgroundColor = .white
+        
+    }
+
+    
+    func fetchJokes(){
+        //initial call
+        webService.fetchJokes(completion: { (data) -> (Void) in
+            let jokeJSON = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+            guard let joke = jokeJSON!["joke"] else {return}
+            self.jokes.append(joke as! String)
+            DispatchQueue.main.async {
+                self.jokeLabel.text = joke as! String
+            }
+        })
+        
+        if jokeIndex != 0{
+            jokeIndex += 1
+        }
 
     }
     
-
-
-
+    @objc func handleSwipe(recog : UISwipeGestureRecognizer){
+            switch recog.direction {
+            case .left:
+                if(jokeIndex < jokes.count-1){
+                    print("left")
+                    jokeIndex += 1
+                    let joke = jokes[jokeIndex]
+                    self.jokeLabel.text = joke
+                }else {
+                    fetchJokes()
+                }
+            case .right:
+                if(jokeIndex != 0){
+                    print("right")
+                    jokeIndex -= 1
+                    let joke = jokes[jokeIndex]
+                    self.jokeLabel.text = joke
+                }
+            default:
+                break
+            }
+    }
+    
+    
 }
 
 //MARK: AGORA ENGINE SET UP
@@ -203,11 +278,11 @@ extension VideoViewController: AgoraRtcEngineDelegate {
     }
     
     @objc private func leaveChannel() {
-      
+        
         self.dismiss(animated: true, completion: nil)
         agoraKit.leaveChannel(nil)
         UIApplication.shared.isIdleTimerDisabled = false
-    
+        
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteVideoDecodedOfUid uid: UInt, size: CGSize, elapsed: Int) {
@@ -220,7 +295,6 @@ extension VideoViewController: AgoraRtcEngineDelegate {
         view.bringSubviewToFront(localVideoView)
         
         //hide control buttons
-        
         UIView.animate(withDuration: 0.3, animations: {
             self.buttonStackView.alpha = 0
         }) { (_) in
@@ -231,3 +305,4 @@ extension VideoViewController: AgoraRtcEngineDelegate {
     
     
 }
+

@@ -299,8 +299,9 @@ class MapViewController: UIViewController {
         guard let uid = userObject["uid"] as? String else {return}
         guard let lat = userObject["latitude"] as? String else {return}
         guard let lon = userObject["longitude"] as? String else{return}
+        guard let videoURL = userObject["profileVideo"] as? String else {return}
         
-        let user = User(uid: uid, token: "" , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
+        let user = User(uid: uid, token: "" , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: videoURL)
         self.mapView.addAnnotation(user)
         self.users.append(user)
       }
@@ -310,8 +311,11 @@ class MapViewController: UIViewController {
   @objc func logoutTapped(){
     print("logout")
     videoView.isHidden = true
-    let incomeCall = IncomeCallViewController()
-    self.present(incomeCall, animated: true, completion: nil)
+    
+    let videoViewController = VideoViewController()
+    self.present(videoViewController, animated: true, completion: nil)
+//    let incomeCall = IncomeCallViewController()
+//    self.present(incomeCall, animated: true, completion: nil)
 //    do{
 //      try Auth.auth().signOut()
 //      self.view.window?.rootViewController?.presentedViewController!.dismiss(animated: true, completion: nil)
@@ -434,7 +438,7 @@ extension MapViewController : CLLocationManagerDelegate {
         let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
         mapView.setRegion(region, animated: true)
-        
+
         let myAnnotation: MKPointAnnotation = MKPointAnnotation()
         myAnnotation.coordinate = CLLocationCoordinate2DMake(newLocation.coordinate.latitude, newLocation.coordinate.longitude);
         myAnnotation.title = "Current location"
