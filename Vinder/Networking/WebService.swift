@@ -207,7 +207,6 @@ class WebService {
                 let timeInterval = Double(timestamp)!/1000.0
                 let messageDate = Date(timeIntervalSince1970: timeInterval)
 
-            
                 let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL, sender: sender, timestamp: messageDate, imageURL: imageURL)
                 messages.append(msg)
             }
