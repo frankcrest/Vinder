@@ -17,6 +17,8 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   let notificationCenter = NotificationCenter.default
   var remoteVideoView: UIView!
   var localVideoView: UIView!
+  var inCall = false
+  var userWeAreCalling : String?
   
   private let appID = "007d7c78a4cc4fe48b838110bde1cd0c"
   private var agoraKit: AgoraRtcEngineKit!
@@ -85,18 +87,24 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     let tryingToCallUserUid = callResponse.uid
     
     if callResponse.status == .accepted {
-      ref.child("callAccepted").child(callResponse.uid).removeValue()
       print("the user you are trying to call have accepted your call")
+      userWeAreCalling = callResponse.uid
       leaveChannel()
       joinChannel(uid: tryingToCallUserUid)
     } else if callResponse.status == .rejected {
       print("you have been rejected")
-      ref.child("callRejected").child(callResponse.uid).removeValue()
       let uc = UIAlertController(title: "YOU HAVE BEEN REJECTED", message: "YOU WILL BE REDIRECTED TO TINDER FOR DOGS", preferredStyle: .alert)
       let action = UIAlertAction(title: "okay man", style: .cancel, handler: nil)
       uc.addAction(action)
       self.present(uc, animated: true, completion: nil)
-      print("the user you are trying to call have rejected your call")
+    }else if callResponse.status == .hangup{
+      print("they hang up on you")
+      let uc = UIAlertController(title: "THEY HANG UP ON YOU", message: "FIND ANOTHER USER TO TALK TO", preferredStyle: .alert)
+      let action = UIAlertAction(title: "okay man", style: .cancel) { (action) in
+        self.dismiss(animated: true, completion: nil)
+      }
+      uc.addAction(action)
+      self.present(uc, animated: true, completion: nil)
     }
   }
   
@@ -265,16 +273,26 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     agoraKit.joinChannel(byToken: nil, channelId: uid, info: nil, uid: 0) { (sid, uid, elapsed) in
       self.agoraKit.setEnableSpeakerphone(true)
       UIApplication.shared.isIdleTimerDisabled = true
+      self.inCall = true
     }
   }
   
   @objc func leaveChannel(){
     agoraKit.leaveChannel(nil)
     UIApplication.shared.isIdleTimerDisabled = false
+    inCall = false
   }
   
   @objc private func hangupTapped() {
     guard let user = currentUser else {return}
+    
+    if inCall{
+      if userWeAreCalling != nil {
+        ref.child("hangup").child(userWeAreCalling!).setValue([user.uid : 1])
+        inCall = false
+      } 
+    }
+    
     ref.child("calling").child(user.uid).removeValue()
     agoraKit.leaveChannel(nil)
     UIApplication.shared.isIdleTimerDisabled = false

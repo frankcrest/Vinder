@@ -77,6 +77,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }else if body == "Rejected"{
       print("remove callRejected from firebase")
       ref.child("callRejected").child(uid).removeValue()
+    }else if body == "HangUp"{
+      print("remove Hangup from firebase")
+      ref.child("hangup").child(uid).removeValue()
     }
     
     let callResponse = CallResponse(uid: uid, title: title, body: body)
