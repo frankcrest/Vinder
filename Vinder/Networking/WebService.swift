@@ -84,9 +84,9 @@ class WebService {
         guard let senderID = Auth.auth().currentUser?.uid else { return }
         guard let name = ud.string(forKey: "name") else {return}
         let messageID = UUID().uuidString
-        
-        
-        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "imageURL": imageURL, "messageID": messageID, "sender": name]) { (err, ref) in
+
+        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "messageID": messageID, "sender": name, "timestamp": ServerValue.timestamp()]) { (err, ref) in
+
             completion(err)
         }
         
@@ -208,6 +208,9 @@ class WebService {
         }
         downloadTask.observe(.progress) { (snapshot) in
             let percent = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+            DispatchQueue.main.async {
+                self.updateProgressDelegate?.updateProgress(progress: percent)
+            }
             print("downloading: \(percent)%")
         }
     }
@@ -229,10 +232,12 @@ class WebService {
                 guard let imageURL = message["imageURL"] else { return }
                 let timeInterval = Double(timestamp)!/1000.0
                 let messageDate = Date(timeIntervalSince1970: timeInterval)
-                
-                
+
                 let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL, sender: sender, timestamp: messageDate, imageURL: imageURL)
                 messages.append(msg)
+            }
+            messages.sort { (msg1, msg2) -> Bool in
+                return msg1.timestamp > msg2.timestamp
             }
             completion(messages)
         }

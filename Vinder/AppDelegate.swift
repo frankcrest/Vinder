@@ -32,6 +32,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     window?.rootViewController = nav
     
     self.window?.makeKeyAndVisible()
+
+    let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+
+    if !isLoggedIn {
+        UserDefaults.standard.set(false, forKey: "isLoggedIn")
+    }
+
     
     // Override point for customization after application launch.
     if #available(iOS 10.0, *) {

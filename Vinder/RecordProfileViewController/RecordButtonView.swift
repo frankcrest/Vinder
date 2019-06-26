@@ -16,8 +16,8 @@ protocol VideoHandlerDelegate: AnyObject {
 class RecordButtonView: UIView, CAAnimationDelegate {
     
     
-    private let circleLayer = CAShapeLayer()
-    private let trackLayer = CAShapeLayer()
+    private var circleLayer = CAShapeLayer()
+    private var trackLayer = CAShapeLayer()
     var videoHandlerDelegate: VideoHandlerDelegate?
     
     override init(frame: CGRect) {
@@ -64,7 +64,7 @@ class RecordButtonView: UIView, CAAnimationDelegate {
         circleLayer.fillColor = UIColor.clear.cgColor
         circleLayer.lineCap = CAShapeLayerLineCap.round
         circleLayer.strokeEnd = 0
-        
+
         trackLayer.frame = self.bounds
         trackLayer.path = circularPath.cgPath
         trackLayer.strokeColor = UIColor.darkGray.cgColor
