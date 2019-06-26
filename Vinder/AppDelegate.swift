@@ -23,9 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
     let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
-    print("isloggedIn\(isLoggedIn)")
+
     if !isLoggedIn {
-        print("isloggedIn: setting false")
         UserDefaults.standard.set(false, forKey: "isLoggedIn")
     }
      FirebaseApp.configure()

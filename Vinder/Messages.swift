@@ -14,13 +14,15 @@ class Messages {
     var messageID = String()
     var senderID = String()
     var messageURL = String()
-    
-    init(messageID: String, senderID: String, messageURL: String, sender: String) {
+    var timestamp = Date()
+    var imageURL = String()
+    init(messageID: String, senderID: String, messageURL: String, sender: String, timestamp: Date, imageURL: String) {
         self.messageID = messageID
         self.senderID = senderID
         self.messageURL = messageURL
         self.sender = sender
+        self.timestamp = timestamp
+        self.imageURL = imageURL
     }
-    
     
 }

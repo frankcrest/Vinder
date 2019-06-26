@@ -156,6 +156,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         
         mapView.delegate = self
+        webService.updateProgressDelegate = videoView
         mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         setupViews()
         fetchMessages()
@@ -538,7 +539,7 @@ extension MapViewController : MKMapViewDelegate {
 extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.view.bounds.width
+        return self.view.bounds.width + 82.0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -549,7 +550,7 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
         
         cell.nameLabel.text = messages[indexPath.row].sender
-        cell.distanceLabel.text = "10km"
+        cell.timestampLabel.text = "\(Date())"
         cell.videoURL = URL(string: messages[indexPath.row].messageURL)
         cell.startPreview()
         //need to change message model to store sender name 
