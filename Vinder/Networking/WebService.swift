@@ -25,7 +25,7 @@ class WebService {
     private var downloadURL: URL!
     private let ref = Database.database().reference()
     private let ud = UserDefaults.standard
-    
+    private let storage = Storage.storage()
     let currentUserID = Auth.auth().currentUser?.uid
     
     private var storageRef: StorageReference {
@@ -57,10 +57,6 @@ class WebService {
         ref.child("users").child(uid).updateChildValues(["longitude":lon])
         
     }
-    
-//    func isLoggedIn() -> Bool {
-//        return Auth.auth().currentUser != nil
-//    }
     
     func logIn(withEmail email: String, password: String, completion: @escaping (AuthDataResult?, Error?) -> Void) {
         
@@ -170,7 +166,7 @@ class WebService {
         let imageName = "profileImage_\(UUID().uuidString)"
         let ref = profileImageStorageRef.child(imageName)
         
-        let uploadData = ref.putData(data, metadata: nil) { (metaData, error) in
+        let _ = ref.putData(data, metadata: nil) { (metaData, error) in
             if error != nil {
                 print("cant upload image: \(String(describing: error))")
                 return
@@ -184,12 +180,27 @@ class WebService {
                 }
             }
         }
-        
     }
         
 
     
     //MARK: FIREBASE FECTHING
+    
+    func fetchMsgImage(of message: Messages, completion: @escaping (URL?, Error?) -> Void) {
+        
+        let thumbnailImageURL: URL = {
+            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            let fileURL = paths[0].appendingPathComponent("thumbnails/thumnail_\(message.messageID)")
+            return fileURL
+        }()
+        
+        let url = message.imageURL
+        let httpReference = storage.reference(forURL: url)
+        let _ = httpReference.write(toFile: thumbnailImageURL) { (url, error) in
+            completion(url,error)
+        }
+        
+    }
     
     func fetchProfileVideo(of user: User, completion: @escaping (URL?, Error?) -> (Void)) {
         
@@ -200,7 +211,7 @@ class WebService {
             return fileURL
         }()
         
-        let storage = Storage.storage()
+        
         let url = user.profileVideoUrl 
         let httpReference = storage.reference(forURL: url)
         let downloadTask = httpReference.write(toFile: profileFileURL) { (url, error) in

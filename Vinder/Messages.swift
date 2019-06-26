@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Messages {
     
@@ -16,8 +17,10 @@ class Messages {
     var messageURL = String()
     var timestamp = Date()
     var imageURL = String()
+    var thumbnail: UIImage?
     
     init(messageID: String, senderID: String, messageURL: String, sender: String, timestamp: Date, imageURL: String) {
+        
         self.messageID = messageID
         self.senderID = senderID
         self.messageURL = messageURL

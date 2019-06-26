@@ -43,6 +43,7 @@ class MessageTableViewCell: UITableViewCell {
     }()
     
     var videoURL: URL!
+    var imageURL: URL!
     var videoPlayer = VideoPlayer()
     
     override func awakeFromNib() {

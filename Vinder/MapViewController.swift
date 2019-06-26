@@ -165,11 +165,16 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        determineCurrentLocation()
             
         if !UserDefaults.standard.bool(forKey: "isLoggedIn") {
             presentLogInNavigationController()
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        fetchMessages()
+        determineCurrentLocation()
     }
     
     private func presentLogInNavigationController() {
@@ -320,12 +325,28 @@ class MapViewController: UIViewController {
     }
     
     fileprivate func fetchMessages() {
+        
         webService.fetchAllMessages { (msgs) -> (Void) in
             guard let msgs = msgs else {
                 print("cant fetch messages")
                 return
             }
-            self.messages = msgs
+            
+            for msg in msgs {
+                if msg.thumbnail == nil {
+                    self.webService.fetchMsgImage(of: msg) { (dataURL, err) in
+                        guard err == nil else { return }
+                        guard let dataURL = dataURL else { return }
+                        do {
+                             let image = try UIImage(data: Data(contentsOf: dataURL))
+                            msg.thumbnail = image
+                        }catch let error {
+                            print(error)
+                        }
+                        self.messages.append(msg)
+                    }
+                }
+            }
         }
         messageTableView.reloadData()
     }
@@ -337,7 +358,6 @@ class MapViewController: UIViewController {
         let lon = String(format: "%f", location.coordinate.longitude)
 
         webService.updateUserWithLocation(lat: lat, lon: lon)
-        
         loadUsers()
     }
     
@@ -412,7 +432,6 @@ class MapViewController: UIViewController {
                 self.view.layoutIfNeeded()
             }
         }
-        
         fetchMessages()
     }
     
@@ -464,10 +483,10 @@ extension MapViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations[0] as CLLocation
-        let distanceInMeters = newLocation.distance(from: userLocation ?? CLLocation(latitude: 0, longitude: 0))
-        if distanceInMeters > 100{
+        let distanceInMeters = newLocation.distance(from:  userLocation ?? CLLocation(latitude: 0, longitude: 0))
+//        if distanceInMeters > 100{
             userLocation = newLocation
-        }
+//        }
         
         let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
@@ -550,8 +569,9 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
         
         cell.nameLabel.text = messages[indexPath.row].sender
-        cell.timestampLabel.text = "\(Date())"
+        cell.timestampLabel.text = "\(messages[indexPath.row].timestamp)"
         cell.videoURL = URL(string: messages[indexPath.row].messageURL)
+        cell.imageURL = URL(string: messages[indexPath.row].imageURL)
         cell.startPreview()
         //need to change message model to store sender name 
         return cell
