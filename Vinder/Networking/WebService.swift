@@ -34,6 +34,9 @@ class WebService {
     private var profileVideosStorageRef: StorageReference {
         return storageRef.child("profileVideos")
     }
+    private var profileImageStorageRef: StorageReference {
+        return storageRef.child("profileImage")
+    }
     
     //download fileURL needs to be changed
     private var fileURL: URL = {
@@ -76,13 +79,14 @@ class WebService {
     
     }
     
-    func sendMessage(_ url: String, to user: User,completion: @escaping  (Error?) -> Void)  {
+    func sendMessage(_ url: String, imageURL: String, to user: User,completion: @escaping  (Error?) -> Void)  {
         
         guard let senderID = Auth.auth().currentUser?.uid else { return }
         guard let name = ud.string(forKey: "name") else {return}
         let messageID = UUID().uuidString
         
-        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "messageID": messageID, "sender": name]) { (err, ref) in
+        
+        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "imageURL": imageURL, "messageID": messageID, "sender": name]) { (err, ref) in
             completion(err)
         }
         
@@ -161,6 +165,28 @@ class WebService {
         }
     }
     
+    func uploadImage(withData data: Data,  completion: @escaping (URL) -> (Void)) {
+        
+        let imageName = "profileImage_\(UUID().uuidString)"
+        let ref = profileImageStorageRef.child(imageName)
+        
+        let uploadData = ref.putData(data, metadata: nil) { (metaData, error) in
+            if error != nil {
+                print("cant upload image: \(String(describing: error))")
+                return
+            } else {
+                ref.downloadURL { (url, err) in
+                    guard let downloadURL = url else {
+                        return
+                    }
+                    print("url: \(downloadURL)")
+                    completion(downloadURL)
+                }
+            }
+        }
+        
+    }
+        
 
     
     //MARK: FIREBASE FECTHING
@@ -199,13 +225,20 @@ class WebService {
                 guard let senderID = message["senderID"] else { return }
                 guard let msgID = message["messageID"] else {return}
                 guard let sender = message["sender"] else {return}
+                guard let timestamp = message["timestamp"] else {return}
+                guard let imageURL = message["imageURL"] else { return }
+                let timeInterval = Double(timestamp)!/1000.0
+                let messageDate = Date(timeIntervalSince1970: timeInterval)
                 
-                let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL, sender: sender)
+                
+                let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL, sender: sender, timestamp: messageDate, imageURL: imageURL)
                 messages.append(msg)
             }
             completion(messages)
         }
     }
+    
+    
     
     func fetchUsers(completion: @escaping ([User]?) -> Void) {
         
