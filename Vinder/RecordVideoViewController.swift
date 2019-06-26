@@ -180,8 +180,6 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
                 messageMode()
             case .profileMode:
                 profileMode()
-            default:
-                return
             }
         }
     }
@@ -272,6 +270,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
 //MARK: MODES
 
 extension RecordVideoViewController {
+
     
     func registerMode() {
 //        captureFirstFrame(profileURL: cameraController.fileURL)
@@ -290,12 +289,10 @@ extension RecordVideoViewController {
                     print("error:\(String(describing: error))")
                 }
             }
-        }
-        
-       
-    }
-    
-    
+      }
+  }
+
+  
     func messageMode() {
         
         guard let user = self.toUser else { return }
@@ -317,9 +314,6 @@ extension RecordVideoViewController {
                 }
             }
         }
-        
-        
-
     }
     
     func profileMode() {
@@ -334,9 +328,10 @@ extension RecordVideoViewController {
                 self.dismiss(animated: true, completion: nil)
             }
         }
+
     }
     
-    
+  
 }
 
 
@@ -353,7 +348,8 @@ extension RecordVideoViewController {
         
         do{
             thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: 0, preferredTimescale: 1), actualTime: nil))
-        } catch let error as NSError {
+        } catch let error  {
+          print(error)
             print("No image")
         }
         
@@ -380,7 +376,8 @@ extension RecordVideoViewController {
         
         do{
             thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: captureTime, preferredTimescale: 1), actualTime: nil))
-        } catch let error as NSError {
+        } catch let error {
+          print(error)
             print("No image")
         }
         

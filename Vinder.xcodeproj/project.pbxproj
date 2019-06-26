@@ -17,7 +17,6 @@
 		0D9162A022C1476000C58DCF /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629F22C1475F00C58DCF /* SignUpViewController.swift */; };
 		0D9162A122C1479000C58DCF /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86922BD5CDE0046E35C /* VideoPlayer.swift */; };
 		0D9162A322C1522000C58DCF /* IncomeCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9162A222C1522000C58DCF /* IncomeCallViewController.swift */; };
-		0D9162AB22C3F93200C58DCF /* CircleProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9162AA22C3F93200C58DCF /* CircleProgressBar.swift */; };
 		2829F008C558904A7F28D088 /* Pods_Vinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */; };
 		E9035D6822C18EFF00D9D170 /* CallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9035D6722C18EFF00D9D170 /* CallResponse.swift */; };
 		E90C498222C2F42E00606A03 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C498122C2F42E00606A03 /* UserLocation.swift */; };
@@ -26,6 +25,7 @@
 		E935543C22B9736000CD7958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E935543B22B9736000CD7958 /* Assets.xcassets */; };
 		E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E935543D22B9736000CD7958 /* LaunchScreen.storyboard */; };
 		E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544822B99B3C00CD7958 /* LoginFormViewController.swift */; };
+		E9356BF522C40AAF0007DDF0 /* CircleProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9356BF422C40AAE0007DDF0 /* CircleProgressBar.swift */; };
 		E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */; };
 		E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */; };
 		E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */; };
@@ -54,7 +54,6 @@
 		0D91629C22C1439D00C58DCF /* NearbyUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NearbyUserView.swift; path = Vinder/NearbyUserView.swift; sourceTree = SOURCE_ROOT; };
 		0D91629F22C1475F00C58DCF /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		0D9162A222C1522000C58DCF /* IncomeCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeCallViewController.swift; sourceTree = "<group>"; };
-		0D9162AA22C3F93200C58DCF /* CircleProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CircleProgressBar.swift; path = "/Users/Frances/Desktop/Lighthouse Lab/FinalProject/Vinder/CircleProgressBar.swift"; sourceTree = "<absolute>"; };
 		1E180473BECC247993331594 /* Pods-Vinder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.release.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.release.xcconfig"; sourceTree = "<group>"; };
 		538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9035D6722C18EFF00D9D170 /* CallResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallResponse.swift; sourceTree = "<group>"; };
@@ -66,6 +65,7 @@
 		E935543E22B9736000CD7958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E935544022B9736000CD7958 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
+		E9356BF422C40AAE0007DDF0 /* CircleProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleProgressBar.swift; sourceTree = "<group>"; };
 		E972D7AB22BD84520058D54E /* Vinder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
 		E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -146,7 +146,7 @@
 				ED31021822BEAE8200D2211B /* loading */,
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,
 				E9035D6722C18EFF00D9D170 /* CallResponse.swift */,
-				0D9162AA22C3F93200C58DCF /* CircleProgressBar.swift */,
+				E9356BF422C40AAE0007DDF0 /* CircleProgressBar.swift */,
 				E90C498122C2F42E00606A03 /* UserLocation.swift */,
 				0D3E98DB22BAC5CA00D02311 /* User.swift */,
 				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
@@ -344,7 +344,7 @@
 				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
 				E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */,
-				0D9162AB22C3F93200C58DCF /* CircleProgressBar.swift in Sources */,
+				E9356BF522C40AAF0007DDF0 /* CircleProgressBar.swift in Sources */,
 				ED31022022BEAF1200D2211B /* LoadingView.swift in Sources */,
 				E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */,
 				EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */,
