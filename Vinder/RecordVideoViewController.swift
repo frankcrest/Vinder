@@ -251,7 +251,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
             
             self.buttonView.backButton.setTitle("retake", for: .normal)
             
-            switch self.mode {
+            switch self.mode! {
             case .messageMode:
                 self.buttonView.switchCameraButton.setTitle("send", for: .normal)
             default:
@@ -273,6 +273,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
 extension RecordVideoViewController {
     
     func registerMode() {
+//        captureFirstFrame(profileURL: cameraController.fileURL)
         webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
             
             self.webService.register(withProfileURL: url) { (succeeded, error) in
@@ -289,6 +290,8 @@ extension RecordVideoViewController {
                 }
             }
         }
+        
+       
     }
     
     
@@ -296,24 +299,30 @@ extension RecordVideoViewController {
         
         guard let user = self.toUser else { return }
         
-        webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
+        captureFirstFrame(profileURL: cameraController.fileURL) { (imageURL) in
             
-            self.webService.sendMessage("\(url)", to: user) { (err) in
-                guard err == nil else {
-                    print("cant send message : \(String(describing: err))")
-                    return
-                }
-                let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
-                mapVC.videoView.isHidden = true
-                self.clearVideoReviewLayer()
-                self.navigationController?.popViewController(animated: true)
+            self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (videoURL) -> (Void) in
                 
+                self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
+                    guard err == nil else {
+                        print("cant send message : \(String(describing: err))")
+                        return
+                    }
+                    let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
+                    mapVC.videoView.isHidden = true
+                    self.clearVideoReviewLayer()
+                    self.navigationController?.popViewController(animated: true)
+                    
+                }
             }
         }
+        
+        
+
     }
     
     func profileMode() {
-        
+//        captureFirstFrame(profileURL: cameraController.fileURL)
         webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
             
             self.webService.changeProfile("\(url)") { (err) in
@@ -330,3 +339,31 @@ extension RecordVideoViewController {
 }
 
 
+
+//snap shot
+extension RecordVideoViewController {
+    
+    func captureFirstFrame(profileURL : URL,completion: @escaping (String) -> Void ){
+        let avAsset = AVURLAsset(url: profileURL, options: nil)
+        let imageGenerator = AVAssetImageGenerator(asset: avAsset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        var thumbnail: UIImage?
+        var imageURL : URL!
+        
+        do{
+            thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: 0, preferredTimescale: 1), actualTime: nil))
+        } catch let error as NSError {
+            print("No image")
+        }
+        
+        let imageData = thumbnail!.jpegData(compressionQuality: 1.0)
+        
+        webService.uploadImage(withData: imageData!, completion: { (url) in
+            completion("\(url)")
+        })
+        
+    }
+    
+    
+    
+}
