@@ -85,7 +85,7 @@ class WebService {
         guard let name = ud.string(forKey: "name") else {return}
         let messageID = UUID().uuidString
 
-        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "messageID": messageID, "sender": name, "timestamp": ServerValue.timestamp()]) { (err, ref) in
+        self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "imageURL":imageURL, "messageID": messageID, "sender": name, "timestamp": ServerValue.timestamp()]) { (err, ref) in
 
             completion(err)
         }

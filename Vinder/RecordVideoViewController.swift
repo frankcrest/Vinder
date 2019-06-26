@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import AVKit
+import CoreMedia
 
 enum Mode {
     case signupMode
@@ -348,7 +349,7 @@ extension RecordVideoViewController {
         let imageGenerator = AVAssetImageGenerator(asset: avAsset)
         imageGenerator.appliesPreferredTrackTransform = true
         var thumbnail: UIImage?
-        var imageURL : URL!
+        
         
         do{
             thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: 0, preferredTimescale: 1), actualTime: nil))
@@ -365,5 +366,30 @@ extension RecordVideoViewController {
     }
     
     
+    func captureRandomFrame(profileURL : URL,completion: @escaping (String) -> Void ){
+        let avAsset = AVURLAsset(url: profileURL, options: nil)
+        let duration = avAsset.duration
+        let durationTime = CMTimeGetSeconds(duration)
+        let imageGenerator = AVAssetImageGenerator(asset: avAsset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        var thumbnail: UIImage?
+        
+        print("\(durationTime)")
+        
+        let captureTime = Double.random(in: 0 ... Double(durationTime))
+        
+        do{
+            thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: captureTime, preferredTimescale: 1), actualTime: nil))
+        } catch let error as NSError {
+            print("No image")
+        }
+        
+        let imageData = thumbnail!.jpegData(compressionQuality: 1.0)
+        
+        webService.uploadImage(withData: imageData!, completion: { (url) in
+            completion("\(url)")
+        })
+        
+    }
     
 }
