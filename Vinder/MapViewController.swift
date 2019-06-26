@@ -32,6 +32,7 @@ class MapViewController: UIViewController {
     v.backgroundColor = .white
     v.layer.cornerRadius = 20
     v.isHidden = true
+    v.alpha = 0
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
@@ -299,7 +300,9 @@ class MapViewController: UIViewController {
   
   func loadUsers(){
     ref.child("users").observe(.value) { (snapshot) in
+      
       self.users.removeAll()
+      
       for user in snapshot.children.allObjects as! [DataSnapshot]{
         guard let userObject = user.value as? [String:AnyObject] else{return}
         
@@ -438,8 +441,11 @@ extension MapViewController : CLLocationManagerDelegate {
     let distanceInMeters = newLocation.distance(from: userLocation ?? CLLocation(latitude: 0, longitude: 0))
     let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
     let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+    
     print(distanceInMeters)
+    
     if distanceInMeters > 100{
+      print("user have moved 100 metres")
       userLocation = newLocation
       mapView.setRegion(region, animated: true)
     }
@@ -482,12 +488,10 @@ extension MapViewController : MKMapViewDelegate {
   
   func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
     self.selectedUser = view.annotation as? User
-    
     videoView.isHidden = false
     UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
       self.videoView.alpha = 1
     }, completion: nil)
-    videoView.setUpViews()
     videoView.configure(url: selectedUser!.profileVideoUrl)
     videoView.play()
   }

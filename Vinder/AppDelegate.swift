@@ -135,10 +135,21 @@ extension AppDelegate : MessagingDelegate {
   // [END ios_10_data_message]
   
   func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    
     print("received silent notification \(userInfo)")
+    
     guard let uid = userInfo["event_id"] as? String else {return}
     guard let title = userInfo["title"] as? String else {return}
     guard let body = userInfo["body"] as? String else {return}
+    guard let firebaseRef = ref else {return}
+    
+    if body == "Accepted" {
+      print("remove callAccepted from firebase")
+      firebaseRef.child("callAccepted").child(uid).removeValue()
+    }else if body == "Rejected"{
+      print("remove callRejected from firebase")
+      firebaseRef.child("callRejected").child(uid).removeValue()
+    }
     
     let callResponse = CallResponse(uid: uid, title: title, body: body)
     notificationCenter.post(name: NSNotification.Name.CallResponseNotification, object: callResponse)
