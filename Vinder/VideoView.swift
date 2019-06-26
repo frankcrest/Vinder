@@ -119,8 +119,8 @@ class VideoView: UIView {
     }
     
     func stop() {
-        player.pause()
-        player.seek(to: CMTime.zero)
+        //player.pause()
+        //player.seek(to: CMTime.zero)
     }
     
     @objc func reachTheEndOfTheVideo(_ notification: Notification) {

@@ -10,7 +10,7 @@ class MapViewController: UIViewController {
   let ref = Database.database().reference()
   let currentUser = Auth.auth().currentUser
   var locationManager:CLLocationManager = CLLocationManager()
-
+  var userLocations = [UserLocation]()
   var userLocation : CLLocation? {
     didSet{
       updateLocationToFirebase()
@@ -168,6 +168,7 @@ class MapViewController: UIViewController {
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillAppear(true)
+    ref.child("users").removeAllObservers()
     self.videoView.stop()
   }
   
@@ -315,6 +316,21 @@ class MapViewController: UIViewController {
         let user = User(uid: uid, token: "" , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")
         self.mapView.addAnnotation(user)
         self.users.append(user)
+      }
+    }
+  }
+  
+  func loadUserLocations(){
+    ref.child("userLocation").observe(.childChanged) { (snapshot) in
+      for location in snapshot.children.allObjects as! [DataSnapshot]{
+        guard let locationObject = location.value as? [String:AnyObject] else {return}
+        
+        let uid = location.key
+        guard let lat = locationObject["latitude"] as? String else {return}
+        guard let lon = locationObject["longitude"] as? String else {return}
+        
+        let location = UserLocation(uid: uid, lat: lat, long: lon)
+        self.userLocations.append(location)
       }
     }
   }
@@ -488,12 +504,20 @@ extension MapViewController : MKMapViewDelegate {
   
   func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
     self.selectedUser = view.annotation as? User
-    videoView.isHidden = false
-    UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
-      self.videoView.alpha = 1
-    }, completion: nil)
-    videoView.configure(url: selectedUser!.profileVideoUrl)
-    videoView.play()
+    guard let user = currentUser else {return}
+    guard let userTapped = self.selectedUser else {return}
+    if user.uid != userTapped.uid{
+      print("did not tap self, the user uid = \(userTapped.uid)")
+      print(user.uid)
+      videoView.isHidden = false
+      UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
+        self.videoView.alpha = 1
+      }, completion: nil)
+      videoView.configure(url: selectedUser!.profileVideoUrl)
+      videoView.play()
+    } else{
+      print("you tapped on yourself, do nothing")
+    }
   }
 
 }

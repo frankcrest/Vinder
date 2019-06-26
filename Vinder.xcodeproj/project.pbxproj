@@ -19,6 +19,7 @@
 		0D9162A322C1522000C58DCF /* IncomeCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9162A222C1522000C58DCF /* IncomeCallViewController.swift */; };
 		2829F008C558904A7F28D088 /* Pods_Vinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */; };
 		E9035D6822C18EFF00D9D170 /* CallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9035D6722C18EFF00D9D170 /* CallResponse.swift */; };
+		E90C498222C2F42E00606A03 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C498122C2F42E00606A03 /* UserLocation.swift */; };
 		E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543422B9735F00CD7958 /* AppDelegate.swift */; };
 		E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* LoginViewController.swift */; };
 		E935543C22B9736000CD7958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E935543B22B9736000CD7958 /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 		1E180473BECC247993331594 /* Pods-Vinder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.release.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.release.xcconfig"; sourceTree = "<group>"; };
 		538DEB739557BCA9EAEE6AC3 /* Pods_Vinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9035D6722C18EFF00D9D170 /* CallResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallResponse.swift; sourceTree = "<group>"; };
+		E90C498122C2F42E00606A03 /* UserLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
 		E935543122B9735F00CD7958 /* Vinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543422B9735F00CD7958 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E935543622B9735F00CD7958 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				ED31021822BEAE8200D2211B /* loading */,
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,
 				E9035D6722C18EFF00D9D170 /* CallResponse.swift */,
+				E90C498122C2F42E00606A03 /* UserLocation.swift */,
 				0D3E98DB22BAC5CA00D02311 /* User.swift */,
 				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
 				0D9162A222C1522000C58DCF /* IncomeCallViewController.swift */,
@@ -353,6 +356,7 @@
 				0D9162A022C1476000C58DCF /* SignUpViewController.swift in Sources */,
 				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
 				E9035D6822C18EFF00D9D170 /* CallResponse.swift in Sources */,
+				E90C498222C2F42E00606A03 /* UserLocation.swift in Sources */,
 				E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
 				0D9162A322C1522000C58DCF /* IncomeCallViewController.swift in Sources */,
