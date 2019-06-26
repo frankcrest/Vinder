@@ -10,7 +10,7 @@ class MapViewController: UIViewController {
   private let webService = WebService()
   private var messages: [Messages] = []
   let ref = Database.database().reference()
-  let currentUser = Auth.auth().currentUser
+  var currentUser = Auth.auth().currentUser
   var locationManager:CLLocationManager = CLLocationManager()
   var userLocations = [UserLocation]()
   var userLocation : CLLocation? {
@@ -56,7 +56,7 @@ class MapViewController: UIViewController {
     mp.mapType = MKMapType.standard
     mp.isZoomEnabled = true
     mp.isScrollEnabled = true
-    mp.showsUserLocation = true
+    mp.showsUserLocation = false
     mp.translatesAutoresizingMaskIntoConstraints = false
     return mp
   }()
@@ -173,17 +173,23 @@ class MapViewController: UIViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    determineCurrentLocation()
     if Auth.auth().currentUser == nil {
       presentLogInNavigationController()
+    } else{
+      currentUser = Auth.auth().currentUser
+      determineCurrentLocation()
     }
+  }
+  override func viewDidDisappear(_ animated: Bool) {
+    locationManager.stopUpdatingHeading()
+    locationManager.stopUpdatingLocation()
   }
   
   private func presentLogInNavigationController() {
     let loginNav = UINavigationController()
     loginNav.viewControllers = [LoginViewController()]
     loginNav.modalPresentationStyle = .fullScreen
-    present(loginNav, animated: true, completion: nil)
+    present(loginNav, animated: false, completion: nil)
   }
   
   //MARK: SETUP VIEWS
@@ -308,12 +314,13 @@ class MapViewController: UIViewController {
   }
   
   func loadUsers(){
+    print("fetching users")
+     self.users.removeAll()
     webService.fetchUsers { (users) in
       guard let users = users else {
         print("faied fetching users")
         return
       }
-      self.users.removeAll()
       for user in users {
         self.mapView.addAnnotation(user)
         self.users.append(user)
@@ -351,8 +358,9 @@ class MapViewController: UIViewController {
     guard let location = userLocation else{return}
     let lat = String(format: "%f", location.coordinate.latitude)
     let lon = String(format: "%f", location.coordinate.longitude)
-    
-    webService.updateUserWithLocation(lat: lat, lon: lon)
+    guard let user = currentUser else {return}
+    print(user.uid)
+    webService.updateUserWithLocation(lat: lat, lon: lon, uid: user.uid)
     
     loadUsers()
   }
@@ -479,7 +487,7 @@ extension MapViewController : CLLocationManagerDelegate {
     let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     
     print(distanceInMeters)
-    print(userLocation)
+    
     if distanceInMeters > 100{
       print("user have moved 100 metres")
       userLocation = newLocation

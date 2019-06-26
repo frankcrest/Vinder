@@ -193,7 +193,7 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     
     hangupButton = UIButton()
     hangupButton.setTitle("Hangup", for: .normal)
-    hangupButton.addTarget(self, action: #selector(self.leaveChannel), for: .touchUpInside)
+    hangupButton.addTarget(self, action: #selector(self.hangupTapped), for: .touchUpInside)
     
     muteButton = UIButton()
     muteButton.setTitle("Mute", for: .normal)

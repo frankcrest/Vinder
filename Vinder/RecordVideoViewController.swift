@@ -264,6 +264,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
 extension RecordVideoViewController {
   
   func registerMode() {
+    print("register")
     webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
       
       self.webService.register(withProfileURL: url) { (succeeded, error) in
@@ -312,6 +313,7 @@ extension RecordVideoViewController {
           print("cant change video profile: \(String(describing: err))")
           return
         }
+        
         self.dismiss(animated: true, completion: nil)
       }
     }
