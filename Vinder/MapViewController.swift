@@ -175,7 +175,7 @@ class MapViewController: UIViewController {
         fetchMessages()
     }
   }
-  
+
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillAppear(true)
     ref.child("users").removeAllObservers()
@@ -478,10 +478,10 @@ class MapViewController: UIViewController {
   }
   
   @objc func callTapped(){
+    //check if user is currently in call, if not , call them
     guard let selectedUser = selectedUser else {return}
     guard let currentUser = currentUser else {return}
     ref.child("calling").child(currentUser.uid).setValue([selectedUser.uid : 1])
-    
     let videoVC = VideoViewController()
     self.present(videoVC, animated: true, completion: nil)
   }

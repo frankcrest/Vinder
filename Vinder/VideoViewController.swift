@@ -89,9 +89,10 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
       print("the user you are trying to call have accepted your call")
       leaveChannel()
       joinChannel(uid: tryingToCallUserUid)
-    } else {
+    } else if callResponse.status == .rejected {
+      print("you have been rejected")
       ref.child("callRejected").child(callResponse.uid).removeValue()
-      let uc = UIAlertController(title: "You have been rejected", message: "rejected", preferredStyle: .alert)
+      let uc = UIAlertController(title: "YOU HAVE BEEN REJECTED", message: "YOU WILL BE REDIRECTED TO TINDER FOR DOGS", preferredStyle: .alert)
       let action = UIAlertAction(title: "okay man", style: .cancel, handler: nil)
       uc.addAction(action)
       self.present(uc, animated: true, completion: nil)

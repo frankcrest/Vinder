@@ -51,17 +51,17 @@ exports.observeRejectedCall = functions.database.ref('/callRejected/{callerId}/{
   var callerId = context.params.callerId;
   var uid = context.params.uid;
 
-  console.log('User' + callerId + 'is calling' + uid);
+  console.log('User' + uid + 'is calling' + callerId);
 
   return admin.database().ref('/users/' + callerId).once('value',snapshot => {
-    var userDoingCalling = snapshot.val();
+    var userWeAreCalling = snapshot.val();
 
     return admin.database().ref('/users/' + uid).once('value', snapshot => {
-      var userWeAreCalling = snapshot.val();
+      var userDoingCalling = snapshot.val();
 
       const payload = {
     data: {
-      title: 'A call is coming!',
+      title: 'Call Response',
       body: 'Rejected',
       event_id: userWeAreCalling.uid
     }
@@ -85,17 +85,17 @@ exports.observeAcceptedCall = functions.database.ref('/callAccepted/{callerId}/{
   var callerId = context.params.callerId;
   var uid = context.params.uid;
 
-  console.log('User' + callerId + 'is calling ' + uid);
+  console.log('User' + uid + 'is calling ' + callerId);
 
   return admin.database().ref('/users/' + callerId).once('value',snapshot => {
-    var userDoingCalling = snapshot.val();
+    var userWeAreCalling = snapshot.val();
 
     return admin.database().ref('/users/' + uid).once('value', snapshot => {
-      var userWeAreCalling = snapshot.val();
+      var userDoingCalling = snapshot.val();
 
       const payload = {
     data: {
-      title: 'A call is coming',
+      title: 'Call Response',
       body: 'Accepted',
       event_id: userWeAreCalling.uid
     }

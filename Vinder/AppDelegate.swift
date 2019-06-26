@@ -21,24 +21,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
   let notificationCenter = NotificationCenter.default
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    
     FirebaseApp.configure()
     ref = Database.database().reference()
-   
-    self.window = UIWindow(frame:UIScreen.main.bounds)
-    let initialController = MapViewController()
-    let nav = UINavigationController()
-    nav.viewControllers = [initialController]
-    window?.rootViewController = nav
     
-    self.window?.makeKeyAndVisible()
-
     let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
-
+    
     if !isLoggedIn {
-        UserDefaults.standard.set(false, forKey: "isLoggedIn")
+      UserDefaults.standard.set(false, forKey: "isLoggedIn")
     }
-
     
     // Override point for customization after application launch.
     if #available(iOS 10.0, *) {
@@ -52,17 +42,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
       Messaging.messaging().delegate = self
     } else {
       let settings: UIUserNotificationSettings =
-        UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+        UIUserNotificationSettings(types: [.alert, .badge, .sound,], categories: nil)
       application.registerUserNotificationSettings(settings)
     }
     
     application.registerForRemoteNotifications()
+    
+    self.window = UIWindow(frame:UIScreen.main.bounds)
+    let initialController = MapViewController()
+    let nav = UINavigationController()
+    nav.viewControllers = [initialController]
+    window?.rootViewController = nav
+    
+    self.window?.makeKeyAndVisible()
     
     return true
   }
   
   func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
     completionHandler(.alert)
+  }
+  
+  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    print("received silent notification \(userInfo)")
+    
+    guard let uid = userInfo["event_id"] as? String else {return}
+    guard let title = userInfo["title"] as? String else {return}
+    guard let body = userInfo["body"] as? String else {return}
+    let ref = Database.database().reference()
+    
+    if body == "Accepted" {
+      print("remove callAccepted from firebase")
+      ref.child("callAccepted").child(uid).removeValue()
+    }else if body == "Rejected"{
+      print("remove callRejected from firebase")
+      ref.child("callRejected").child(uid).removeValue()
+    }
+    
+    let callResponse = CallResponse(uid: uid, title: title, body: body)
+    notificationCenter.post(name: NSNotification.Name.CallResponseNotification, object: callResponse)
   }
   
   func applicationWillResignActive(_ application: UIApplication) {
@@ -91,7 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
 @available(iOS 10, *)
 extension AppDelegate : UNUserNotificationCenterDelegate {
-
+  
   func userNotificationCenter(_ center: UNUserNotificationCenter,
                               didReceive response: UNNotificationResponse,
                               withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -102,11 +120,10 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     let callerId = userInfo["callerId"] as? String
     guard let firebaseRef = ref else {return}
     if callerId != nil {
-      ud.set(callerId!, forKey: "callerId")
-      print("the caller id is: \(callerId!)")
       firebaseRef.child("calling").child(callerId!).removeValue()
       let presentVC = self.window!.rootViewController!
       let incomeCallVC = IncomeCallViewController()
+      incomeCallVC.callerId = callerId!
       presentVC.present(incomeCallVC, animated: true, completion: nil)
     } else{
       print("Do nothing")
@@ -135,25 +152,4 @@ extension AppDelegate : MessagingDelegate {
   }
   // [END ios_10_data_message]
   
-  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    
-    print("received silent notification \(userInfo)")
-    
-    guard let uid = userInfo["event_id"] as? String else {return}
-    guard let title = userInfo["title"] as? String else {return}
-    guard let body = userInfo["body"] as? String else {return}
-    guard let firebaseRef = ref else {return}
-    
-    if body == "Accepted" {
-      print("remove callAccepted from firebase")
-      firebaseRef.child("callAccepted").child(uid).removeValue()
-    }else if body == "Rejected"{
-      print("remove callRejected from firebase")
-      firebaseRef.child("callRejected").child(uid).removeValue()
-    }
-    
-    let callResponse = CallResponse(uid: uid, title: title, body: body)
-    notificationCenter.post(name: NSNotification.Name.CallResponseNotification, object: callResponse)
-    
-  }
 }
