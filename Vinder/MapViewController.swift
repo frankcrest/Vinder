@@ -479,7 +479,7 @@ extension MapViewController : CLLocationManagerDelegate {
     let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     
     print(distanceInMeters)
-    
+    print(userLocation)
     if distanceInMeters > 100{
       print("user have moved 100 metres")
       userLocation = newLocation
