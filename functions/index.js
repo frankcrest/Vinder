@@ -47,7 +47,7 @@ exports.observeCalling = functions.database.ref('/calling/{uid}/{callingId}').on
       return snapshot.ref.parent.child('uppercase').set(uppercase);
     });
 
-exports.observeCallResponse = functions.database.ref('/callResponse/{callerId}/{uid}').onCreate((snapshot, context) => {
+exports.observeRejectedCall = functions.database.ref('/callRejected/{callerId}/{uid}').onCreate((snapshot, context) => {
   var callerId = context.params.callerId;
   var uid = context.params.uid;
 
@@ -59,25 +59,60 @@ exports.observeCallResponse = functions.database.ref('/callResponse/{callerId}/{
     return admin.database().ref('/users/' + uid).once('value', snapshot => {
       var userWeAreCalling = snapshot.val();
 
-      var payload = {
-        "aps" : {
-        "content-available" : 1
-        },
-        "callerId" : callerId.uid
-      };
+      const payload = {
+    data: {
+      title: 'A call is coming!',
+      body: 'Rejected',
+      event_id: userWeAreCalling.uid
+    }
+  };
 
-      admin.messaging().sendToDevice(userDoingCalling.token, payload).then(function(response){
+  const options = {
+    content_available: true
+  }
+
+      admin.messaging().sendToDevice(userDoingCalling.token, payload,options).then(function(response){
         console.log("succesfully send message:", response);
       })
       .catch(function(errror){
         console.log("Error sending message:",error);
       });
-
-
     })
   })
+})
 
+exports.observeAcceptedCall = functions.database.ref('/callAccepted/{callerId}/{uid}').onCreate((snapshot, context) => {
+  var callerId = context.params.callerId;
+  var uid = context.params.uid;
 
+  console.log('User' + callerId + 'is calling ' + uid);
+
+  return admin.database().ref('/users/' + callerId).once('value',snapshot => {
+    var userDoingCalling = snapshot.val();
+
+    return admin.database().ref('/users/' + uid).once('value', snapshot => {
+      var userWeAreCalling = snapshot.val();
+
+      const payload = {
+    data: {
+      title: 'A call is coming',
+      body: 'Accepted',
+      event_id: userWeAreCalling.uid
+    }
+  };
+
+  const options = {
+    content_available: true
+  }
+
+      admin.messaging().sendToDevice(userDoingCalling.token, payload, options).then(function(response){
+        console.log("succesfully send message:", response);
+      })
+      .catch(function(errror){
+        console.log("Error sending message:",error);
+      });
+    })
+  })
 })
 
 exports.sendNotifications = functions.https.onRequest((req,res) => {

@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import Firebase
 
 class IncomeCallViewController: UIViewController {
     
     var callingUser : User!
-    
+    let ref = Database.database().reference()
+    let currentUser = Auth.auth().currentUser
+    let ud = UserDefaults.standard
+  
     lazy var videoView : VideoView = {
         let v = VideoView()
         v.backgroundColor = .white
@@ -47,13 +51,24 @@ class IncomeCallViewController: UIViewController {
     
     
     @objc func pickUpCallTapped(){
-        print("pick up")
-        
+      guard let user = currentUser else {return}
+      guard let callerId = ud.string(forKey: "callerId") else {return}
+    
+      ref.child("callAccepted").child(user.uid).setValue([callerId : 1])
+      //create video vc and join call
+      let videoVC = VideoViewController()
+        let rootVC = UIApplication.shared.delegate!.window!?.rootViewController!
+      rootVC!.dismiss(animated: false, completion: {
+        rootVC!.present(videoVC, animated: true, completion: nil)
+      })
     }
     
     @objc func rejectCallTapped(){
-        print("reject call")
-        
+      guard let user = currentUser else {return}
+      guard let callerId = ud.string(forKey: "calledId") else {return}
+      print(callerId)
+      ref.child("callRejected").child(user.uid).setValue([callerId : 1])
+      self.dismiss(animated: true, completion: nil)
     }
 
 }
