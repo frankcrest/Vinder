@@ -191,9 +191,8 @@ class WebService {
             return fileURL
         }()
         
-        ref.child("users").child(id).observe(.value) { (snapshot) in
-            for info in snapshot.children.allObjects as! [DataSnapshot]{
-                guard let infoObject = info.value as? [String:AnyObject] else{return}
+        ref.child("users").child(id).observe(DataEventType.value) { (snapshot) in
+                guard let infoObject = snapshot.value as? [String:AnyObject] else{return}
                 guard let profileImageUrl = infoObject["profileImageUrl"] as? String else {return}
                 guard let name = infoObject["name"] as? String else { return }
                 guard let profileVideo = infoObject["profileVideo"] as? String else { return }
@@ -206,7 +205,6 @@ class WebService {
                     userInfo["profileImageUrl"] = "\(url)"
                     completion(userInfo)
                 }
-            }
         }
     }
     
