@@ -16,7 +16,10 @@ class VideoView: UIView {
     var playerLayer: AVPlayerLayer!
     var player: AVPlayer!
     var isLoop: Bool = false
-    var user: User?
+    
+    var videoURL: String?
+    var username: String?
+    
     private var circleLayer = CAShapeLayer()
     
     let buttonContainer:UIView = {
@@ -116,9 +119,10 @@ class VideoView: UIView {
     }
 
     
-    func configureView(url: String) {
-        let videoURL = URL(string: url)
-        player = AVPlayer(url: videoURL!)
+    func configureView() {
+        guard let videoURL = videoURL else { return }
+        guard let url = URL(string: videoURL) else { return }
+        player = AVPlayer(url: url)
         playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = self.videoContainer.frame
         self.layer.addSublayer(playerLayer)

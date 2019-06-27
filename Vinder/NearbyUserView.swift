@@ -20,7 +20,7 @@ class NearbyUserView: MKAnnotationView {
             calloutOffset = CGPoint(x: -5, y: 5)
             rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             
-            if let imageName = user.imageUrl {
+            if let imageName = user.profileImageUrl {
 
                 image = UIImage(named: imageName)?.scaleImage(toSize: CGSize.init(width: 25, height: 25))
             } else {

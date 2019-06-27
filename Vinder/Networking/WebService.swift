@@ -180,7 +180,9 @@ class WebService {
   
     //MARK: FIREBASE FECTHING
     
-    func fetchProfileImage(ofUser id: String, completion: @escaping (URL?, Error?) -> Void) {
+    func fetchProfile(ofUser id: String, completion: @escaping (Dictionary<String,String>) -> Void) {
+        
+        var userInfo: [String: String] = [:]
         
         let profileImageFileUrl: URL = {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -192,11 +194,17 @@ class WebService {
         ref.child("users").child(id).observe(.value) { (snapshot) in
             for info in snapshot.children.allObjects as! [DataSnapshot]{
                 guard let infoObject = info.value as? [String:AnyObject] else{return}
-                guard let profileImageUrl = infoObject["profileImage"] as? String else {return}
-                
+                guard let profileImageUrl = infoObject["profileImageUrl"] as? String else {return}
+                guard let name = infoObject["name"] as? String else { return }
+                guard let profileVideo = infoObject["profileVideo"] as? String else { return }
                 let httpreference = self.storage.reference(forURL: profileImageUrl)
                 let _ = httpreference.write(toFile: profileImageFileUrl) { (url, err) in
-                    completion(url,err)
+                    guard err == nil else { return }
+                    guard let url = url else { return }
+                    userInfo["name"] = name
+                    userInfo["profileVideo"] = profileVideo
+                    userInfo["profileImageUrl"] = "\(url)"
+                    completion(userInfo)
                 }
             }
         }
@@ -284,8 +292,10 @@ class WebService {
                 guard let lon = userObject["longitude"] as? String else{return}
                 guard let profileVideo = userObject["profileVideo"] as? String else {return}
                 guard let token = userObject["token"] as? String else {return}
-                
-                let user = User(uid: uid, token:token , username: username, name: name , imageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
+                // update 
+//                guard let profileImageUrl = userObject["profileImageUrl"] as? String else { return }
+//                 let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: imageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
+                let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
                 users.append(user)
             }
             completion(users)

@@ -25,11 +25,10 @@ class MapViewController: UIViewController {
     let maleColor : UIColor = UIColor(red: 98, green: 98, blue: 247, alpha: 1)
     let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
     var selectedUser: User?
-    var fetchMessageQueue = OperationQueue()
-    //    var getMsgOperation = BlockOperation()
+    var swipeRecog = UISwipeGestureRecognizer()
     
     //MARK: VIEW PROPERTIES
-    var messageTableViewCell = MessageTableViewCell()
+
     let videoView : VideoView = {
         let v = VideoView()
         v.backgroundColor = .white
@@ -162,7 +161,6 @@ class MapViewController: UIViewController {
         
         mapView.delegate = self
         mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         setupViews()
         getMessages()
@@ -220,7 +218,7 @@ class MapViewController: UIViewController {
         contactsCollectionView.delegate = self
         contactsCollectionView.dataSource = self
         
-        self.centerView.addSubview(videoView)
+        self.view.addSubview(videoView)
         
         
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -232,6 +230,9 @@ class MapViewController: UIViewController {
         
         videoView.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         videoView.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
+        videoView.addGestureRecognizer(swipeRecog)
+        swipeRecog.addTarget(self, action: #selector(swipeHandler(_:)))
+        swipeRecog.direction = .up
         
         leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
         rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
@@ -465,13 +466,15 @@ class MapViewController: UIViewController {
         let touch = touches.first
         guard let location = touch?.location(in: self.view) else { return }
         if !videoView.frame.contains(location) && videoView.isHidden == false{
-            UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
-                self.videoView.alpha = 0
-            }, completion: nil)
-            self.videoView.stop()
-            self.videoView.isHidden = true
+            hideVideoView()
         }else {
-            
+
+        }
+    }
+    
+    @objc func swipeHandler(_ sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            hideVideoView()
         }
     }
     
@@ -554,16 +557,38 @@ extension MapViewController : MKMapViewDelegate {
         if user.uid != userTapped.uid{
             print("did not tap self, the user uid = \(userTapped.uid)")
             print(user.uid)
-            videoView.isHidden = false
-            UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
-                self.videoView.alpha = 1
-            }, completion: nil)
-            videoView.configureView(url: userTapped.profileVideoUrl)
-            videoView.play()
+            showVideoView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
         } else{
             print("you tapped on yourself, do nothing")
         }
     }
+    
+}
+//MARK: VIDEO VIEW RELATED
+extension MapViewController: ShowProfileDelegate {
+    
+    func showVideoView(withUser name: String, profileVideoUrl: String) {
+        
+        view.bringSubviewToFront(videoView)
+        videoView.isHidden = false
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
+            self.videoView.alpha = 1
+        }, completion: nil)
+        videoView.videoURL = profileVideoUrl
+        videoView.username = name
+        videoView.configureView()
+        videoView.play()
+    }
+    
+    func hideVideoView() {
+        
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut], animations: {
+            self.videoView.alpha = 0
+        }, completion: nil)
+        self.videoView.stop()
+        self.videoView.isHidden = true
+    }
+    
     
 }
 
@@ -580,16 +605,16 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
-        
+        cell.showProfileDelegate = self
+        cell.isProfileHidden = videoView.isHidden
         cell.message = messages[indexPath.row]
-        //need to change message model to store sender name
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let cell = tableView.cellForRow(at: indexPath) as! MessageTableViewCell
-        messageTableViewCell = cell
         guard let videoURL = cell.message?.messageURL else { return }
         let videoPlayerVC = MessageVideoPlayerViewController()
         videoPlayerVC.url = videoURL

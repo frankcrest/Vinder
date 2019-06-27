@@ -8,8 +8,14 @@
 
 import UIKit
 
+protocol ShowProfileDelegate: AnyObject {
+     func showVideoView(withUser name: String, profileVideoUrl: String)
+}
+
 class MessageTableViewCell: UITableViewCell {
     
+    var showProfileDelegate: ShowProfileDelegate?
+    var isProfileHidden: Bool?
     let containerView:UIView = {
         let v = UIView()
         v.backgroundColor = .gray
@@ -83,6 +89,13 @@ class MessageTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    @objc func showProfile() {
+        
+//        guard let username = profileImageView.userName, let url = profileImageView.profileVideoUrl else { return }
+        self.showProfileDelegate?.showVideoView(withUser: "username", profileVideoUrl: "url")
+        
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -92,6 +105,7 @@ class MessageTableViewCell: UITableViewCell {
         containerView.addSubview(thumbnailImageView)
         addSubview(profileImageView)
         profileImageView.image = UIImage(named: "Ray")
+        profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showProfile)))
         
         NSLayoutConstraint.activate([
             
@@ -136,7 +150,7 @@ class MessageTableViewCell: UITableViewCell {
     
     func setProfileImage() {
         if let senderID = message?.senderID {
-            //get ID
+            profileImageView.loadProfileImage(withID: senderID)
         }
     }
     

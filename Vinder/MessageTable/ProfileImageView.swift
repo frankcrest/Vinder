@@ -10,40 +10,39 @@ import UIKit
 
 class ProfileImageView: UIImageView {
 
-    var imageUrlString: String?
+    var userID: String?
+    var userName: String?
+    var profileVideoUrl: String?
     
-    func loadThumbnailImage(withURL imageURL: String) {
+    func loadProfileImage(withID id: String) {
         
-        imageUrlString = imageURL
-        guard let url = URL(string: imageURL) else { return }
-        
+        userID = id
         image = nil
         
-        if let imageFromCache = imageCache.object(forKey: imageURL as NSString) {
+        if let imageFromCache = imageCache.object(forKey: id as NSString) {
             self.image = imageFromCache
             return
         }
         
-        WebService().fetchThumbnailImage(with: url) { (url, error) in
-            
-            guard error == nil else { return }
-            guard let url = url else { return }
-            
+        WebService().fetchProfile(ofUser: id) { (userInfo) in
             DispatchQueue.main.async {
+                self.userName = userInfo["name"]
+                self.profileVideoUrl = userInfo["profileVideo"]
+                guard let url =  URL(string: userInfo["profileImageUrl"]!) else { return }
                 do {
                     let image = try UIImage(data: Data(contentsOf: url))
                     guard let imageToCache = image else { return }
-                    if self.imageUrlString == imageURL {
+                    if self.userID == id {
                         self.image = imageToCache
                     }
-                    
-                    imageCache.setObject(imageToCache, forKey: imageURL as NSString)
+                    imageCache.setObject(imageToCache, forKey: id as NSString)
                 }catch let error {
                     print(error)
                 }
-                
             }
         }
     }
+    
+    
 
 }

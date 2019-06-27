@@ -25,18 +25,18 @@ class User: NSObject , MKAnnotation{
   var token:String
   var username:String
   var name:String
-  var imageUrl:String?
+  var profileImageUrl:String?
   var gender: UserGender
   var lat:String
   var lon:String
   var profileVideoUrl:String
 
-  init(uid : String, token:String,  username: String, name: String, imageUrl : String, gender:UserGender, lat:String, lon:String, profileVideoUrl:String){
+  init(uid : String, token:String,  username: String, name: String, profileImageUrl : String, gender:UserGender, lat:String, lon:String, profileVideoUrl:String){
     self.uid = uid
     self.token = token
     self.username = username
     self.name = name
-    self.imageUrl = imageUrl
+    self.profileImageUrl = profileImageUrl
     self.gender = gender
     self.lat = lat
     self.lon = lon
