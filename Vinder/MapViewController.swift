@@ -18,7 +18,7 @@ class MapViewController: UIViewController {
       updateLocationToFirebase()
     }
   }
-  
+  let statusBarHeight = UIApplication.shared.statusBarFrame.height
   var leftViewTrailing :NSLayoutConstraint!
   var rightViewLeading: NSLayoutConstraint!
   var users : [User] = []
@@ -68,6 +68,7 @@ class MapViewController: UIViewController {
     b.setTitleColor(.black, for: .normal)
     b.translatesAutoresizingMaskIntoConstraints = false
     b.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
+    b.layer.cornerRadius = 25
     return b
   }()
   
@@ -77,7 +78,17 @@ class MapViewController: UIViewController {
     b.backgroundColor = .white
     b.setTitleColor(.black, for: .normal)
     b.translatesAutoresizingMaskIntoConstraints = false
+    b.layer.cornerRadius = 25
     b.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
+    return b
+  }()
+  
+  let refreshButton: UIButton = {
+    let b = UIButton()
+    b.backgroundColor = .white
+    b.translatesAutoresizingMaskIntoConstraints = false
+    b.layer.cornerRadius = 25
+    b.addTarget(self, action: #selector(refreshTapped), for: .touchUpInside)
     return b
   }()
   
@@ -87,6 +98,7 @@ class MapViewController: UIViewController {
     b.layer.cornerRadius = 25
     b.clipsToBounds = true
     b.addTarget(self, action: #selector(contactTapped), for: .touchUpInside)
+    b.setImage(UIImage(named: "friends"), for: .normal)
     return b
   }()
   
@@ -96,15 +108,17 @@ class MapViewController: UIViewController {
     b.layer.cornerRadius = 25
     b.clipsToBounds = true
     b.addTarget(self, action: #selector(mapTapped), for: .touchUpInside)
+    b.setImage(UIImage(named: "map"), for: .normal)
     return b
   }()
   
-  let meButton: UIButton = {
+  let messagesButton: UIButton = {
     let b = UIButton()
     b.backgroundColor = .white
     b.layer.cornerRadius = 25
     b.clipsToBounds = true
     b.addTarget(self, action: #selector(meTapped), for: .touchUpInside)
+    b.setImage(UIImage(named:"messages"), for: .normal)
     return b
   }()
   
@@ -119,6 +133,7 @@ class MapViewController: UIViewController {
   
   let messageTableView:UITableView = {
     let tb = UITableView()
+    tb.separatorStyle = .none
     tb.translatesAutoresizingMaskIntoConstraints = false
     tb.register(MessageTableViewCell.self, forCellReuseIdentifier: "messageCell")
     return tb
@@ -129,6 +144,7 @@ class MapViewController: UIViewController {
     let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
     cv.register(ContactsCollectionViewCell.self, forCellWithReuseIdentifier: "contactCell")
     cv.translatesAutoresizingMaskIntoConstraints = false
+    cv.backgroundColor = .white
     return cv
   }()
   
@@ -205,10 +221,11 @@ class MapViewController: UIViewController {
     self.centerView.addSubview(mapView)
     self.view.addSubview(logoutButton)
     self.view.addSubview(settingButton)
+    self.view.addSubview(refreshButton)
     self.view.addSubview(buttonStackView)
     self.buttonStackView.addArrangedSubview(contactButton)
     self.buttonStackView.addArrangedSubview(mapButton)
-    self.buttonStackView.addArrangedSubview(meButton)
+    self.buttonStackView.addArrangedSubview(messagesButton)
     
     self.rightView.addSubview(messageTableView)
     messageTableView.delegate = self
@@ -259,12 +276,12 @@ class MapViewController: UIViewController {
       mapView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0),
       mapView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: 0),
       
-      logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 20),
+      logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: statusBarHeight),
       logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
       logoutButton.heightAnchor.constraint(equalToConstant: 50),
       logoutButton.widthAnchor.constraint(equalToConstant: 50),
       
-      settingButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10),
+      settingButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: statusBarHeight),
       settingButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
       settingButton.heightAnchor.constraint(equalToConstant: 50),
       settingButton.widthAnchor.constraint(equalToConstant: 50),
@@ -275,13 +292,18 @@ class MapViewController: UIViewController {
       mapButton.heightAnchor.constraint(equalToConstant: 50),
       mapButton.widthAnchor.constraint(equalToConstant: 50),
       
-      meButton.heightAnchor.constraint(equalToConstant: 50),
-      meButton.widthAnchor.constraint(equalToConstant: 50),
+      messagesButton.heightAnchor.constraint(equalToConstant: 50),
+      messagesButton.widthAnchor.constraint(equalToConstant: 50),
       
       buttonStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
       buttonStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
       buttonStackView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
       buttonStackView.heightAnchor.constraint(equalToConstant: 50),
+      
+      refreshButton.bottomAnchor.constraint(equalTo: self.buttonStackView.topAnchor, constant: -10),
+      refreshButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+      refreshButton.heightAnchor.constraint(equalToConstant: 50),
+      refreshButton.widthAnchor.constraint(equalToConstant: 50),
       
       messageTableView.topAnchor.constraint(equalTo: self.rightView.topAnchor, constant: 0),
       messageTableView.leadingAnchor.constraint(equalTo: self.rightView.leadingAnchor, constant: 0),
@@ -483,6 +505,7 @@ class MapViewController: UIViewController {
     guard let currentUser = currentUser else {return}
     ref.child("calling").child(currentUser.uid).setValue([selectedUser.uid : 1])
     let videoVC = VideoViewController()
+    videoVC.userWeAreCalling = selectedUser.uid
     self.present(videoVC, animated: true, completion: nil)
   }
   

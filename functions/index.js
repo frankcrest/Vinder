@@ -118,14 +118,11 @@ exports.observeAcceptedCall = functions.database.ref('/callAccepted/{callerId}/{
 exports.observeHangup = functions.database.ref('/hangup/{callerId}/{uid}').onCreate((snapshot, context) => {
   var callerId = context.params.callerId;
   var uid = context.params.uid;
-  console.log('User' + uid + 'is Calling' + callerId);
+  console.log('User' + uid + 'hanged up,' + callerId + 'needs to hang up automatically');
   return admin.database().ref('/users/' + callerId).once('value', snapshot => {
-    var userWeAreCalling = snapshot.val();
-
-    return admin.database().ref('/users/' + uid).once('value', snapshot => {
-      var userDoingCalling = snapshot.val();
-
-      const payload1 = {
+    var userToHangUp = snapshot.val();
+  
+      const payload = {
         data: {
           title: 'Call Response',
           body: 'HangUp',
@@ -136,23 +133,14 @@ exports.observeHangup = functions.database.ref('/hangup/{callerId}/{uid}').onCre
       const options = {
         content_available: true
       }
-      admin.messaging().sendToDevice(userWeAreCalling.token,payload1,options).then(function(response){
+      admin.messaging().sendToDevice(userToHangUp.token,payload,options).then(function(response){
         console.log("succesfully sent your message:", response);
       })
       .catch(function(error){
         console.log("error sending message:",error);
-      });
-
-      admin.messaging().sendToDevice(userDoingCalling.token,payload1,options).then(function(response){
-        console.log("succesfully sent your message:", response);
       })
-      .catch(function(error){
-        console.log("error sending message:",error);
-      });
-
-    })
+      })
   })
-})
 
 
 exports.sendNotifications = functions.https.onRequest((req,res) => {

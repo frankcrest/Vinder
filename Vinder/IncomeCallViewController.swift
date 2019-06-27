@@ -59,6 +59,8 @@ class IncomeCallViewController: UIViewController {
       ref.child("callAccepted").child(user.uid).setValue([callerId : 1])
       //create video vc and join call
       let videoVC = VideoViewController()
+      videoVC.inCall = true
+      videoVC.userWeAreCalling = callerId
         let rootVC = UIApplication.shared.delegate!.window!?.rootViewController!
       rootVC!.dismiss(animated: false, completion: {
         rootVC!.present(videoVC, animated: true, completion: nil)

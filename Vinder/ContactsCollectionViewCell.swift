@@ -23,6 +23,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     let label = UILabel()
     label.font = UIFont.systemFont(ofSize: 12)
     label.backgroundColor = .white
+    label.textAlignment = .center
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
@@ -34,7 +35,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     self.addSubview(nameLabel)
     
     NSLayoutConstraint.activate([
-      profileImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
+      profileImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 4),
       profileImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
       profileImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
       profileImageView.heightAnchor.constraint(equalToConstant: self.bounds.width - 20),

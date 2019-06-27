@@ -168,7 +168,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
       signUpButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       signUpButton.topAnchor.constraint(equalTo: self.passwordTextfield.bottomAnchor, constant: 20),
       signUpButton.widthAnchor.constraint(equalToConstant: 180),
-      signUpButton.heightAnchor.constraint(equalToConstant: 30)
+      signUpButton.heightAnchor.constraint(equalToConstant: 50)
       ])
   }
   
