@@ -49,7 +49,7 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
         }
         
         self.previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        self.previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        self.previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
         self.previewLayer?.connection?.videoOrientation = .portrait
         
         view.layer.insertSublayer(self.previewLayer!, at: 0)

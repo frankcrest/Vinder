@@ -18,7 +18,7 @@
     let ud = UserDefaults.standard
     let currentUser = Auth.auth().currentUser
     var uid : String!
-
+    let videoPlayer = VideoPlayer()
     
     
     let backButton : UIButton = {
@@ -65,13 +65,17 @@
         tableView.delegate = self
         setupViews()
         uid = currentUser?.uid
+        
+//        videoPlayer.playerLayer?.frame = profileHeader.frame
+//        self.view.layer.addSublayer(videoPlayer.playerLayer!)
     }
 
     
     func setupViews(){
         self.view.backgroundColor = .yellow
         self.view.addSubview(profileHeader)
-        self.profileHeader.addSubview(imageView)
+
+//        self.profileHeader.addSubview(imageView)
         self.profileHeader.addSubview(editButton)
         self.view.addSubview(backButton)
         self.view.addSubview(tableView)
@@ -89,7 +93,8 @@
             profileHeader.topAnchor.constraint(equalTo: self.view.topAnchor),
             profileHeader.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             profileHeader.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            profileHeader.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -600),
+            profileHeader.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.4),
+//            profileHeader.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -600),
             
             //imageview constraint
             imageView.topAnchor.constraint(equalTo: profileHeader.topAnchor),
@@ -109,6 +114,11 @@
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ])
+        
+    }
+    
+    func loadUserProfile(){
+        
     }
     
     

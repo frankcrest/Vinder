@@ -49,7 +49,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureCameraController()
+//        configureCameraController()
         
         cameraController.startAnimationDelegate = self
         buttonView.recordButtonView.videoHandlerDelegate = self
@@ -65,6 +65,11 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             self.notSurebutton.isHidden = false
             //self.videoReviewer.playVideo(atUrl:url, on: self.tutorialView)
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        configureCameraController()
     }
     
     //MARK: CAMERA CONTROLLER
@@ -101,10 +106,15 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             buttonView.widthAnchor.constraint(equalToConstant: view.frame.width),
             buttonView.heightAnchor.constraint(equalToConstant: view.frame.height * 1/12),
             
-            recordPreviewView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
-            recordPreviewView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
-            recordPreviewView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
-            recordPreviewView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
+//            recordPreviewView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
+//            recordPreviewView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
+//            recordPreviewView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
+//            recordPreviewView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
+            recordPreviewView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            recordPreviewView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            recordPreviewView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
+            recordPreviewView.heightAnchor.constraint(equalTo: self.view.widthAnchor),
+
             
             notSurebutton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
             notSurebutton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
@@ -199,7 +209,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             if isTutorialMode {
                 notSurebutton.isHidden = false
             }
-
+            
             buttonView.switchCameraButton.setTitle("switch", for: .normal)
             sender.setTitle("back", for: .normal)
             clearVideoReviewLayer()
@@ -256,7 +266,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
             default:
                 self.buttonView.switchCameraButton.setTitle("confirm", for: .normal)
             }
-          
+            
             self.notSurebutton.isHidden = true
         }
     }
@@ -270,10 +280,10 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
 //MARK: MODES
 
 extension RecordVideoViewController {
-
+    
     
     func registerMode() {
-//        captureFirstFrame(profileURL: cameraController.fileURL)
+        //        captureFirstFrame(profileURL: cameraController.fileURL)
         webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
             
             self.webService.register(withProfileURL: url) { (succeeded, error) in
@@ -284,40 +294,44 @@ extension RecordVideoViewController {
                     self.clearVideoReviewLayer()
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     self.dismiss(animated: true, completion: nil)
-     
+                    
                 } else {
                     print("error:\(String(describing: error))")
-                }
-            }
-      }
-  }
-
-  
-    func messageMode() {
-        
-        guard let user = self.toUser else { return }
-        
-        captureFirstFrame(profileURL: cameraController.fileURL) { (imageURL) in
-            
-            self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (videoURL) -> (Void) in
-                
-                self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
-                    guard err == nil else {
-                        print("cant send message : \(String(describing: err))")
-                        return
-                    }
-                    let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
-                    mapVC.videoView.isHidden = true
-                    self.clearVideoReviewLayer()
-                    self.navigationController?.popViewController(animated: true)
-                    
                 }
             }
         }
     }
     
+    
+    func messageMode() {
+        
+        guard let user = self.toUser else { return }
+        
+        cropVideo(videoURL: cameraController.fileURL, completion: {(outputURL) in
+            
+            self.captureFirstFrame(profileURL: outputURL) { (imageURL) in
+                
+                self.webService.uploadVideo(atURL: outputURL) { (videoURL) -> (Void) in
+                    
+                    self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
+                        guard err == nil else {
+                            print("cant send message : \(String(describing: err))")
+                            return
+                        }
+                        let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
+                        mapVC.videoView.isHidden = true
+                        self.clearVideoReviewLayer()
+                        self.navigationController?.popViewController(animated: true)
+                        
+                    }
+                }
+            }
+        })
+        
+    }
+    
     func profileMode() {
-//        captureFirstFrame(profileURL: cameraController.fileURL)
+        //        captureFirstFrame(profileURL: cameraController.fileURL)
         webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
             
             self.webService.changeProfile("\(url)") { (err) in
@@ -328,28 +342,30 @@ extension RecordVideoViewController {
                 self.dismiss(animated: true, completion: nil)
             }
         }
-
+        
     }
     
-  
+    
 }
 
 
 
-//snap shot
+//MARK: Recorded video addon functions
 extension RecordVideoViewController {
     
     func captureFirstFrame(profileURL : URL,completion: @escaping (String) -> Void ){
         let avAsset = AVURLAsset(url: profileURL, options: nil)
         let imageGenerator = AVAssetImageGenerator(asset: avAsset)
         imageGenerator.appliesPreferredTrackTransform = true
+        let duration = avAsset.duration
+        let durationTime = CMTimeGetSeconds(duration)
+        print("exported: \(durationTime)")
         var thumbnail: UIImage?
-        
         
         do{
             thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: 0, preferredTimescale: 1), actualTime: nil))
         } catch let error  {
-          print(error)
+            print(error)
             print("No image")
         }
         
@@ -377,8 +393,7 @@ extension RecordVideoViewController {
         do{
             thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: captureTime, preferredTimescale: 1), actualTime: nil))
         } catch let error {
-          print(error)
-            print("No image")
+            print(error)
         }
         
         let imageData = thumbnail!.jpegData(compressionQuality: 1.0)
@@ -389,4 +404,45 @@ extension RecordVideoViewController {
         
     }
     
+    func cropVideo(videoURL : URL, completion : @escaping (_ outputURL : URL) -> (Void) ){
+        let videoAsset : AVAsset = AVAsset(url: videoURL)
+        let duration = videoAsset.duration
+        let durationTime = CMTimeGetSeconds(duration)
+//        let clipVideoTrack = videoAsset.tracks(withMediaType : AVMediaType.video).first! as AVAssetTrack
+        
+        let videoComposition = AVMutableVideoComposition()
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let fileURL = paths[0].appendingPathComponent("croppedvideo.mov")
+
+        print("cropped: \(durationTime)")
+        
+        videoComposition.renderSize = CGSize(width: 720, height: 720)
+        videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 120)
+        
+//        let transformer = AVMutableVideoCompositionLayerInstruction( assetTrack: clipVideoTrack )
+//        let transform1 = CGAffineTransform( translationX: clipVideoTrack.naturalSize.height, y: -( clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height ) / 2 )
+//        let transform2 = transform1.rotated(by: CGFloat( Double.pi / 2 ) )
+//        transformer.setTransform( transform2, at: CMTime.zero)
+        
+        
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.enablePostProcessing = true
+        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: CMTimeMakeWithSeconds(durationTime, preferredTimescale: 120))
+        
+//        instruction.layerInstructions = [transformer]
+        videoComposition.instructions = [instruction]
+        
+        let exporter = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
+        exporter.videoComposition = videoComposition
+        exporter.outputURL = fileURL
+        exporter.outputFileType = AVFileType.mov
+        
+        exporter.exportAsynchronously( completionHandler: { () -> Void in
+            DispatchQueue.main.async(execute: {
+                completion( fileURL )
+            })
+        })
+    }
+    
 }
+

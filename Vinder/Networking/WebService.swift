@@ -83,6 +83,8 @@ class WebService {
     }
     
   }
+    
+    
   
   func register(withProfileURL url: URL, registered: @escaping (Bool, Error?) -> Void) {
     
@@ -194,8 +196,6 @@ class WebService {
         
     }
     
-    
-    
    
     func fetchAllMessages(completion: @escaping ([Messages]?) ->(Void)) {
       
@@ -270,6 +270,11 @@ class WebService {
             }
             completion(users)
         }
+    }
+    
+    func fetchContacts(completion: @escaping ([User]?) -> Void) {
+        var contacts: [User] = []
+        
     }
     
   //MARK:  JOKE API
