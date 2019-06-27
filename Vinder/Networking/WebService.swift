@@ -22,6 +22,8 @@ class WebService {
     
     var updateProgressDelegate: UpdateProgressDelegate?
     
+    var msgDLTSK: StorageDownloadTask?
+    
     private var downloadURL: URL!
     private let ref = Database.database().reference()
     private let ud = UserDefaults.standard
@@ -178,22 +180,42 @@ class WebService {
   
     //MARK: FIREBASE FECTHING
     
-    func fetchMsgImage(of message: Messages, completion: @escaping (URL?, Error?) -> Void) {
+    func fetchProfileImage(ofUser id: String, completion: @escaping (URL?, Error?) -> Void) {
         
-        let thumbnailImageURL: URL = {
+        let profileImageFileUrl: URL = {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            let fileURL = paths[0].appendingPathComponent("thumbnails/thumnail_\(message.messageID)")
+            let fileURL = paths[0].appendingPathComponent("profiles/profile_\(id)")
+            try? FileManager.default.removeItem(at: fileURL)
             return fileURL
         }()
         
-        let url = message.imageURL
-        let httpReference = storage.reference(forURL: url)
+        ref.child("users").child(id).observe(.value) { (snapshot) in
+            for info in snapshot.children.allObjects as! [DataSnapshot]{
+                guard let infoObject = info.value as? [String:AnyObject] else{return}
+                guard let profileImageUrl = infoObject["profileImage"] as? String else {return}
+                
+                let httpreference = self.storage.reference(forURL: profileImageUrl)
+                let _ = httpreference.write(toFile: profileImageFileUrl) { (url, err) in
+                    completion(url,err)
+                }
+            }
+        }
+    }
+    
+    func fetchThumbnailImage(with url: URL, completion: @escaping (URL?, Error?) -> Void) {
+        
+        let thumbnailImageURL: URL = {
+            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            let fileURL = paths[0].appendingPathComponent("thumbnails/thumnail_\(UUID().uuidString)")
+            return fileURL
+        }()
+        
+        let httpReference = storage.reference(forURL: "\(url)")
         let _ = httpReference.write(toFile: thumbnailImageURL) { (url, error) in
             completion(url,error)
         }
         
     }
-    
     
     
    
@@ -205,22 +227,20 @@ class WebService {
       var messages: [Messages] = []
       ref.child("messages").child(userID).observe(DataEventType.value) { (snapshot) in
         for messageID in snapshot.children.allObjects as! [DataSnapshot] {
-          guard let message = messageID.value as? [String: String] else { return }
-          guard let messageURL = message["messageURL"] else { return }
-          guard let senderID = message["senderID"] else { return }
-          guard let msgID = message["messageID"] else {return}
-          guard let sender = message["sender"] else {return}
-          guard let timestamp = message["timestamp"] else {return}
-          guard let imageURL = message["imageURL"] else { return }
-          let timeInterval = Double(timestamp)!/1000.0
+          guard let message = messageID.value as? [String: AnyObject] else { return }
+          guard let messageURL = message["messageURL"] as? String else { return }
+          guard let senderID = message["senderID"] as? String else { return }
+          guard let msgID = message["messageID"] as? String else {return}
+          guard let sender = message["sender"] as? String else {return}
+          guard let timestamp = message["timestamp"] as? Double else {return}
+          guard let imageURL = message["imageURL"] as? String else { return }
+          let timeInterval = timestamp/1000.0
           let messageDate = Date(timeIntervalSince1970: timeInterval)
           
           let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL, sender: sender, timestamp: messageDate, imageURL: imageURL)
           messages.append(msg)
         }
-        messages.sort { (msg1, msg2) -> Bool in
-          return msg1.timestamp > msg2.timestamp
-        }
+
         completion(messages)
       }
     }
@@ -270,6 +290,31 @@ class WebService {
             }
             completion(users)
         }
+    }
+    
+    
+    func downloadMSGVideo(at url: URL, completion: @escaping (URL?, Error?) -> Void) {
+        
+        let msgFileURL: URL = {
+            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            let fileURL = paths[0].appendingPathComponent("msg/\(UUID().uuidString).mov")
+            return fileURL
+        }()
+        
+        let httpReference = storage.reference(forURL: "\(url)")
+        let downloadTask = httpReference.write(toFile: msgFileURL) { (url, error) in
+            completion(url,error)
+        }
+        msgDLTSK = downloadTask
+        downloadTask.observe(.progress) { (snapshot) in
+            let percent = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+            DispatchQueue.main.async {
+                self.updateProgressDelegate?.updateProgress(progress: percent)
+            }
+        }
+        
+        
+        
     }
     
   //MARK:  JOKE API

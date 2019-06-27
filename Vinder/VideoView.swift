@@ -16,6 +16,7 @@ class VideoView: UIView {
     var playerLayer: AVPlayerLayer!
     var player: AVPlayer!
     var isLoop: Bool = false
+    var user: User?
     private var circleLayer = CAShapeLayer()
     
     let buttonContainer:UIView = {

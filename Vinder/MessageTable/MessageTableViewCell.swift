@@ -10,16 +10,16 @@ import UIKit
 
 class MessageTableViewCell: UITableViewCell {
     
-    let videoView:UIView = {
+    let containerView:UIView = {
         let v = UIView()
-        v.backgroundColor = .yellow
+        v.backgroundColor = .gray
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
     
     let nameLabel:UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 24)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
@@ -28,24 +28,50 @@ class MessageTableViewCell: UITableViewCell {
     
     let timestampLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 18)
         label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
         return label
     }()
     
-    var profileImageView: UIImageView = {
-        let imageview = UIImageView()
+    var profileImageView: ProfileImageView = {
+        let imageview = ProfileImageView()
         imageview.translatesAutoresizingMaskIntoConstraints = false
+        imageview.isUserInteractionEnabled = true
         imageview.contentMode = .scaleAspectFit
+        imageview.layer.borderWidth = 1
+        imageview.layer.masksToBounds = false
+        imageview.layer.borderColor = UIColor.black.cgColor
+        imageview.layer.cornerRadius = 33
+        imageview.clipsToBounds = true
         return imageview
     }()
     
-    var videoURL: URL!
-    var imageURL: URL!
-    var videoPlayer = VideoPlayer()
+    var thumbnailImageView: TNImageView = {
+        let imageview = TNImageView()
+        imageview.translatesAutoresizingMaskIntoConstraints = false
+        imageview.contentMode = .scaleAspectFill
+        imageview.clipsToBounds = true
+        return imageview
+    }()
     
+
+    var thumbnail: UIImage!
+    
+    var message: Messages? {
+        didSet {
+            setThumbnailImage()
+            setProfileImage()
+            if let msg = message {
+                nameLabel.text = msg.sender
+                timestampLabel.text = "\(msg.timestamp)"
+            }
+        }
+    }
+    
+    var videoPlayer = VideoPlayer()
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -60,9 +86,10 @@ class MessageTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.addSubview(videoView)
-        self.addSubview(nameLabel)
-        self.addSubview(timestampLabel)
+        addSubview(containerView)
+        addSubview(nameLabel)
+        addSubview(timestampLabel)
+        containerView.addSubview(thumbnailImageView)
         addSubview(profileImageView)
         profileImageView.image = UIImage(named: "Ray")
         
@@ -70,43 +97,51 @@ class MessageTableViewCell: UITableViewCell {
             
             profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            profileImageView.bottomAnchor.constraint(equalTo: self.videoView.topAnchor, constant: -8),
+            profileImageView.bottomAnchor.constraint(equalTo: self.containerView.topAnchor, constant: -8),
             profileImageView.widthAnchor.constraint(equalToConstant: 66.0),
             profileImageView.heightAnchor.constraint(equalToConstant: 66.0),
             
             nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            nameLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 16),
             nameLabel.heightAnchor.constraint(equalToConstant: 40),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8),
             
             timestampLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 8),
-            timestampLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 8),
+            timestampLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 16),
             timestampLabel.heightAnchor.constraint(equalToConstant: 18),
             timestampLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8),
            
-            videoView.topAnchor.constraint(equalTo: self.profileImageView.bottomAnchor, constant: 8),
-            videoView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
-            videoView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
-            videoView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
-//            videoView.heightAnchor.constraint(equalToConstant: self.bounds.width),
+            containerView.topAnchor.constraint(equalTo: self.profileImageView.bottomAnchor, constant: 8),
+            containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
+            containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
+            containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
+            
+            thumbnailImageView.widthAnchor.constraint(equalTo: containerView.widthAnchor),
+            thumbnailImageView.heightAnchor.constraint(equalTo: containerView.heightAnchor),
             
             ])
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func startPreview() {
-        guard videoURL != nil else {
-            print("invalid url cant play video on cell")
-            return
+    func setThumbnailImage() {
+        
+        if let thumbnailImageUrl = message?.imageURL {
+            thumbnailImageView.loadThumbnailImage(withURL: thumbnailImageUrl)
         }
-        videoPlayer.playVideo(atUrl: videoURL, on: videoView)
-        videoPlayer.player?.pause()
     }
     
-    func playVideo() {
+    func setProfileImage() {
+        if let senderID = message?.senderID {
+            //get ID
+        }
+    }
+    
+    @objc func playVideo() {
+        
         videoPlayer.isLoop = false
         videoPlayer.player?.play()
     }
