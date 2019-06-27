@@ -61,7 +61,7 @@ class IncomeCallViewController: UIViewController {
       let videoVC = VideoViewController()
       videoVC.inCall = true
       videoVC.userWeAreCalling = callerId
-        let rootVC = UIApplication.shared.delegate!.window!?.rootViewController!
+      let rootVC = UIApplication.shared.delegate!.window!?.rootViewController!
       rootVC!.dismiss(animated: false, completion: {
         rootVC!.present(videoVC, animated: true, completion: nil)
       })

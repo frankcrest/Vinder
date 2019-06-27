@@ -298,6 +298,7 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   @objc private func hangupTapped() {
     guard let user = currentUser else {return}
     if inCall == false {
+      self.ref.child("calling").child(user.uid).removeValue()
       self.dismiss(animated: true, completion: nil)
     }else if inCall == true{
       guard let otherUser = userWeAreCalling else {return}

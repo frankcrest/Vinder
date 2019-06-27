@@ -535,7 +535,6 @@ class MapViewController: UIViewController {
     guard let currentUser = currentUser else {return}
     ref.child("calling").child(currentUser.uid).setValue([selectedUser.uid : 1])
     let videoVC = VideoViewController()
-    videoVC.userWeAreCalling = selectedUser.uid
     self.present(videoVC, animated: true, completion: nil)
   }
   
