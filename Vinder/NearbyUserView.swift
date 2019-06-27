@@ -11,20 +11,42 @@ import MapKit
 
 class NearbyUserView: MKAnnotationView {
     
-    var videoURL : String!
-
+    var userID: String?
     override var annotation : MKAnnotation? {
         willSet{
             guard let user = newValue as? User else {return}
             canShowCallout = false
             calloutOffset = CGPoint(x: -5, y: 5)
             rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            
-            if let imageName = user.profileImageUrl {
+            self.userID = user.uid
+            self.loadProfileImage(withID: user.uid)
 
-                image = UIImage(named: imageName)?.scaleImage(toSize: CGSize.init(width: 25, height: 25))
-            } else {
-                image = nil
+        }
+    }
+    
+    func loadProfileImage(withID id: String) {
+        
+        image = nil
+        
+        if let imageFromCache = imageCache.object(forKey: id as NSString) {
+
+            image = imageFromCache.scaleImage(toSize: CGSize.init(width: 25, height: 25))
+            return
+        }
+        
+        WebService().fetchProfile(ofUser: id) { (userInfo) in
+            DispatchQueue.main.async {
+                guard let url =  URL(string: userInfo["profileImageUrl"]!) else { return }
+                do {
+                    let image = try UIImage(data: Data(contentsOf: url))
+                    guard let imageToCache = image else { return }
+                    if self.userID == id {
+                        self.image = imageToCache.scaleImage(toSize: CGSize.init(width: 25, height: 25))
+                    }
+                    imageCache.setObject(imageToCache, forKey: id as NSString)
+                }catch let error {
+                    print(error)
+                }
             }
         }
     }

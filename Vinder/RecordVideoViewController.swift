@@ -273,23 +273,25 @@ extension RecordVideoViewController {
 
     
     func registerMode() {
-//        captureFirstFrame(profileURL: cameraController.fileURL)
-        webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
-            
-            self.webService.register(withProfileURL: url) { (succeeded, error) in
-                
-                if succeeded {
+        
+        captureRandomFrame(profileURL: cameraController.fileURL) { (profileImageURL) in
+            self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (url) -> (Void) in
+                self.webService.register(withProfileURL: url, profileImageURL: profileImageURL) { (succeeded, error) in
                     
-                    self.loading.removeFromSuperview()
-                    self.clearVideoReviewLayer()
-                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                    self.dismiss(animated: true, completion: nil)
-     
-                } else {
-                    print("error:\(String(describing: error))")
+                    if succeeded {
+                        
+                        self.loading.removeFromSuperview()
+                        self.clearVideoReviewLayer()
+                        self.dismiss(animated: true, completion: nil)
+                        
+                    } else {
+                        print("error:\(String(describing: error))")
+                    }
                 }
             }
-      }
+        }
+        
+
   }
 
   

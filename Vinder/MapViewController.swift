@@ -316,8 +316,6 @@ class MapViewController: UIViewController {
             self.messages.sort { (msg1, msg2) -> Bool in
                 return msg1.timestamp > msg2.timestamp
             }
-            print("did get msgs")
-            
         }
         
         DispatchQueue.main.async {

@@ -14,7 +14,7 @@ enum UserGender{
   case female
 }
 
-class User: NSObject , MKAnnotation{
+class User: NSObject ,MKAnnotation{
   
   var coordinate: CLLocationCoordinate2D {
     get{

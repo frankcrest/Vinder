@@ -86,7 +86,7 @@ class WebService {
     
   }
   
-  func register(withProfileURL url: URL, registered: @escaping (Bool, Error?) -> Void) {
+    func register(withProfileURL url: URL,profileImageURL: String, registered: @escaping (Bool, Error?) -> Void) {
     
     guard let email = ud.string(forKey: "email") else {return}
     guard let password = ud.string(forKey: "password") else {return}
@@ -103,7 +103,7 @@ class WebService {
       guard let uid = user?.user.uid else { return }
       print("Registered uid \(uid)")
       self.ud.set(uid, forKey:"uid")
-      self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)"]), withCompletionBlock: { (error, ref) in
+        self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)", "profileImageUrl": profileImageURL]), withCompletionBlock: { (error, ref) in
         
         if let error = error{
           print("can not set ref\(error)")
@@ -284,7 +284,6 @@ class WebService {
         ref.child("users").observe(.value) { (snapshot) in
             for user in snapshot.children.allObjects as! [DataSnapshot]{
                 guard let userObject = user.value as? [String:AnyObject] else{return}
-                
                 guard let name = userObject["name"] as? String else {return}
                 guard let username = userObject["username"] as? String else{return}
                 guard let uid = userObject["uid"] as? String else {return}
@@ -292,10 +291,9 @@ class WebService {
                 guard let lon = userObject["longitude"] as? String else{return}
                 guard let profileVideo = userObject["profileVideo"] as? String else {return}
                 guard let token = userObject["token"] as? String else {return}
-                // update 
-//                guard let profileImageUrl = userObject["profileImageUrl"] as? String else { return }
-//                 let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: imageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
-                let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: "kawhi", gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
+                guard let profileImageUrl = userObject["profileImageUrl"] as? String else { return }
+                 let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
+
                 users.append(user)
             }
             completion(users)
