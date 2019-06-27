@@ -88,7 +88,8 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     b.translatesAutoresizingMaskIntoConstraints = false
     b.setTitleColor(.white, for: .normal)
     b.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
-    b.backgroundColor = .red
+    b.backgroundColor = .cyan
+    b.layer.cornerRadius = 20
     return b
   }()
   
@@ -168,7 +169,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
       signUpButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       signUpButton.topAnchor.constraint(equalTo: self.passwordTextfield.bottomAnchor, constant: 20),
       signUpButton.widthAnchor.constraint(equalToConstant: 180),
-      signUpButton.heightAnchor.constraint(equalToConstant: 30)
+      signUpButton.heightAnchor.constraint(equalToConstant: 50)
       ])
   }
   

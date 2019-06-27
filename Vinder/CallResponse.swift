@@ -12,6 +12,7 @@ enum CallReponseType{
   case accepted
   case rejected
   case error
+  case hangup
 }
 
 struct CallResponse {
@@ -24,7 +25,10 @@ struct CallResponse {
         return .accepted
       }else if body == "Rejected"{
         return .rejected
-      }else{
+      }else if body == "HangUp"{
+        return .hangup
+      }
+      else{
         return .error
       }
     }

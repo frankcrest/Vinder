@@ -25,6 +25,7 @@ class LoginViewController: UIViewController {
     b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
     b.setTitleColor(.white, for: .normal)
     b.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
+    b.layer.cornerRadius = 20
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()
@@ -36,6 +37,7 @@ class LoginViewController: UIViewController {
     b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
     b.setTitleColor(.white, for: .normal)
     b.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
+    b.layer.cornerRadius = 20
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()
@@ -63,12 +65,12 @@ class LoginViewController: UIViewController {
       
       loginInButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       loginInButton.topAnchor.constraint(equalTo: self.logoView.bottomAnchor, constant: 100),
-      loginInButton.heightAnchor.constraint(lessThanOrEqualToConstant: 40),
+      loginInButton.heightAnchor.constraint(lessThanOrEqualToConstant: 50),
       loginInButton.widthAnchor.constraint(equalTo: self.logoView.widthAnchor, multiplier: 0.7),
       
       signUpButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       signUpButton.topAnchor.constraint(equalTo: self.loginInButton.bottomAnchor, constant: 16),
-      signUpButton.heightAnchor.constraint(lessThanOrEqualToConstant: 40),
+      signUpButton.heightAnchor.constraint(lessThanOrEqualToConstant: 50),
       signUpButton.widthAnchor.constraint(equalTo: self.logoView.widthAnchor, multiplier: 0.7),
       ])
   }

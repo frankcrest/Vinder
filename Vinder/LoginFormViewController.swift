@@ -52,8 +52,9 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     b.setTitle("Log In", for: .normal)
     b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
     b.setTitleColor(.white, for: .normal)
-    b.backgroundColor = .red
+    b.backgroundColor = .magenta
     b.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
+    b.layer.cornerRadius = 20
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()
@@ -102,7 +103,7 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
       
       loginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       loginButton.topAnchor.constraint(equalTo: self.passwordTextfield.bottomAnchor, constant: 20),
-      loginButton.heightAnchor.constraint(equalToConstant: 30),
+      loginButton.heightAnchor.constraint(equalToConstant: 50),
       loginButton.widthAnchor.constraint(equalToConstant: 180),
       ])
   }

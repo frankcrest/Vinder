@@ -17,6 +17,8 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   let notificationCenter = NotificationCenter.default
   var remoteVideoView: UIView!
   var localVideoView: UIView!
+  var userWeAreCalling : String?
+  var inCall = false
   
   private let appID = "007d7c78a4cc4fe48b838110bde1cd0c"
   private var agoraKit: AgoraRtcEngineKit!
@@ -77,25 +79,46 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     joinChannel(uid: userUid)
   }
   
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(true)
+    agoraKit.stopPreview()
+    agoraKit.leaveChannel(nil)
+    UIApplication.shared.isIdleTimerDisabled = false
+  }
+  
   //MARK: ACTIONS
   @objc func callResponseReceived(notification:NSNotification){
     print("did receive local notification")
     guard let callResponse = notification.object as? CallResponse else {return}
     print(callResponse.status)
     let tryingToCallUserUid = callResponse.uid
+    guard let user = currentUser else {return}
     
     if callResponse.status == .accepted {
-      ref.child("callAccepted").child(callResponse.uid).removeValue()
       print("the user you are trying to call have accepted your call")
+      userWeAreCalling = callResponse.uid
+      inCall = true
       leaveChannel()
       joinChannel(uid: tryingToCallUserUid)
-    } else {
-      ref.child("callRejected").child(callResponse.uid).removeValue()
-      let uc = UIAlertController(title: "You have been rejected", message: "rejected", preferredStyle: .alert)
-      let action = UIAlertAction(title: "okay man", style: .cancel, handler: nil)
+    } else if callResponse.status == .rejected {
+      print("you have been rejected")
+      let uc = UIAlertController(title: "YOU HAVE BEEN REJECTED", message: "YOU WILL BE REDIRECTED TO TINDER FOR DOGS", preferredStyle: .alert)
+      let action = UIAlertAction(title: "okay man", style: .cancel) { (action) in
+        self.dismiss(animated: true, completion: nil)
+      }
       uc.addAction(action)
       self.present(uc, animated: true, completion: nil)
-      print("the user you are trying to call have rejected your call")
+    }else if callResponse.status == .hangup{
+      print("they hang up on you")
+      if user.uid == callResponse.uid{
+        return
+      }
+      let uc = UIAlertController(title: "THEY HANG UP ON YOU", message: "FIND ANOTHER USER TO TALK TO", preferredStyle: .alert)
+      let action = UIAlertAction(title: "okay man", style: .cancel) { (action) in
+        self.dismiss(animated: true, completion: nil)
+      }
+      uc.addAction(action)
+      self.present(uc, animated: true, completion: nil)
     }
   }
   
@@ -274,13 +297,17 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   
   @objc private func hangupTapped() {
     guard let user = currentUser else {return}
-    ref.child("calling").child(user.uid).removeValue()
-    agoraKit.leaveChannel(nil)
-    UIApplication.shared.isIdleTimerDisabled = false
-    self.dismiss(animated: true, completion: nil)
+    if inCall == false {
+      self.dismiss(animated: true, completion: nil)
+    }else if inCall == true{
+      guard let otherUser = userWeAreCalling else {return}
+      ref.child("hangup").child(otherUser).setValue([user.uid : 1])
+      inCall = false
+      self.dismiss(animated: true, completion: nil)
+    }
   }
-  
 }
+  
 
 //MARK: AGORA ENGINE SET UP
 extension VideoViewController: AgoraRtcEngineDelegate {

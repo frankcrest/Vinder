@@ -25,7 +25,7 @@ class User: NSObject ,MKAnnotation{
   var token:String
   var username:String
   var name:String
-  var profileImageUrl:String?
+  var profileImageUrl:String
   var gender: UserGender
   var lat:String
   var lon:String

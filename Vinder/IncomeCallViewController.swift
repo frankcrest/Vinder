@@ -15,6 +15,7 @@ class IncomeCallViewController: UIViewController {
     let ref = Database.database().reference()
     let currentUser = Auth.auth().currentUser
     let ud = UserDefaults.standard
+    var callerId :String?
   
     lazy var videoView : VideoView = {
         let v = VideoView()
@@ -31,7 +32,7 @@ class IncomeCallViewController: UIViewController {
         setUpViews()
 //        videoView.configureView(url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
     }
-    
+  
     func setUpViews(){
         self.view.addSubview(videoView)
         
@@ -51,12 +52,15 @@ class IncomeCallViewController: UIViewController {
     
     
     @objc func pickUpCallTapped(){
+      print("accept tapped")
       guard let user = currentUser else {return}
-      guard let callerId = ud.string(forKey: "callerId") else {return}
+      guard let callerId = callerId else {return}
     
       ref.child("callAccepted").child(user.uid).setValue([callerId : 1])
       //create video vc and join call
       let videoVC = VideoViewController()
+      videoVC.inCall = true
+      videoVC.userWeAreCalling = callerId
         let rootVC = UIApplication.shared.delegate!.window!?.rootViewController!
       rootVC!.dismiss(animated: false, completion: {
         rootVC!.present(videoVC, animated: true, completion: nil)
@@ -65,8 +69,7 @@ class IncomeCallViewController: UIViewController {
     
     @objc func rejectCallTapped(){
       guard let user = currentUser else {return}
-      guard let callerId = ud.string(forKey: "calledId") else {return}
-      print(callerId)
+      guard let callerId = callerId else {return}
       ref.child("callRejected").child(user.uid).setValue([callerId : 1])
       self.dismiss(animated: true, completion: nil)
     }
