@@ -88,7 +88,8 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     b.translatesAutoresizingMaskIntoConstraints = false
     b.setTitleColor(.white, for: .normal)
     b.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
-    b.backgroundColor = .red
+    b.backgroundColor = .cyan
+    b.layer.cornerRadius = 20
     return b
   }()
   

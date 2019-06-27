@@ -54,7 +54,7 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     b.setTitleColor(.white, for: .normal)
     b.backgroundColor = .magenta
     b.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
-    b.layer.cornerRadius = 10
+    b.layer.cornerRadius = 20
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()

@@ -3,7 +3,7 @@ import CoreLocation
 import MapKit
 import Firebase
 
-
+//78 178 249 blue color hex code
 class MapViewController: UIViewController {
   
   //MARK: PROPERTIES
@@ -38,15 +38,28 @@ class MapViewController: UIViewController {
   
   let buttonContainer:UIView = {
     let v = UIView()
-    v.backgroundColor = .blue
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
   
   
-  let navView: UIView = {
+  let navView: GradientView = {
+    let v = GradientView()
+    v.backgroundColor = .clear
+    v.translatesAutoresizingMaskIntoConstraints = false
+    return v
+  }()
+  
+  let navViewLeft: UIView = {
     let v = UIView()
     v.backgroundColor = .magenta
+    v.translatesAutoresizingMaskIntoConstraints = false
+    return v
+  }()
+  
+  let navViewRight: UIView = {
+    let v = UIView()
+    v.backgroundColor = .cyan
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
@@ -64,7 +77,7 @@ class MapViewController: UIViewController {
   let logoutButton: UIButton = {
     let b = UIButton()
     b.setTitle("logout", for: .normal)
-    b.backgroundColor = .white
+    b.backgroundColor = .cyan
     b.setTitleColor(.black, for: .normal)
     b.translatesAutoresizingMaskIntoConstraints = false
     b.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
@@ -74,9 +87,8 @@ class MapViewController: UIViewController {
   
   let settingButton: UIButton = {
     let b = UIButton()
-    b.setTitle("setting", for: .normal)
-    b.backgroundColor = .white
-    b.setTitleColor(.black, for: .normal)
+    b.backgroundColor = .clear
+    b.setImage(UIImage(named:"settings"), for: .normal)
     b.translatesAutoresizingMaskIntoConstraints = false
     b.layer.cornerRadius = 25
     b.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
@@ -85,7 +97,8 @@ class MapViewController: UIViewController {
   
   let refreshButton: UIButton = {
     let b = UIButton()
-    b.backgroundColor = .white
+    b.backgroundColor = .clear
+    b.setImage(UIImage(named:"refresh"), for: .normal)
     b.translatesAutoresizingMaskIntoConstraints = false
     b.layer.cornerRadius = 25
     b.addTarget(self, action: #selector(refreshTapped), for: .touchUpInside)
@@ -94,7 +107,7 @@ class MapViewController: UIViewController {
   
   let contactButton: UIButton = {
     let b = UIButton()
-    b.backgroundColor = .white
+    b.backgroundColor = .magenta
     b.layer.cornerRadius = 25
     b.clipsToBounds = true
     b.addTarget(self, action: #selector(contactTapped), for: .touchUpInside)
@@ -104,7 +117,7 @@ class MapViewController: UIViewController {
   
   let mapButton: UIButton = {
     let b = UIButton()
-    b.backgroundColor = .white
+    b.backgroundColor = .green
     b.layer.cornerRadius = 25
     b.clipsToBounds = true
     b.addTarget(self, action: #selector(mapTapped), for: .touchUpInside)
@@ -114,7 +127,7 @@ class MapViewController: UIViewController {
   
   let messagesButton: UIButton = {
     let b = UIButton()
-    b.backgroundColor = .white
+    b.backgroundColor = .cyan
     b.layer.cornerRadius = 25
     b.clipsToBounds = true
     b.addTarget(self, action: #selector(meTapped), for: .touchUpInside)
@@ -135,6 +148,7 @@ class MapViewController: UIViewController {
     let tb = UITableView()
     tb.separatorStyle = .none
     tb.translatesAutoresizingMaskIntoConstraints = false
+    tb.backgroundColor = .white
     tb.register(MessageTableViewCell.self, forCellReuseIdentifier: "messageCell")
     return tb
   }()
@@ -213,15 +227,15 @@ class MapViewController: UIViewController {
   
   //MARK: SETUP VIEWS
   func setupViews(){
-    self.view.addSubview(navView)
     self.view.addSubview(centerView)
     self.view.addSubview(leftView)
     self.view.addSubview(rightView)
     
     self.centerView.addSubview(mapView)
-    self.view.addSubview(logoutButton)
-    self.view.addSubview(settingButton)
-    self.view.addSubview(refreshButton)
+    self.mapView.addSubview(navView)
+    self.centerView.addSubview(logoutButton)
+    self.navView.addSubview(settingButton)
+    self.centerView.addSubview(refreshButton)
     self.view.addSubview(buttonStackView)
     self.buttonStackView.addArrangedSubview(contactButton)
     self.buttonStackView.addArrangedSubview(mapButton)
@@ -237,6 +251,9 @@ class MapViewController: UIViewController {
     
     self.centerView.addSubview(videoView)
     
+    self.leftView.addSubview(navViewLeft)
+    self.rightView.addSubview(navViewRight)
+    
     self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
     self.navigationController?.navigationBar.shadowImage = UIImage()
     self.navigationController?.navigationBar.isTranslucent = true
@@ -251,25 +268,35 @@ class MapViewController: UIViewController {
     rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
     
     NSLayoutConstraint.activate([
-      navView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
-      navView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
-      navView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
-      navView.heightAnchor.constraint(equalToConstant: 90),
+      navView.topAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 0),
+      navView.leadingAnchor.constraint(equalTo: self.mapView.leadingAnchor, constant: 0),
+      navView.trailingAnchor.constraint(equalTo: self.mapView.trailingAnchor, constant: 0),
+      navView.heightAnchor.constraint(equalToConstant: 200),
       
-      centerView.topAnchor.constraint(equalTo: self.navView.bottomAnchor, constant: 0),
+      centerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
       centerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
       centerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
       centerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
       
       leftViewTrailing,
-      leftView.topAnchor.constraint(equalTo: self.navView.bottomAnchor, constant: 0),
+      leftView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
       leftView.heightAnchor.constraint(equalToConstant: self.view.bounds.height),
       leftView.widthAnchor.constraint(equalToConstant: self.view.bounds.width),
       
       rightViewLeading,
-      rightView.topAnchor.constraint(equalTo: self.navView.bottomAnchor, constant: 0),
+      rightView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
       rightView.heightAnchor.constraint(equalToConstant: self.view.bounds.height),
       rightView.widthAnchor.constraint(equalToConstant: self.view.bounds.width),
+      
+      navViewLeft.topAnchor.constraint(equalTo: self.leftView.topAnchor, constant: 0),
+      navViewLeft.leadingAnchor.constraint(equalTo: self.leftView.leadingAnchor, constant: 0),
+      navViewLeft.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
+      navViewLeft.heightAnchor.constraint(equalToConstant: 100),
+      
+      navViewRight.topAnchor.constraint(equalTo: self.rightView.topAnchor, constant: 0),
+      navViewRight.leadingAnchor.constraint(equalTo: self.rightView.leadingAnchor, constant: 0),
+      navViewRight.trailingAnchor.constraint(equalTo: self.rightView.trailingAnchor, constant: 0),
+      navViewRight.heightAnchor.constraint(equalToConstant: 100),
       
       mapView.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: 0),
       mapView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0),
@@ -281,8 +308,8 @@ class MapViewController: UIViewController {
       logoutButton.heightAnchor.constraint(equalToConstant: 50),
       logoutButton.widthAnchor.constraint(equalToConstant: 50),
       
-      settingButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: statusBarHeight),
-      settingButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
+      settingButton.topAnchor.constraint(equalTo: self.navView.topAnchor, constant: statusBarHeight),
+      settingButton.trailingAnchor.constraint(equalTo: self.navView.trailingAnchor, constant: -10),
       settingButton.heightAnchor.constraint(equalToConstant: 50),
       settingButton.widthAnchor.constraint(equalToConstant: 50),
       
@@ -305,12 +332,12 @@ class MapViewController: UIViewController {
       refreshButton.heightAnchor.constraint(equalToConstant: 50),
       refreshButton.widthAnchor.constraint(equalToConstant: 50),
       
-      messageTableView.topAnchor.constraint(equalTo: self.rightView.topAnchor, constant: 0),
+      messageTableView.topAnchor.constraint(equalTo: self.navViewRight.bottomAnchor, constant: 0),
       messageTableView.leadingAnchor.constraint(equalTo: self.rightView.leadingAnchor, constant: 0),
       messageTableView.trailingAnchor.constraint(equalTo: self.rightView.trailingAnchor, constant: 0),
       messageTableView.bottomAnchor.constraint(equalTo: self.rightView.bottomAnchor, constant: 0),
       
-      contactsCollectionView.topAnchor.constraint(equalTo: self.leftView.topAnchor, constant: 0),
+      contactsCollectionView.topAnchor.constraint(equalTo: self.navViewLeft.bottomAnchor, constant: 0),
       contactsCollectionView.leadingAnchor.constraint(equalTo: self.leftView.leadingAnchor, constant: 0),
       contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
       contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
@@ -319,7 +346,6 @@ class MapViewController: UIViewController {
       videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 20),
       videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -20),
       videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -200),
-      
       ])
   }
   
@@ -422,6 +448,10 @@ class MapViewController: UIViewController {
   @objc func settingTapped(){
     let settingsVC = SettingViewController()
     self.present(settingsVC, animated: true, completion: nil)
+  }
+  
+  @objc func refreshTapped(){
+    loadUsers()
   }
   
   @objc func contactTapped(){
@@ -560,11 +590,11 @@ extension MapViewController : MKMapViewDelegate {
     view.layer.cornerRadius = view.frame.size.height/2
     view.layer.borderColor = UIColor.white.cgColor
     view.layer.masksToBounds = true
-    
+    let limeGreen =  UIColor(red: 172/255, green: 245/255, blue: 87/255, alpha: 1)
     if(annotation.gender == UserGender.male){
-      view.layer.borderColor = UIColor.blue.cgColor
+      view.layer.borderColor = limeGreen.cgColor
     }else{
-      view.layer.borderColor = UIColor.red.cgColor
+      view.layer.borderColor = limeGreen.cgColor
     }
     
     view.layer.borderWidth = 5
@@ -642,3 +672,29 @@ extension MapViewController:UICollectionViewDelegateFlowLayout{
   }
 }
 
+
+class GradientView: UIView {
+  
+  var gradient = CAGradientLayer()
+  
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    setupGradientView()
+  }
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    gradient.frame = self.bounds
+  }
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  func setupGradientView(){
+    gradient.colors = [UIColor.white.cgColor, UIColor.white.withAlphaComponent(0).cgColor]
+    gradient.startPoint = CGPoint.zero
+    gradient.endPoint = CGPoint(x: 0, y: 1)
+    gradient.locations = [0,1.0]
+    self.layer.addSublayer(gradient)
+    
+  }
+  
+}

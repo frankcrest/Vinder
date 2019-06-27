@@ -25,7 +25,7 @@ class LoginViewController: UIViewController {
     b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
     b.setTitleColor(.white, for: .normal)
     b.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
-    b.layer.cornerRadius = 10
+    b.layer.cornerRadius = 20
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()
@@ -37,7 +37,7 @@ class LoginViewController: UIViewController {
     b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
     b.setTitleColor(.white, for: .normal)
     b.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
-    b.layer.cornerRadius = 10
+    b.layer.cornerRadius = 20
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()
