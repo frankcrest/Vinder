@@ -110,9 +110,6 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
       self.present(uc, animated: true, completion: nil)
     }else if callResponse.status == .hangup{
       print("they hang up on you")
-      if user.uid == callResponse.uid{
-        return
-      }
       let uc = UIAlertController(title: "THEY HANG UP ON YOU", message: "FIND ANOTHER USER TO TALK TO", preferredStyle: .alert)
       let action = UIAlertAction(title: "okay man", style: .cancel) { (action) in
         self.dismiss(animated: true, completion: nil)
@@ -298,6 +295,7 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   @objc private func hangupTapped() {
     guard let user = currentUser else {return}
     if inCall == false {
+      self.ref.child("calling").child(user.uid).removeValue()
       self.dismiss(animated: true, completion: nil)
     }else if inCall == true{
       guard let otherUser = userWeAreCalling else {return}

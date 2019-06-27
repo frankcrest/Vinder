@@ -51,21 +51,21 @@ class IncomeCallViewController: UIViewController {
     }
     
     
-    @objc func pickUpCallTapped(){
-      print("accept tapped")
-      guard let user = currentUser else {return}
-      guard let callerId = callerId else {return}
+  @objc func pickUpCallTapped(){
+    print("accept tapped")
+    guard let user = currentUser else {return}
+    guard let callerId = callerId else {return}
     
-      ref.child("callAccepted").child(user.uid).setValue([callerId : 1])
-      //create video vc and join call
-      let videoVC = VideoViewController()
-      videoVC.inCall = true
-      videoVC.userWeAreCalling = callerId
-        let rootVC = UIApplication.shared.delegate!.window!?.rootViewController!
-      rootVC!.dismiss(animated: false, completion: {
-        rootVC!.present(videoVC, animated: true, completion: nil)
-      })
-    }
+    ref.child("callAccepted").child(user.uid).setValue([callerId : 1])
+    //create video vc and join call
+    let videoVC = VideoViewController()
+    videoVC.inCall = true
+    videoVC.userWeAreCalling = callerId
+    let rootVC = UIApplication.shared.delegate!.window!?.rootViewController!
+    rootVC!.dismiss(animated: false, completion: {
+      rootVC!.present(videoVC, animated: true, completion: nil)
+    })
+  }
     
     @objc func rejectCallTapped(){
       guard let user = currentUser else {return}
