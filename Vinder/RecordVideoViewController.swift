@@ -320,7 +320,7 @@ extension RecordVideoViewController {
     }
     
     func profileMode() {
-//        captureFirstFrame(profileURL: cameraController.fileURL)
+
         webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
             
             self.webService.changeProfile("\(url)") { (err) in
