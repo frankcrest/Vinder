@@ -274,7 +274,8 @@ extension RecordVideoViewController {
     
     func registerMode() {
         
-        captureRandomFrame(profileURL: cameraController.fileURL) { (profileImageURL) in
+    cropVideo(videoURL: cameraController.fileURL, completion: {(croppedURL) in
+        self.captureRandomFrame(profileURL: croppedURL) { (profileImageURL) in
             self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (url) -> (Void) in
             self.webService.register(withProfileURL: url, profileImageURL: profileImageURL) { (succeeded, error) in
                     
@@ -290,7 +291,7 @@ extension RecordVideoViewController {
                 }
             }
         }
-        
+        })
 
   }
 
@@ -299,25 +300,23 @@ extension RecordVideoViewController {
         
         guard let user = self.toUser else { return }
         
-        cropVideo(videoURL: cameraController.fileURL, completion: {(croppedURL) in
-            self.captureFirstFrame(profileURL: croppedURL) { (imageURL) in
+        self.captureFirstFrame(profileURL: cameraController.fileURL) { (imageURL) in
+            
+            self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (videoURL) -> (Void) in
                 
-                self.webService.uploadVideo(atURL: croppedURL) { (videoURL) -> (Void) in
-                    
-                    self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
-                        guard err == nil else {
-                            print("cant send message : \(String(describing: err))")
-                            return
-                        }
-                        let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
-                        mapVC.videoView.isHidden = true
-                        self.clearVideoReviewLayer()
-                        self.navigationController?.popViewController(animated: true)
-                        
+                self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
+                    guard err == nil else {
+                        print("cant send message : \(String(describing: err))")
+                        return
                     }
+                    let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
+                    mapVC.videoView.isHidden = true
+                    self.clearVideoReviewLayer()
+                    self.navigationController?.popViewController(animated: true)
+                    
                 }
             }
-        })
+        }
         
     }
     
