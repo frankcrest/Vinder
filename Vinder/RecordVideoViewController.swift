@@ -22,6 +22,9 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     
     
     //MARK: UI VIEW PROPERTIES
+    let centerView = UIView()
+    let topView = UIView()
+    let bottomView = UIView()
     var loading: LoadingView!
     let buttonView = ButtonView()
     let notSurebutton = UIButton()
@@ -110,6 +113,58 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             notSurebutton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
             
             ])
+        
+        setupMaskView()
+    }
+    
+    
+    func setupMaskView() {
+        
+        func setCenterView() {
+            centerView.translatesAutoresizingMaskIntoConstraints = false
+            centerView.backgroundColor = .clear
+            view.addSubview(centerView)
+        }
+        
+        func setTopView() {
+            topView.translatesAutoresizingMaskIntoConstraints = false
+            topView.backgroundColor = .systemPink
+            view.addSubview(topView)
+        }
+        
+        func setBottomView() {
+            bottomView.translatesAutoresizingMaskIntoConstraints = false
+            bottomView.backgroundColor = .systemBlue
+            //            view.addSubview(bottomView)
+            view.insertSubview(bottomView, aboveSubview: recordPreviewView)
+        }
+        
+        setCenterView()
+        setTopView()
+        setBottomView()
+        
+        NSLayoutConstraint.activate([
+            
+            centerView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            centerView.heightAnchor.constraint(equalTo: view.widthAnchor),
+            centerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            centerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            topView.topAnchor.constraint(equalTo: view.topAnchor),
+            topView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topView.bottomAnchor.constraint(equalTo: centerView.topAnchor),
+            
+            bottomView.topAnchor.constraint(equalTo: centerView.bottomAnchor),
+            bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            
+            ])
+        
+        
+        
     }
     
     func setupTutorialView() {
@@ -274,24 +329,27 @@ extension RecordVideoViewController {
     
     func registerMode() {
         
-    cropVideo(videoURL: cameraController.fileURL, completion: {(croppedURL) in
-        self.captureRandomFrame(profileURL: croppedURL) { (profileImageURL) in
-            self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (url) -> (Void) in
-            self.webService.register(withProfileURL: url, profileImageURL: profileImageURL) { (succeeded, error) in
-                    
-                    if succeeded {
+        
+        cropVideo(videoURL: cameraController.fileURL) { (croppedURL) -> (Void) in
+            self.captureRandomFrame(profileURL: croppedURL) { (profileImageURL) in
+                self.webService.uploadVideo(atURL: croppedURL) { (url) -> (Void) in
+                    self.webService.register(withProfileURL: url, profileImageURL: profileImageURL) { (succeeded, error) in
                         
-                        self.loading.removeFromSuperview()
-                        self.clearVideoReviewLayer()
-                        self.dismiss(animated: true, completion: nil)
-                        
-                    } else {
-                        print("error:\(String(describing: error))")
+                        if succeeded {
+                            
+                            self.loading.removeFromSuperview()
+                            self.clearVideoReviewLayer()
+                            self.dismiss(animated: true, completion: nil)
+                            
+                        } else {
+                            print("error:\(String(describing: error))")
+                        }
                     }
                 }
             }
+
         }
-        })
+
 
   }
 
@@ -433,7 +491,7 @@ extension RecordVideoViewController {
         exporter.exportAsynchronously( completionHandler: { () -> Void in
             
             DispatchQueue.main.async(execute: {
-                //                completion( fileURL )
+                completion( fileURL )
                 print("DONE \(exporter.error?.localizedDescription ?? "okay")")
             })
             
