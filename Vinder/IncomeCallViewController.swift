@@ -36,8 +36,9 @@ class IncomeCallViewController: UIViewController {
     func setUpViews(){
         self.view.addSubview(videoView)
         
-        videoView.leftButton.setImage(UIImage(named: "reject"), for: .normal)
+        videoView.leftButton.setImage(UIImage(named: "hangup"), for: .normal)
         videoView.rightButton.setImage(UIImage(named: "call"), for: .normal)
+        videoView.leftButton.backgroundColor = .red
         
         videoView.leftButton.addTarget(self, action: #selector(rejectCallTapped), for: .touchUpInside)
         videoView.rightButton.addTarget(self, action: #selector(pickUpCallTapped), for: .touchUpInside)

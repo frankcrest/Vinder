@@ -11,6 +11,7 @@ class MapViewController: UIViewController {
   private var messages: [Messages] = []
   let ref = Database.database().reference()
   var currentUser = Auth.auth().currentUser
+  var selfUser : User?
   var locationManager:CLLocationManager = CLLocationManager()
   var userLocations = [UserLocation]()
   var userLocation : CLLocation? {
@@ -32,7 +33,7 @@ class MapViewController: UIViewController {
   let videoView : VideoView = {
     let v = VideoView()
     v.backgroundColor = .white
-    v.layer.cornerRadius = 20
+    v.layer.cornerRadius = 10
     v.isHidden = true
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
@@ -54,6 +55,7 @@ class MapViewController: UIViewController {
   
   let navViewLeft: UIView = {
     let v = UIView()
+    v.isUserInteractionEnabled = true
     v.backgroundColor = .magenta
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
@@ -72,6 +74,7 @@ class MapViewController: UIViewController {
     mp.isZoomEnabled = true
     mp.isScrollEnabled = true
     mp.showsUserLocation = false
+    mp.showsCompass = false
     mp.translatesAutoresizingMaskIntoConstraints = false
     return mp
   }()
@@ -262,6 +265,7 @@ class MapViewController: UIViewController {
     self.navigationController?.navigationBar.isHidden = true
     videoView.rightButton.setImage(UIImage(named: "call"), for: .normal)
     videoView.leftButton.setImage(UIImage(named: "message"), for: .normal)
+    videoView.heartButton.setImage(UIImage(named:"like"), for: .normal)
     
     videoView.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
     videoView.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
@@ -276,7 +280,7 @@ class MapViewController: UIViewController {
       navView.topAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 0),
       navView.leadingAnchor.constraint(equalTo: self.mapView.leadingAnchor, constant: 0),
       navView.trailingAnchor.constraint(equalTo: self.mapView.trailingAnchor, constant: 0),
-      navView.heightAnchor.constraint(equalToConstant: 200),
+      navView.heightAnchor.constraint(equalToConstant: 180),
       
       centerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
       centerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
@@ -347,10 +351,10 @@ class MapViewController: UIViewController {
       contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
       contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
       
-      videoView.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: 50),
-      videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 20),
-      videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -20),
-      videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -200),
+      videoView.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: statusBarHeight + 58),
+      videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 50),
+      videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -50),
+      videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -180),
       ])
   }
   
@@ -378,8 +382,13 @@ class MapViewController: UIViewController {
         return
       }
       for user in users {
-        self.mapView.addAnnotation(user)
-        self.users.append(user)
+        if user.uid == self.currentUser?.uid{
+          self.selfUser = user
+        }
+        DispatchQueue.main.async {
+          self.mapView.addAnnotation(user)
+        }
+        self.users.append(user) 
       }
     }
   }
@@ -444,10 +453,13 @@ class MapViewController: UIViewController {
   
   @objc func settingTapped(){
     let settingsVC = SettingViewController()
+    guard let user = selfUser else {return}
+    settingsVC.currentUser = user
     self.present(settingsVC, animated: true, completion: nil)
   }
   
   @objc func contactTapped(){
+    hideVideoView()
     if rightViewLeading.constant == -self.view.bounds.width{
       
       UIView.animate(withDuration: 0.2, delay: 0, options:.curveEaseOut, animations: {
@@ -469,6 +481,7 @@ class MapViewController: UIViewController {
   }
   
   @objc func mapTapped(){
+    hideVideoView()
     if leftViewTrailing.constant == self.view.bounds.width || rightViewLeading.constant == -self.view.bounds.width{
       leftViewTrailing.constant = 0
       rightViewLeading.constant = 0
@@ -479,6 +492,7 @@ class MapViewController: UIViewController {
   }
   
   @objc func meTapped(){
+    hideVideoView()
     if leftViewTrailing.constant == self.view.bounds.width{
       
       UIView.animate(withDuration: 0.2, delay: 0, options:.curveEaseOut, animations: {
