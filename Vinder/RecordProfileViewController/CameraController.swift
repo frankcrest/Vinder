@@ -5,7 +5,6 @@
 //  Created by Dayson Dong on 2019-06-19.
 //  Copyright © 2019 Frank Chen. All rights reserved.
 //
-
 import Foundation
 import AVFoundation
 import UIKit
@@ -15,7 +14,7 @@ protocol StartAnimationDelegate: AnyObject {
 }
 
 class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
-
+    
     //MARK: PROPERTIES
     var startAnimationDelegate: StartAnimationDelegate?
     var captureSession: AVCaptureSession?
@@ -36,28 +35,35 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
     }()
     
     let tutorialURL: URL = {
-       let url = URL(fileURLWithPath: "tutorial", isDirectory: false)
+        let url = URL(fileURLWithPath: "tutorial", isDirectory: false)
         return url
     }()
     
     
     //MARK: DISPLAY PREVIEW LAYER
-    func displayPreview(on view: UIView) throws {
-        
-        guard let captureSession = self.captureSession, captureSession.isRunning else {
-            throw CameraControllerError.captureSessionIsMissing
-        }
-        
-        self.previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        self.previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
-        self.previewLayer?.connection?.videoOrientation = .portrait
-        
-        view.layer.insertSublayer(self.previewLayer!, at: 0)
-        self.previewLayer?.frame = view.frame
-    }
+//    func displayPreview(on view: UIView) throws {
+//
+//        guard let captureSession = self.captureSession, captureSession.isRunning else {
+//            throw CameraControllerError.captureSessionIsMissing
+//        }
+//
+////        self.previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+////        self.previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
+////        self.previewLayer?.connection?.videoOrientation = .portrait
+//
+//        view.layer.insertSublayer(self.previewLayer!, at: 0)
+//        self.previewLayer?.frame = view.frame
+//    }
     
     func removePreview() {
         self.previewLayer?.removeFromSuperlayer()
+    }
+    
+    func configurePreviewView(_ view: PreviewView){
+        view.videoPreviewLayer.videoGravity = .resize
+        view.videoPreviewLayer.connection?.videoOrientation = .portrait
+        view.videoPreviewLayer.session = self.captureSession
+        self.previewLayer = view.videoPreviewLayer
     }
     
     //MARK: SWITCH CAMERA
@@ -112,12 +118,12 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
         captureSession.commitConfiguration()
     }
     
-    //MARK: RECORD AND SAVE VIDEO 
+    //MARK: RECORD AND SAVE VIDEO
     
     func startRecording(toURL url: URL) {
         
         videoOutput?.startRecording(to: fileURL, recordingDelegate: self)
-    
+        
     }
     
     func stopRecording() {
@@ -143,7 +149,6 @@ class CameraController: NSObject, AVCaptureFileOutputRecordingDelegate {
 
 
 //MARK: PREPARE
-
 extension CameraController {
     
     func prepare(completion: @escaping (Error?) -> Void) {
@@ -257,7 +262,6 @@ extension CameraController {
 }
 
 //MARK: ENUMS
-
 extension CameraController {
     enum CameraControllerError: Swift.Error {
         case captureSessionAlreadyRunning
@@ -273,4 +277,3 @@ extension CameraController {
         case rear
     }
 }
-

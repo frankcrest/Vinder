@@ -26,11 +26,12 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     let buttonView = ButtonView()
     let notSurebutton = UIButton()
     let tutorialView = TutorialView()
-    let recordPreviewView: UIView = {
-        let view = UIView()
+    let recordPreviewView: PreviewView = {
+        let view = PreviewView()
         view.translatesAutoresizingMaskIntoConstraints = false
         //TODO: NEED TO CHANGE BACKGROUND
         view.backgroundColor = .black
+        view.layer.masksToBounds = true
         return view
     }()
     
@@ -49,7 +50,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        configureCameraController()
+        configureCameraController()
         
         cameraController.startAnimationDelegate = self
         buttonView.recordButtonView.videoHandlerDelegate = self
@@ -67,10 +68,10 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        configureCameraController()
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        configureCameraController()
+//    }
     
     //MARK: CAMERA CONTROLLER
     
@@ -79,7 +80,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             if let error = error {
                 print("can not configure camera controller: \(error)")
             }
-            try? self.cameraController.displayPreview(on: self.recordPreviewView)
+            try? self.cameraController.configurePreviewView(self.recordPreviewView)
         }
     }
     
@@ -110,10 +111,12 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
 //            recordPreviewView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
 //            recordPreviewView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
 //            recordPreviewView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
-            recordPreviewView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            recordPreviewView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+//            recordPreviewView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+//            recordPreviewView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
             recordPreviewView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
             recordPreviewView.heightAnchor.constraint(equalTo: self.view.widthAnchor),
+            recordPreviewView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            recordPreviewView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
 
             
             notSurebutton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
@@ -309,23 +312,23 @@ extension RecordVideoViewController {
         
         cropVideo(videoURL: cameraController.fileURL, completion: {(outputURL) in
             
-            self.captureFirstFrame(profileURL: outputURL) { (imageURL) in
-                
-                self.webService.uploadVideo(atURL: outputURL) { (videoURL) -> (Void) in
-                    
-                    self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
-                        guard err == nil else {
-                            print("cant send message : \(String(describing: err))")
-                            return
-                        }
-                        let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
-                        mapVC.videoView.isHidden = true
-                        self.clearVideoReviewLayer()
-                        self.navigationController?.popViewController(animated: true)
-                        
-                    }
-                }
-            }
+//            self.captureFirstFrame(profileURL: outputURL) { (imageURL) in
+//
+////                self.webService.uploadVideo(atURL: outputURL) { (videoURL) -> (Void) in
+////
+////                    self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
+////                        guard err == nil else {
+////                            print("cant send message : \(String(describing: err))")
+////                            return
+////                        }
+////                        let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
+////                        mapVC.videoView.isHidden = true
+////                        self.clearVideoReviewLayer()
+////                        self.navigationController?.popViewController(animated: true)
+////
+////                    }
+////                }
+//            }
         })
         
     }
