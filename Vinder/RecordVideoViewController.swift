@@ -299,27 +299,30 @@ extension RecordVideoViewController {
         
         guard let user = self.toUser else { return }
         
-        captureFirstFrame(profileURL: cameraController.fileURL) { (imageURL) in
-            
-            self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (videoURL) -> (Void) in
+        cropVideo(videoURL: cameraController.fileURL, completion: {(croppedURL) in
+            self.captureFirstFrame(profileURL: croppedURL) { (imageURL) in
                 
-                self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
-                    guard err == nil else {
-                        print("cant send message : \(String(describing: err))")
-                        return
-                    }
-                    let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
-                    mapVC.videoView.isHidden = true
-                    self.clearVideoReviewLayer()
-                    self.navigationController?.popViewController(animated: true)
+                self.webService.uploadVideo(atURL: croppedURL) { (videoURL) -> (Void) in
                     
+                    self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
+                        guard err == nil else {
+                            print("cant send message : \(String(describing: err))")
+                            return
+                        }
+                        let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
+                        mapVC.videoView.isHidden = true
+                        self.clearVideoReviewLayer()
+                        self.navigationController?.popViewController(animated: true)
+                        
+                    }
                 }
             }
-        }
+        })
+        
     }
     
     func profileMode() {
-//        captureFirstFrame(profileURL: cameraController.fileURL)
+
         webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
             
             self.webService.changeProfile("\(url)") { (err) in
@@ -338,7 +341,7 @@ extension RecordVideoViewController {
 
 
 
-//snap shot
+//MARK: Video helper methods
 extension RecordVideoViewController {
     
     func captureFirstFrame(profileURL : URL,completion: @escaping (String) -> Void ){
@@ -391,4 +394,51 @@ extension RecordVideoViewController {
         
     }
     
+    func cropVideo(videoURL : URL, completion : @escaping (_ outputURL : URL) -> (Void) ){
+        let videoAsset : AVAsset = AVAsset(url: videoURL)
+        let duration = videoAsset.duration
+        let durationTime = CMTimeGetSeconds(duration)
+        let clipVideoTrack = videoAsset.tracks(withMediaType: AVMediaType.video).first! as AVAssetTrack
+//        let clipAudioTrack = videoAsset.tracks(withMediaType: AVMediaType.audio).first! as AVAssetTrack
+        
+        let videoComposition = AVMutableVideoComposition(propertiesOf: videoAsset)
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let fileURL = paths[0].appendingPathComponent("croppedvideo.mov")
+        do { try FileManager.default.removeItem(at: fileURL) } catch {}
+        print("PAth \(paths[0])")
+        
+        print("cropped: \(durationTime)")
+        
+        videoComposition.renderSize = CGSize(width: 1080, height: 1080)
+        videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 60)
+        
+        let transformer = AVMutableVideoCompositionLayerInstruction( assetTrack: clipVideoTrack )
+                let transform1 = CGAffineTransform( translationX: clipVideoTrack.naturalSize.height, y: -( clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height ) / 2 )
+                let transform2 = transform1.rotated(by: CGFloat( Double.pi / 2 ) )
+                transformer.setTransform( transform2, at: CMTime.zero)
+        
+        
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.enablePostProcessing = true
+//        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: CMTimeMakeWithSeconds(durationTime, preferredTimescale: 1200000))
+        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: duration)
+        
+        instruction.layerInstructions = [transformer]
+        videoComposition.instructions = [instruction]
+        
+        let exporter = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)!
+        exporter.videoComposition = videoComposition
+        exporter.outputURL = fileURL
+        exporter.outputFileType = AVFileType.mov
+        
+        exporter.exportAsynchronously( completionHandler: { () -> Void in
+            
+            DispatchQueue.main.async(execute: {
+                //                completion( fileURL )
+                print("DONE \(exporter.error?.localizedDescription ?? "okay")")
+            })
+            
+            
+        })
+    }
 }
