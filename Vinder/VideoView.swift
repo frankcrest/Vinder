@@ -142,8 +142,8 @@ class VideoView: UIView {
     }
     
     func stop() {
-        //player.pause()
-        //player.seek(to: CMTime.zero)
+        player.pause()
+        player = nil
     }
     
     @objc func reachTheEndOfTheVideo(_ notification: Notification) {
@@ -178,6 +178,7 @@ extension VideoView: CAAnimationDelegate, UpdateProgressDelegate {
     }
     
     func updateProgress(progress: Double) {
+        print("updating progress")
         self.circleLayer.isHidden = false
         self.percentageLabel.isHidden = false
         percentageLabel.text = "\(round(progress))%"

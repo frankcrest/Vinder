@@ -45,7 +45,7 @@ class MessageTableViewCell: UITableViewCell {
         let imageview = ProfileImageView()
         imageview.translatesAutoresizingMaskIntoConstraints = false
         imageview.isUserInteractionEnabled = true
-        imageview.contentMode = .scaleAspectFit
+        imageview.contentMode = .scaleAspectFill
         imageview.layer.borderWidth = 1
         imageview.layer.masksToBounds = false
         imageview.layer.borderColor = UIColor.black.cgColor
@@ -71,7 +71,7 @@ class MessageTableViewCell: UITableViewCell {
             setProfileImage()
             if let msg = message {
                 nameLabel.text = msg.sender
-                timestampLabel.text = "\(msg.timestamp)"
+                timestampLabel.text = "\(serverToLocal(date: msg.timestamp)!)"
             }
         }
     }
@@ -104,7 +104,6 @@ class MessageTableViewCell: UITableViewCell {
         addSubview(timestampLabel)
         containerView.addSubview(thumbnailImageView)
         addSubview(profileImageView)
-        profileImageView.image = UIImage(named: "Ray")
         profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showProfile)))
         
         NSLayoutConstraint.activate([
@@ -160,6 +159,14 @@ class MessageTableViewCell: UITableViewCell {
         videoPlayer.player?.play()
     }
     
+    private func serverToLocal(date:Date) -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let str = dateFormatter.string(from: date)
+        dateFormatter.timeZone = TimeZone.current
+        let localDate = dateFormatter.date(from: str)
+        return dateFormatter.string(from: localDate!)
+    }
     
     
 }

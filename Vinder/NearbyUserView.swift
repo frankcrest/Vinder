@@ -26,7 +26,7 @@ class NearbyUserView: MKAnnotationView {
     
     func loadProfileImage(withID id: String) {
         
-         image = UIImage(named: "kawhi")?.scaleImage(toSize: CGSize.init(width: 25, height: 25))
+         image = UIImage(named: "defaultIcon")?.scaleImage(toSize: CGSize.init(width: 25, height: 25))
         
         if let imageFromCache = imageCache.object(forKey: id as NSString) {
 

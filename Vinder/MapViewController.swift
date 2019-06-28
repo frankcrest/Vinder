@@ -8,8 +8,8 @@ class MapViewController: UIViewController {
   
   //MARK: PROPERTIES
   private let webService = WebService()
-  private var messages: [Messages] = []
-  let ref = Database.database().reference()
+    private var messages: [Messages] = []
+    let ref = Database.database().reference()
   var currentUser = Auth.auth().currentUser
   var locationManager:CLLocationManager = CLLocationManager()
   var userLocations = [UserLocation]()
@@ -184,12 +184,23 @@ class MapViewController: UIViewController {
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
+    
+    let inboxLabel: UILabel = {
+       let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "Inbox"
+        l.font = UIFont.systemFont(ofSize: 35, weight: .semibold)
+        l.textColor = .white
+        return l
+    }()
+    
   
   //MARK: VIEW DID LOAD
   override func viewDidLoad() {
     super.viewDidLoad()
     
     mapView.delegate = self
+    webService.updateProgressDelegate = videoView
     mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
     
     locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -211,7 +222,10 @@ class MapViewController: UIViewController {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillAppear(true)
     ref.child("users").removeAllObservers()
-    self.videoView.stop()
+    if !videoView.isHidden {
+        hideVideoView()
+
+    }
   }
   
   override func viewDidDisappear(_ animated: Bool) {
@@ -255,6 +269,7 @@ class MapViewController: UIViewController {
     
     self.leftView.addSubview(navViewLeft)
     self.rightView.addSubview(navViewRight)
+    navViewRight.addSubview(inboxLabel)
     
     self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
     self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -272,7 +287,15 @@ class MapViewController: UIViewController {
     leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
     rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
     
+    
+    
     NSLayoutConstraint.activate([
+        
+        inboxLabel.centerXAnchor.constraint(equalTo: navViewRight.centerXAnchor),
+        inboxLabel.centerYAnchor.constraint(equalTo: navViewRight.centerYAnchor, constant: 15),
+        
+        
+        
       navView.topAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 0),
       navView.leadingAnchor.constraint(equalTo: self.mapView.leadingAnchor, constant: 0),
       navView.trailingAnchor.constraint(equalTo: self.mapView.trailingAnchor, constant: 0),
@@ -353,6 +376,9 @@ class MapViewController: UIViewController {
       videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -200),
       ])
   }
+    
+    //MARK: HELPERS
+    
   
   
   //MARK: LOAD USER AND LOCATE
@@ -404,17 +430,18 @@ class MapViewController: UIViewController {
   func getMessages() {
     
     self.webService.fetchAllMessages { (allMessages) -> (Void) in
-      print("getting msgs")
+        
       guard let allMessages = allMessages else { return }
-      self.messages = allMessages
-      self.messages.sort { (msg1, msg2) -> Bool in
-        return msg1.timestamp > msg2.timestamp
-      }
+        DispatchQueue.main.async {
+            self.messages = allMessages
+            self.messages.sort { (msg1, msg2) -> Bool in
+                return msg1.timestamp > msg2.timestamp
+            }
+            self.messageTableView.reloadData()
+        }
+
     }
     
-    DispatchQueue.main.async {
-      self.messageTableView.reloadData()
-    }
   }
   
   
@@ -429,7 +456,7 @@ class MapViewController: UIViewController {
     loadUsers()
   }
   
-  //MARK: ACTIONS
+  //MARK: BUTTON ACTIONS
   @objc func logoutTapped(){
     videoView.isHidden = true
     do{
@@ -448,6 +475,11 @@ class MapViewController: UIViewController {
   }
   
   @objc func contactTapped(){
+    
+    if !videoView.isHidden {
+        hideVideoView()
+    }
+    
     if rightViewLeading.constant == -self.view.bounds.width{
       
       UIView.animate(withDuration: 0.2, delay: 0, options:.curveEaseOut, animations: {
@@ -469,6 +501,11 @@ class MapViewController: UIViewController {
   }
   
   @objc func mapTapped(){
+    
+    if !videoView.isHidden {
+        hideVideoView()
+    }
+    
     if leftViewTrailing.constant == self.view.bounds.width || rightViewLeading.constant == -self.view.bounds.width{
       leftViewTrailing.constant = 0
       rightViewLeading.constant = 0
@@ -479,6 +516,11 @@ class MapViewController: UIViewController {
   }
   
   @objc func meTapped(){
+    
+    if !videoView.isHidden {
+        hideVideoView()
+    }
+    
     if leftViewTrailing.constant == self.view.bounds.width{
       
       UIView.animate(withDuration: 0.2, delay: 0, options:.curveEaseOut, animations: {
