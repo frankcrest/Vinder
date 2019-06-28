@@ -587,7 +587,7 @@ extension MapViewController : MKMapViewDelegate {
       view.calloutOffset = CGPoint(x: -5, y: 5)
       view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
     }
-    
+    view.contentMode = .scaleAspectFill
     view.layer.cornerRadius = view.frame.size.height/2
     view.layer.borderColor = UIColor.white.cgColor
     view.layer.masksToBounds = true
@@ -672,6 +672,27 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     self.navigationController?.pushViewController(videoPlayerVC, animated: true)
     
   }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            print("delete swipe")
+            let msg = messages[indexPath.row]
+            webService.deleteMessage(msg) { (err) in
+                guard err == nil else { return }
+                DispatchQueue.main.async {
+                    self.messages.remove(at: indexPath.row)
+                    self.messageTableView.beginUpdates()
+                    self.messageTableView.deleteRows(at: [indexPath], with: .fade)
+                    self.messageTableView.endUpdates()
+                }
+            }
+        }
+    }
+    
   
 }
 

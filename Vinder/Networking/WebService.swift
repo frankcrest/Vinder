@@ -290,6 +290,9 @@ class WebService {
                 guard let profileVideo = userObject["profileVideo"] as? String else {return}
                 guard let token = userObject["token"] as? String else {return}
                 guard let profileImageUrl = userObject["profileImageUrl"] as? String else { return }
+                if uid == Auth.auth().currentUser?.uid {
+                    self.ud.set(name, forKey: "name")
+                }
                  let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
 
                 users.append(user)
@@ -318,8 +321,30 @@ class WebService {
                 self.updateProgressDelegate?.updateProgress(progress: percent)
             }
         }
-        
-        
+    }
+    
+    func deleteMessage(_ message: Messages, completion: @escaping (Error?) -> Void) {
+        guard let msgReceiver = Auth.auth().currentUser?.uid else { return }
+        let msgVideoRef = storage.reference(forURL: message.messageURL)
+        let msgThumnailRef = storage.reference(forURL: message.imageURL)
+        let msgID = message.messageID
+        let msgRef = ref.child("messages").child(msgReceiver).child(msgID)
+        //Delete msg
+        print("deleting message ")
+        msgRef.removeValue { (err, ref) in
+            completion(err)
+            guard err == nil else {return}
+            // then delete msg content
+            print("delete msg content")
+            msgVideoRef.delete { (err) in
+                guard err == nil else {return}
+                print("delete video")
+            }
+            msgThumnailRef.delete { (err) in
+                guard err == nil else {return}
+                print("delete tn")
+            }
+        }
         
     }
     
