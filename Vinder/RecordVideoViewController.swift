@@ -276,7 +276,7 @@ extension RecordVideoViewController {
         
         captureRandomFrame(profileURL: cameraController.fileURL) { (profileImageURL) in
             self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (url) -> (Void) in
-                self.webService.register(withProfileURL: url, profileImageURL: profileImageURL) { (succeeded, error) in
+            self.webService.register(withProfileURL: url, profileImageURL: profileImageURL) { (succeeded, error) in
                     
                     if succeeded {
                         
