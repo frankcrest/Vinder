@@ -121,12 +121,12 @@ exports.observeHangup = functions.database.ref('/hangup/{callerId}/{uid}').onCre
   console.log('User' + uid + 'hanged up,' + callerId + 'needs to hang up automatically');
   return admin.database().ref('/users/' + callerId).once('value', snapshot => {
     var userToHangUp = snapshot.val();
-  
+
       const payload = {
         data: {
           title: 'Call Response',
           body: 'HangUp',
-          event_id: userWeAreCalling.uid
+          event_id: userToHangUp.uid
         }
       };
 
