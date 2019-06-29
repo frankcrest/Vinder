@@ -24,6 +24,8 @@ class MapViewController: UIViewController {
   let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
   var selectedUser: User?
   var swipeRecog = UISwipeGestureRecognizer()
+  var friendList = [String]()
+  var friends = [User]()
   
   //MARK: VIEW PROPERTIES
   let videoView : VideoView = {
@@ -189,23 +191,34 @@ class MapViewController: UIViewController {
        let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = "Inbox"
-        l.font = UIFont.systemFont(ofSize: 35, weight: .semibold)
+        l.font = UIFont.systemFont(ofSize: 32, weight: .semibold)
         l.textColor = .white
         return l
     }()
-    
+  
+  let favoriteLabel: UILabel = {
+    let l = UILabel()
+    l.translatesAutoresizingMaskIntoConstraints = false
+    l.text = "Favorites"
+    l.font = UIFont.systemFont(ofSize: 32, weight: .semibold)
+    l.textColor = .white
+    return l
+  }()
   
   //MARK: VIEW DID LOAD
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    print("load")
     mapView.delegate = self
     webService.updateProgressDelegate = videoView
     mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
     
     locationManager.desiredAccuracy = kCLLocationAccuracyBest
     setupViews()
-    getMessages()
+    
+    retrieveFriendList { (list) in
+      self.retrieveFriendsData(friendList: list)
+    }
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -271,6 +284,7 @@ class MapViewController: UIViewController {
     self.leftView.addSubview(navViewLeft)
     self.rightView.addSubview(navViewRight)
     navViewRight.addSubview(inboxLabel)
+    navViewLeft.addSubview(favoriteLabel)
     
     self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
     self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -278,10 +292,12 @@ class MapViewController: UIViewController {
     self.navigationController?.navigationBar.isHidden = true
     videoView.rightButton.setImage(UIImage(named: "call"), for: .normal)
     videoView.leftButton.setImage(UIImage(named: "message"), for: .normal)
-    videoView.heartButton.setImage(UIImage(named:"like"), for: .normal)
+    videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
     
     videoView.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
     videoView.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
+    videoView.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
+    
     videoView.addGestureRecognizer(swipeRecog)
     swipeRecog.addTarget(self, action: #selector(swipeHandler(_:)))
     swipeRecog.direction = .up
@@ -295,6 +311,9 @@ class MapViewController: UIViewController {
         
         inboxLabel.centerXAnchor.constraint(equalTo: navViewRight.centerXAnchor),
         inboxLabel.centerYAnchor.constraint(equalTo: navViewRight.centerYAnchor, constant: 15),
+        
+        favoriteLabel.centerXAnchor.constraint(equalTo: navViewLeft.centerXAnchor),
+        favoriteLabel.centerYAnchor.constraint(equalTo: navViewLeft.centerYAnchor, constant: 15),
         
         
         
@@ -398,12 +417,10 @@ class MapViewController: UIViewController {
   }
   
   func loadUsers(){
-    print("fetching users")
     self.users.removeAll()
     self.mapView.removeAnnotations(self.users)
     webService.fetchUsers { (users) in
       guard let users = users else {
-        print("faied fetching users")
         return
       }
       for user in users {
@@ -431,6 +448,10 @@ class MapViewController: UIViewController {
     }
   }
   
+  func loadFavorites(){
+    
+  }
+  
   //MARK: FETCH MESSAGE
   
   func getMessages() {
@@ -456,7 +477,6 @@ class MapViewController: UIViewController {
     let lat = String(format: "%f", location.coordinate.latitude)
     let lon = String(format: "%f", location.coordinate.longitude)
     guard let user = currentUser else {return}
-    print("uid: \(user.uid)")
     webService.updateUserWithLocation(lat: lat, lon: lon, uid: user.uid)
   }
   
@@ -587,6 +607,64 @@ class MapViewController: UIViewController {
     self.present(videoVC, animated: true, completion: nil)
   }
   
+  @objc func heartTapped(){
+    self.friendList.removeAll()
+    self.friends.removeAll()
+    guard let selectedUser = selectedUser else {return}
+    guard let currentUser = currentUser else {return}
+
+    if videoView.heartButton.currentImage == UIImage(named:"heartUntap"){
+      videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+      videoView.heartButton.backgroundColor = .white
+      ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid : "true"])
+    }else{
+      videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+      videoView.heartButton.backgroundColor = .magenta
+      ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue()
+      }
+    
+  }
+  
+  func retrieveFriendList(completion: @escaping ([String]) -> Void){
+    self.friendList.removeAll()
+    guard let currentUser = currentUser else {return}
+    ref.child("friends").child(currentUser.uid).observe(.value) { (snapshot) in
+      for child in snapshot.children{
+        let snap = child as! DataSnapshot
+        let key = snap.key
+        self.friendList.append(key)
+      }
+      completion(self.friendList)
+    }
+  }
+  
+  func retrieveFriendsData(friendList: [String]){
+    self.friends.removeAll()
+    print("friend list count \(friendList.count)")
+    print("retrieve data called")
+    for friend in friendList{
+      ref.child("users").child(friend).observe(.value) { (snapshot) in
+        guard let snapshot = snapshot.value as? [String:AnyObject] else {return}
+        guard let name = snapshot["name"] as? String else {return}
+        guard let username = snapshot["username"] as? String else{return}
+        guard let uid = snapshot["uid"] as? String else {return}
+        guard let lat = snapshot["latitude"] as? String else {return}
+        guard let lon = snapshot["longitude"] as? String else{return}
+        guard let profileVideo = snapshot["profileVideo"] as? String else {return}
+        guard let token = snapshot["token"] as? String else {return}
+        guard let profileImageUrl = snapshot["profileImageUrl"] as? String else { return }
+        let user = User(uid: uid, token: token, username: username, name: name, profileImageUrl: profileImageUrl, gender: .male, lat: lat, lon: lon, profileVideoUrl: profileVideo)
+        print(user)
+        self.friends.append(user)
+        DispatchQueue.main.async {
+          self.contactsCollectionView.reloadData()
+        }
+      }
+      
+     
+    }
+  }
+  
   
 }
 
@@ -605,8 +683,6 @@ extension MapViewController : CLLocationManagerDelegate {
     let distanceInMeters = newLocation.distance(from: userLocation ?? CLLocation(latitude: 0, longitude: 0))
     let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
     let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-    
-    print(distanceInMeters)
     
     if distanceInMeters > 100{
       print("user have moved 100 metres")
@@ -655,6 +731,17 @@ extension MapViewController : MKMapViewDelegate {
     self.selectedUser = view.annotation as? User
     guard let user = currentUser else {return}
     guard let userTapped = self.selectedUser else {return}
+    
+    ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
+      if snapshot.exists(){
+        self.videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+        self.videoView.heartButton.backgroundColor = .white
+      }else{
+        self.videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+        self.videoView.heartButton.backgroundColor = .magenta
+      }
+    }
+    
     if user.uid != userTapped.uid{
       print("did not tap self, the user uid = \(userTapped.uid)")
       print(user.uid)
@@ -747,12 +834,13 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
 extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 5
+    return friends.count
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "contactCell", for: indexPath) as! ContactsCollectionViewCell
-    cell.nameLabel.text = "name"
+    let friend = friends[indexPath.row]
+    cell.nameLabel.text = friend.name
     return cell
   }
   
