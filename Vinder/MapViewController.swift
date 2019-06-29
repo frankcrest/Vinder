@@ -641,14 +641,13 @@ class MapViewController: UIViewController {
     
     @objc func refreshTapped(){
         generator.impactOccurred()
-        UIView.animate(withDuration: 0.15, delay: 0, options: [], animations: {
-            self.refreshButton.transform = self.refreshButton.transform.rotated(by: CGFloat.pi)
-        }) { (_) in
-            UIView.animate(withDuration: 0.15, delay: 0, options: .curveEaseOut, animations: {
-                self.refreshButton.transform = self.refreshButton.transform.rotated(by: CGFloat.pi)
-            }, completion: nil)
-        }
         
+        UIView.animate(withDuration: 0.3) {
+            self.refreshButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        }
+        UIView.animate(withDuration: 0.3, delay: 0.15, options: .curveEaseIn, animations: {
+            self.refreshButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi*2.0)
+        }, completion: nil)
 
         loadUsers()
     }
