@@ -14,11 +14,7 @@ class MapViewController: UIViewController {
   var selfUser : User?
   var locationManager:CLLocationManager = CLLocationManager()
   var userLocations = [UserLocation]()
-  var userLocation : CLLocation? {
-    didSet{
-      updateLocationToFirebase()
-    }
-  }
+  var userLocation : CLLocation?
   
   let statusBarHeight = UIApplication.shared.statusBarFrame.height
   var leftViewTrailing :NSLayoutConstraint!
@@ -49,6 +45,7 @@ class MapViewController: UIViewController {
   let navView: GradientView = {
     let v = GradientView()
     v.backgroundColor = .clear
+    v.isUserInteractionEnabled = false
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
@@ -218,6 +215,7 @@ class MapViewController: UIViewController {
     } else{
       currentUser = Auth.auth().currentUser
       determineCurrentLocation()
+      loadUsers()
       getMessages()
     }
   }
@@ -303,7 +301,7 @@ class MapViewController: UIViewController {
       navView.topAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 0),
       navView.leadingAnchor.constraint(equalTo: self.mapView.leadingAnchor, constant: 0),
       navView.trailingAnchor.constraint(equalTo: self.mapView.trailingAnchor, constant: 0),
-      navView.heightAnchor.constraint(equalToConstant: 180),
+      navView.heightAnchor.constraint(equalToConstant: 260),
       
       centerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
       centerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
@@ -402,6 +400,7 @@ class MapViewController: UIViewController {
   func loadUsers(){
     print("fetching users")
     self.users.removeAll()
+    self.mapView.removeAnnotations(self.users)
     webService.fetchUsers { (users) in
       guard let users = users else {
         print("faied fetching users")
@@ -411,10 +410,8 @@ class MapViewController: UIViewController {
         if user.uid == self.currentUser?.uid{
           self.selfUser = user
         }
-        DispatchQueue.main.async {
-          self.mapView.addAnnotation(user)
-        }
-        self.users.append(user) 
+        self.mapView.addAnnotation(user)
+        self.users.append(user)
       }
     }
   }
@@ -461,8 +458,6 @@ class MapViewController: UIViewController {
     guard let user = currentUser else {return}
     print("uid: \(user.uid)")
     webService.updateUserWithLocation(lat: lat, lon: lon, uid: user.uid)
-    
-    loadUsers()
   }
   
   //MARK: BUTTON ACTIONS
@@ -514,6 +509,9 @@ class MapViewController: UIViewController {
     if !videoView.isHidden {
         hideVideoView()
     }
+    
+    guard let userLoc = userLocation else{return}
+    mapView.setCenter(userLoc.coordinate, animated: true)
 
     if leftViewTrailing.constant == self.view.bounds.width || rightViewLeading.constant == -self.view.bounds.width{
       leftViewTrailing.constant = 0
@@ -613,6 +611,7 @@ extension MapViewController : CLLocationManagerDelegate {
     if distanceInMeters > 100{
       print("user have moved 100 metres")
       userLocation = newLocation
+      updateLocationToFirebase()
       mapView.setRegion(region, animated: true)
     }
   }
