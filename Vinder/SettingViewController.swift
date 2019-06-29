@@ -25,10 +25,11 @@
         let b = UIButton(type: .system)
         b.setImage(UIImage(named:"edit"), for: .normal)
         b.tintColor = UIColor(red: 36/255, green: 171/255, blue: 255/255, alpha: 1)
+        b.imageView?.contentMode = .scaleAspectFit
         b.clipsToBounds = true
-        b.contentMode = .scaleAspectFit
-        b.backgroundColor = .white
+        b.backgroundColor = .black
         b.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
+        b.imageEdgeInsets = UIEdgeInsets(top: 8,left: 8,bottom: 8,right: 8)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
@@ -125,9 +126,9 @@
             profileVideo.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
             //editButton constraint
-            editButton.heightAnchor.constraint(equalToConstant: 25),
-            editButton.widthAnchor.constraint(equalToConstant: 25),
-            editButton.trailingAnchor.constraint(equalTo: profileHeader.trailingAnchor, constant: -100),
+            editButton.heightAnchor.constraint(equalToConstant: 40),
+            editButton.widthAnchor.constraint(equalToConstant: 40),
+            editButton.trailingAnchor.constraint(equalTo: profileHeader.trailingAnchor, constant: -90),
             editButton.bottomAnchor.constraint(equalTo: profileHeader.bottomAnchor, constant: -20),
             
             //tableView constraint
@@ -137,17 +138,17 @@
             tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ])
         
+        setUpProfileVideo()
         self.view.bringSubviewToFront(profileVideo)
         self.view.bringSubviewToFront(editButton)
         profileVideo.layer.cornerRadius = 125
-        profileVideo.clipsToBounds = true
         profileVideo.layer.borderColor = UIColor.white.cgColor
         profileVideo.layer.borderWidth = 5
         
-        editButton.layer.cornerRadius = 5
+        editButton.layer.cornerRadius = 20
+        editButton.layer.borderColor = UIColor.white.cgColor
+        editButton.layer.borderWidth = 3.5
         
-        
-        setUpProfileVideo()
     }
     
     func setUpProfileVideo(){
