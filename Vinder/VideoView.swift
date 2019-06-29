@@ -92,6 +92,11 @@ class VideoView: UIView {
     setUpViews()
   }
   
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        videoContainer.layer.cornerRadius = 10
+        clipsToBounds = true
+    }
   
   //UI setup
   func setUpViews(){
@@ -107,6 +112,7 @@ class VideoView: UIView {
     self.layer.addSublayer(circleLayer)
     self.circleLayer.isHidden = true
     self.percentageLabel.isHidden = true
+
     
     NSLayoutConstraint.activate([
       
@@ -118,15 +124,18 @@ class VideoView: UIView {
       
       heartButton.heightAnchor.constraint(equalToConstant:  50),
       heartButton.widthAnchor.constraint(equalToConstant: 50),
+      
       buttonContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -4),
-      buttonContainer.heightAnchor.constraint(equalToConstant: 50),
+//      buttonContainer.heightAnchor.constraint(equalToConstant: 50),
+        buttonContainer.topAnchor.constraint(equalTo: videoContainer.bottomAnchor, constant: 4),
       buttonContainer.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
       buttonContainer.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
       
-      videoContainer.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
+      videoContainer.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
       videoContainer.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
       videoContainer.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
-      videoContainer.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -4),
+//      videoContainer.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -4),
+        videoContainer.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 3.0/4.0),
       
       percentageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
       percentageLabel.centerYAnchor.constraint(equalTo: centerYAnchor),

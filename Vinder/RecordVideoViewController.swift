@@ -68,6 +68,10 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             self.notSurebutton.isHidden = false
             //self.videoReviewer.playVideo(atUrl:url, on: self.tutorialView)
         }
+        
+        if mode == Mode.profileMode || mode == Mode.signupMode {
+            setupMaskView()
+        }
     }
     
     //MARK: CAMERA CONTROLLER
@@ -113,35 +117,24 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             notSurebutton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
             
             ])
-        
-        setupMaskView()
     }
     
     
     func setupMaskView() {
         
-        func setCenterView() {
-            centerView.translatesAutoresizingMaskIntoConstraints = false
-            centerView.backgroundColor = .clear
-            view.addSubview(centerView)
-        }
+        centerView.translatesAutoresizingMaskIntoConstraints = false
+        centerView.backgroundColor = .clear
+        view.addSubview(centerView)
         
-        func setTopView() {
-            topView.translatesAutoresizingMaskIntoConstraints = false
-            topView.backgroundColor = .systemPink
-            view.addSubview(topView)
-        }
+        topView.translatesAutoresizingMaskIntoConstraints = false
+        topView.backgroundColor = .black
+        topView.alpha = 0.9
+        view.insertSubview(topView, aboveSubview: recordPreviewView)
         
-        func setBottomView() {
-            bottomView.translatesAutoresizingMaskIntoConstraints = false
-            bottomView.backgroundColor = .systemBlue
-            //            view.addSubview(bottomView)
-            view.insertSubview(bottomView, aboveSubview: recordPreviewView)
-        }
-        
-        setCenterView()
-        setTopView()
-        setBottomView()
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        bottomView.backgroundColor = .black
+        bottomView.alpha = 0.9
+        view.insertSubview(bottomView, aboveSubview: recordPreviewView)
         
         NSLayoutConstraint.activate([
             
@@ -162,9 +155,6 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             
             
             ])
-        
-        
-        
     }
     
     func setupTutorialView() {
@@ -347,7 +337,6 @@ extension RecordVideoViewController {
                     }
                 }
             }
-
         }
 
 

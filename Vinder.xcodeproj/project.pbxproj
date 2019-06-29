@@ -41,6 +41,7 @@
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
 		ED64C2C522C174170077DCF7 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED64C2C422C174170077DCF7 /* Messages.swift */; };
+		EDA7CE9922C6E33F006F2A5D /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA7CE9822C6E33F006F2A5D /* RoundedButton.swift */; };
 		EDC730C322C52CCB00773F67 /* TNImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C222C52CCB00773F67 /* TNImageView.swift */; };
 		EDC730C622C5360100773F67 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C522C5360100773F67 /* ProfileImageView.swift */; };
 		EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4476222BABFBA0048BAE2 /* CameraController.swift */; };
@@ -86,6 +87,7 @@
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		ED64C2C422C174170077DCF7 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		EDA7CE9822C6E33F006F2A5D /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RoundedButton.swift; path = /Users/daysondong/Desktop/Vinder/Vinder/RoundedButton.swift; sourceTree = "<absolute>"; };
 		EDC730C222C52CCB00773F67 /* TNImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TNImageView.swift; sourceTree = "<group>"; };
 		EDC730C522C5360100773F67 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		EDF4476222BABFBA0048BAE2 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				E97F74F322BC313800AE8155 /* SettingViewController.swift */,
 				0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */,
 				ED31021F22BEAF1200D2211B /* LoadingView.swift */,
+				EDA7CE9822C6E33F006F2A5D /* RoundedButton.swift */,
 				EDC730C422C533E400773F67 /* MessageTable */,
 				ED3BE86D22BD715D0046E35C /* Networking */,
 				EDF4476622BAD6130048BAE2 /* RecordProfileViewController */,
@@ -382,6 +385,7 @@
 				E90C498222C2F42E00606A03 /* UserLocation.swift in Sources */,
 				E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */,
 				EDC730C622C5360100773F67 /* ProfileImageView.swift in Sources */,
+				EDA7CE9922C6E33F006F2A5D /* RoundedButton.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
 				0D9162A322C1522000C58DCF /* IncomeCallViewController.swift in Sources */,
 				E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */,
