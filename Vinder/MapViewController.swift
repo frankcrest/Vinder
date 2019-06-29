@@ -510,19 +510,22 @@ class MapViewController: UIViewController {
     }
   }
   
-  @objc func mapTapped(){
-    if !videoView.isHidden {
-        hideVideoView()
+    @objc func mapTapped(){
+        if !videoView.isHidden {
+            hideVideoView()
+        }
+        
+        guard let userLoc = userLocation else{return}
+        mapView.setCenter(userLoc.coordinate, animated: true)
+        
+        if leftViewTrailing.constant == self.view.bounds.width || rightViewLeading.constant == -self.view.bounds.width{
+            leftViewTrailing.constant = 0
+            rightViewLeading.constant = 0
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }
     }
-
-    if leftViewTrailing.constant == self.view.bounds.width || rightViewLeading.constant == -self.view.bounds.width{
-      leftViewTrailing.constant = 0
-      rightViewLeading.constant = 0
-      UIView.animate(withDuration: 0.3) {
-        self.view.layoutIfNeeded()
-      }
-    }
-  }
   
   @objc func meTapped(){
     if !videoView.isHidden {

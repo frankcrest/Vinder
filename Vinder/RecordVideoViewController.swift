@@ -128,13 +128,13 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
         
         func setTopView() {
             topView.translatesAutoresizingMaskIntoConstraints = false
-            topView.backgroundColor = .systemPink
+            topView.backgroundColor = .black
             view.addSubview(topView)
         }
         
         func setBottomView() {
             bottomView.translatesAutoresizingMaskIntoConstraints = false
-            bottomView.backgroundColor = .systemBlue
+            bottomView.backgroundColor = .black
             //            view.addSubview(bottomView)
             view.insertSubview(bottomView, aboveSubview: recordPreviewView)
         }
