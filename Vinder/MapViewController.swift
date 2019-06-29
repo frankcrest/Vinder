@@ -422,7 +422,8 @@ class MapViewController: UIViewController {
     
     func loadUsers(){
         print("fetching users")
-        self.users.removeAll()
+        mapView.removeAnnotations(users)
+        users.removeAll()
         webService.fetchUsers { (users) in
             guard let users = users else {
                 print("faied fetching users")
@@ -693,6 +694,8 @@ extension MapViewController : CLLocationManagerDelegate {
 //MARK: MKMapViewDelegate
 extension MapViewController : MKMapViewDelegate {
     
+    
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard let annotation = annotation as? User else { return nil }
         
@@ -716,7 +719,7 @@ extension MapViewController : MKMapViewDelegate {
             view.layer.borderColor = limeGreen.cgColor
         }
         
-        view.layer.borderWidth = 5
+        view.layer.borderWidth = 3
         return view
     }
     
