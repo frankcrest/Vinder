@@ -10,7 +10,6 @@
 		0D3E98D422BAA60200D02311 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98D322BAA60200D02311 /* MapViewController.swift */; };
 		0D3E98D622BAA84E00D02311 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3E98D522BAA84E00D02311 /* MapKit.framework */; };
 		0D3E98D822BAA87B00D02311 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3E98D722BAA87B00D02311 /* CoreLocation.framework */; };
-		0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3E98DB22BAC5CA00D02311 /* User.swift */; };
 		0D91629422BD6D6300C58DCF /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */; };
 		0D91629A22C1436300C58DCF /* RecordVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629922C1436300C58DCF /* RecordVideoViewController.swift */; };
 		0D91629E22C1439D00C58DCF /* NearbyUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D91629C22C1439D00C58DCF /* NearbyUserView.swift */; };
@@ -21,10 +20,12 @@
 		E9035D6822C18EFF00D9D170 /* CallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9035D6722C18EFF00D9D170 /* CallResponse.swift */; };
 		E90C498222C2F42E00606A03 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C498122C2F42E00606A03 /* UserLocation.swift */; };
 		E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543422B9735F00CD7958 /* AppDelegate.swift */; };
-		E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935543622B9735F00CD7958 /* LoginViewController.swift */; };
 		E935543C22B9736000CD7958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E935543B22B9736000CD7958 /* Assets.xcassets */; };
 		E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E935543D22B9736000CD7958 /* LaunchScreen.storyboard */; };
 		E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935544822B99B3C00CD7958 /* LoginFormViewController.swift */; };
+		E942743222C7F14700715166 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942743122C7F14600715166 /* User.swift */; };
+		E942743422C7F14E00715166 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942743322C7F14E00715166 /* LoginViewController.swift */; };
+		E942743622C91D6000715166 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942743522C91D6000715166 /* RoundedButton.swift */; };
 		E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */; };
 		E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */; };
 		E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */; };
@@ -41,7 +42,6 @@
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
 		ED64C2C522C174170077DCF7 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED64C2C422C174170077DCF7 /* Messages.swift */; };
-		EDA7CE9922C6E33F006F2A5D /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA7CE9822C6E33F006F2A5D /* RoundedButton.swift */; };
 		EDC730C322C52CCB00773F67 /* TNImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C222C52CCB00773F67 /* TNImageView.swift */; };
 		EDC730C622C5360100773F67 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C522C5360100773F67 /* ProfileImageView.swift */; };
 		EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4476222BABFBA0048BAE2 /* CameraController.swift */; };
@@ -51,7 +51,6 @@
 		0D3E98D322BAA60200D02311 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		0D3E98D522BAA84E00D02311 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0D3E98D722BAA87B00D02311 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		0D3E98DB22BAC5CA00D02311 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
 		0D91629922C1436300C58DCF /* RecordVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordVideoViewController.swift; path = Vinder/RecordVideoViewController.swift; sourceTree = SOURCE_ROOT; };
 		0D91629C22C1439D00C58DCF /* NearbyUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NearbyUserView.swift; path = Vinder/NearbyUserView.swift; sourceTree = SOURCE_ROOT; };
@@ -63,11 +62,13 @@
 		E90C498122C2F42E00606A03 /* UserLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
 		E935543122B9735F00CD7958 /* Vinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E935543422B9735F00CD7958 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E935543622B9735F00CD7958 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E935543B22B9736000CD7958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E935543E22B9736000CD7958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E935544022B9736000CD7958 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E935544822B99B3C00CD7958 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
+		E942743122C7F14600715166 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E942743322C7F14E00715166 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		E942743522C91D6000715166 /* RoundedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
 		E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
@@ -86,7 +87,6 @@
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		ED64C2C422C174170077DCF7 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
-		EDA7CE9822C6E33F006F2A5D /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RoundedButton.swift; path = /Users/daysondong/Desktop/Vinder/Vinder/RoundedButton.swift; sourceTree = "<absolute>"; };
 		EDC730C222C52CCB00773F67 /* TNImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TNImageView.swift; sourceTree = "<group>"; };
 		EDC730C522C5360100773F67 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		EDF4476222BABFBA0048BAE2 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
@@ -152,12 +152,12 @@
 				0D91629C22C1439D00C58DCF /* NearbyUserView.swift */,
 				E9035D6722C18EFF00D9D170 /* CallResponse.swift */,
 				E90C498122C2F42E00606A03 /* UserLocation.swift */,
-				0D3E98DB22BAC5CA00D02311 /* User.swift */,
+				E942743122C7F14600715166 /* User.swift */,
 				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
 				0D9162A222C1522000C58DCF /* IncomeCallViewController.swift */,
 				ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */,
-				E935543622B9735F00CD7958 /* LoginViewController.swift */,
 				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
+				E942743322C7F14E00715166 /* LoginViewController.swift */,
 				0D91629F22C1475F00C58DCF /* SignUpViewController.swift */,
 				0D3E98D322BAA60200D02311 /* MapViewController.swift */,
 				E97F74ED22BC156B00AE8155 /* CustomFlowLayout.swift */,
@@ -165,7 +165,7 @@
 				E97F74F322BC313800AE8155 /* SettingViewController.swift */,
 				0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */,
 				ED31021F22BEAF1200D2211B /* LoadingView.swift */,
-				EDA7CE9822C6E33F006F2A5D /* RoundedButton.swift */,
+				E942743522C91D6000715166 /* RoundedButton.swift */,
 				EDC730C422C533E400773F67 /* MessageTable */,
 				ED3BE86D22BD715D0046E35C /* Networking */,
 				EDF4476622BAD6130048BAE2 /* RecordProfileViewController */,
@@ -356,12 +356,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
 				E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */,
 				ED31022022BEAF1200D2211B /* LoadingView.swift in Sources */,
+				E942743622C91D6000715166 /* RoundedButton.swift in Sources */,
 				E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */,
 				EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */,
+				E942743422C7F14E00715166 /* LoginViewController.swift in Sources */,
 				EDC730C322C52CCB00773F67 /* TNImageView.swift in Sources */,
 				0D91629A22C1436300C58DCF /* RecordVideoViewController.swift in Sources */,
 				ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */,
@@ -369,21 +370,18 @@
 				ED4B9D8C22C429E800BA7234 /* MessageVideoPlayerViewController.swift in Sources */,
 				ED64C2C522C174170077DCF7 /* Messages.swift in Sources */,
 				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
-				E935543722B9735F00CD7958 /* LoginViewController.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				ED3BE86822BD58280046E35C /* TutorialView.swift in Sources */,
 				0D91629422BD6D6300C58DCF /* SettingTableViewCell.swift in Sources */,
-				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
 				0D9162A122C1479000C58DCF /* VideoPlayer.swift in Sources */,
 				ED3BE86C22BD714E0046E35C /* WebService.swift in Sources */,
 				0D91629E22C1439D00C58DCF /* NearbyUserView.swift in Sources */,
 				0D9162A022C1476000C58DCF /* SignUpViewController.swift in Sources */,
-				0D3E98DC22BAC5CA00D02311 /* User.swift in Sources */,
 				E9035D6822C18EFF00D9D170 /* CallResponse.swift in Sources */,
+				E942743222C7F14700715166 /* User.swift in Sources */,
 				E90C498222C2F42E00606A03 /* UserLocation.swift in Sources */,
 				E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */,
 				EDC730C622C5360100773F67 /* ProfileImageView.swift in Sources */,
-				EDA7CE9922C6E33F006F2A5D /* RoundedButton.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,
 				0D9162A322C1522000C58DCF /* IncomeCallViewController.swift in Sources */,
 				E97F74EE22BC156B00AE8155 /* CustomFlowLayout.swift in Sources */,
