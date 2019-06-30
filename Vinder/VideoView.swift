@@ -18,7 +18,11 @@ class VideoView: UIView {
   var isLoop: Bool = false
   
   var videoURL: String?
-  var username: String?
+    var username: String? {
+        didSet {
+            nameLabel.text = username
+        }
+    }
   
   private var circleLayer = CAShapeLayer()
     
@@ -80,7 +84,7 @@ class VideoView: UIView {
     return b
   }()
   
-  var percentageLabel: UILabel = {
+  let percentageLabel: UILabel = {
     let label = UILabel()
     label.textAlignment = .center
     label.text = ""
@@ -88,6 +92,23 @@ class VideoView: UIView {
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
+    
+    let nameLabelContainer: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = .black
+        v.alpha = 0.6
+        return v
+    }()
+    
+    var nameLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -110,7 +131,7 @@ class VideoView: UIView {
         layer.masksToBounds = false
         
         container.layer.cornerRadius = 10.0
-        videoContainer.layer.cornerRadius = 10.0
+//        videoContainer.layer.cornerRadius = 10.0
         videoContainer.layer.masksToBounds = true
         print("\(layer.masksToBounds) \(container.layer.masksToBounds)")
     }
@@ -126,6 +147,10 @@ class VideoView: UIView {
     self.buttonContainer.addArrangedSubview(heartButton)
     self.buttonContainer.addArrangedSubview(rightButton)
     
+    //name label not displaying ???
+    nameLabelContainer.addSubview(nameLabel)
+    container.insertSubview(nameLabelContainer, aboveSubview: videoContainer)
+    
     container.addSubview(percentageLabel)
     setupCircleProgressBar()
     container.layer.addSublayer(circleLayer)
@@ -134,6 +159,11 @@ class VideoView: UIView {
 
     
     NSLayoutConstraint.activate([
+        
+        nameLabelContainer.leadingAnchor.constraint(equalTo: videoContainer.leadingAnchor),
+        nameLabelContainer.trailingAnchor.constraint(equalTo: videoContainer.trailingAnchor),
+        nameLabelContainer.bottomAnchor.constraint(equalTo: videoContainer.bottomAnchor),
+        nameLabelContainer.heightAnchor.constraint(equalToConstant: 30),
       
         container.heightAnchor.constraint(equalTo: heightAnchor),
         container.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0),

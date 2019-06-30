@@ -30,8 +30,9 @@ class User: NSObject ,MKAnnotation{
   var lat:String
   var lon:String
   var profileVideoUrl:String
+    var onlineStatus: Bool?
 
-  init(uid : String, token:String,  username: String, name: String, profileImageUrl : String, gender:UserGender, lat:String, lon:String, profileVideoUrl:String){
+    init(uid : String, token:String,  username: String, name: String, profileImageUrl : String, gender:UserGender, lat:String, lon:String, profileVideoUrl:String, onlineStatus: Bool?){
     self.uid = uid
     self.token = token
     self.username = username
@@ -41,6 +42,7 @@ class User: NSObject ,MKAnnotation{
     self.lat = lat
     self.lon = lon
     self.profileVideoUrl = profileVideoUrl
+    self.onlineStatus = onlineStatus
   }
   
   var subtitle: String? {

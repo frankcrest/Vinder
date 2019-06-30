@@ -103,7 +103,7 @@ class WebService {
       guard let uid = user?.user.uid else { return }
       print("Registered uid \(uid)")
       self.ud.set(uid, forKey:"uid")
-        self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)", "profileImageUrl": profileImageURL]), withCompletionBlock: { (error, ref) in
+        self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)", "profileImageUrl": profileImageURL, "onlineStatus": true]), withCompletionBlock: { (error, ref) in
         
         if let error = error{
           print("can not set ref\(error)")
@@ -116,6 +116,14 @@ class WebService {
   
   
   //MARK: UPLOADING
+    
+    func goOnline(_ userID: String) {
+        ref.child("users").child(userID).setValue(["onlineStatus": true])
+    }
+    
+    func goOffline(_ userID: String) {
+        ref.child("users").child(userID).setValue(["onlineStatus": false])
+    }
   
   func changeProfile(_ url: String, completion: @escaping (Error?) -> Void) {
     guard let userID = currentUserID else {
@@ -290,10 +298,11 @@ class WebService {
                 guard let profileVideo = userObject["profileVideo"] as? String else {return}
                 guard let token = userObject["token"] as? String else {return}
                 guard let profileImageUrl = userObject["profileImageUrl"] as? String else { return }
+                let onlineStatus = userObject["onlineStatus"] as? Bool
                 if uid == Auth.auth().currentUser?.uid {
                     self.ud.set(name, forKey: "name")
                 }
-                 let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo)
+                 let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus )
 
                 users.append(user)
             }

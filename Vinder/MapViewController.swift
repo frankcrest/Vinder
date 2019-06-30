@@ -561,18 +561,22 @@ class MapViewController: UIViewController {
     }
     
     @objc func focusOneUser() {
-        
+        generator.impactOccurred()
         let annotationsInView = mapView.annotations(in: mapView.visibleMapRect)
-        guard let usersInView = Array(annotationsInView) as? [User] else { return }
+        guard var usersInView = Array(annotationsInView) as? [User] else { return }
+        usersInView.sort { (lhs: User, rhs: User) -> Bool in
+            lhs.name > rhs.name
+        }
         for userInView in usersInView {
             mapView.view(for: userInView)!.isHidden = true
         }
         if focusedUserIndex < usersInView.count {
             mapView.view(for: usersInView[focusedUserIndex])!.isHidden = false
             focusedUserIndex += 1
-        } else {
-            focusedUserIndex = 0
-            mapView.view(for: usersInView[focusedUserIndex])!.isHidden = false
+            if focusedUserIndex == usersInView.count {
+                focusedUserIndex = 0
+            }
+            
         }
         
     }
@@ -752,10 +756,10 @@ extension MapViewController : MKMapViewDelegate {
         }
         
         let limeGreen =  UIColor(red: 172/255, green: 245/255, blue: 87/255, alpha: 1)
-        if(annotation.gender == UserGender.male){
+        if(annotation.onlineStatus == true){
             view.layer.borderColor = limeGreen.cgColor
         }else{
-            view.layer.borderColor = limeGreen.cgColor
+            view.layer.borderColor = UIColor.gray.cgColor
         }
         
         view.layer.borderWidth = 3
