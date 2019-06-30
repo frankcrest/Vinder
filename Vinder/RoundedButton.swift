@@ -15,7 +15,7 @@ class RoundedButton: UIButton {
         clipsToBounds = true
         imageView?.bounds.size.height = bounds.size.height * 0.75
         imageView?.bounds.size.width = bounds.size.width * 0.75
-        
+        translatesAutoresizingMaskIntoConstraints = false 
     }
 
 }

@@ -136,6 +136,13 @@ class MapViewController: UIViewController {
         return b
     }()
     
+    let finderButton: RoundedButton = {
+        let b = RoundedButton()
+        b.addTarget(self, action: #selector(focusOneUser), for: .touchUpInside)
+        b.setImage(UIImage(named: "finder"), for: .normal)
+        return b
+    }()
+    
     let buttonStackView:UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
@@ -194,6 +201,7 @@ class MapViewController: UIViewController {
     }()
     
     let generator = UIImpactFeedbackGenerator(style: .light)
+    var focusedUserIndex = 0
     
     //MARK: SET CONSTRAINTS PROPERTY
     var buttonStackViewTrailingConstraint: NSLayoutConstraint?
@@ -229,6 +237,7 @@ class MapViewController: UIViewController {
               determineCurrentLocation()
               getMessages()
             }
+        generator.prepare()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -282,7 +291,7 @@ class MapViewController: UIViewController {
         self.leftView.addSubview(navViewLeft)
         self.rightView.addSubview(navViewRight)
         navViewRight.addSubview(inboxLabel)
-        
+        self.view.insertSubview(finderButton, aboveSubview: mapView)
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
@@ -372,6 +381,12 @@ class MapViewController: UIViewController {
             
             messageButtonHeightCons!,
             messageButtonWidthCons!,
+            
+
+            finderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            finderButton.heightAnchor.constraint(equalToConstant: 40),
+            finderButton.widthAnchor.constraint(equalToConstant: 40),
+            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -20),
             
             buttonStackViewLeadingConstraint!,
             buttonStackViewTrailingConstraint!,
@@ -517,7 +532,7 @@ class MapViewController: UIViewController {
         mapButtonHeightCons?.constant = 35
         contactButtonHeightCons?.constant = 70
         contactButtonWidthCons?.constant = 70
-        
+        showAllanotations()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -545,7 +560,25 @@ class MapViewController: UIViewController {
         }
     }
     
+    @objc func focusOneUser() {
+        
+        let annotationsInView = mapView.annotations(in: mapView.visibleMapRect)
+        guard let usersInView = Array(annotationsInView) as? [User] else { return }
+        for userInView in usersInView {
+            mapView.view(for: userInView)!.isHidden = true
+        }
+        if focusedUserIndex < usersInView.count {
+            mapView.view(for: usersInView[focusedUserIndex])!.isHidden = false
+            focusedUserIndex += 1
+        } else {
+            focusedUserIndex = 0
+            mapView.view(for: usersInView[focusedUserIndex])!.isHidden = false
+        }
+        
+    }
+    
     @objc func mapTapped(){
+        
         generator.impactOccurred()
         buttonStackViewTrailingConstraint?.constant = -30
         buttonStackViewLeadingConstraint?.constant = 30
@@ -555,7 +588,7 @@ class MapViewController: UIViewController {
         mapButtonHeightCons?.constant = 70
         contactButtonHeightCons?.constant = 55
         contactButtonWidthCons?.constant = 55
-        
+        showAllanotations()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -583,7 +616,7 @@ class MapViewController: UIViewController {
         mapButtonHeightCons?.constant = 35
         contactButtonHeightCons?.constant = 35
         contactButtonWidthCons?.constant = 35
-        
+        showAllanotations()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -619,7 +652,14 @@ class MapViewController: UIViewController {
         recordMessageVC.toUserID = user.uid
         navigationController?.pushViewController(recordMessageVC, animated: true)
     }
-    
+    //MARK: HELPERS
+    func showAllanotations() {
+        for annotation in mapView.annotations {
+            if mapView.view(for: annotation)?.isHidden == true {
+                mapView.view(for: annotation)?.isHidden = false
+            }
+        }
+    }
     
     
     //MARK: Handle user interaction
@@ -747,9 +787,6 @@ extension MapViewController: ShowProfileDelegate {
         recordMessageVC.toUserID = userID
         navigationController?.pushViewController(recordMessageVC, animated: true)
     }
-    
-    
-    
     
     func showVideoView(withUser name: String, profileVideoUrl: String) {
         
