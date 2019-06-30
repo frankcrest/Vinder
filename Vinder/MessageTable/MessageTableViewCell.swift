@@ -47,9 +47,7 @@ class MessageTableViewCell: UITableViewCell {
         imageview.translatesAutoresizingMaskIntoConstraints = false
         imageview.isUserInteractionEnabled = true
         imageview.contentMode = .scaleAspectFill
-        imageview.layer.borderWidth = 1
         imageview.layer.masksToBounds = false
-        imageview.layer.borderColor = UIColor.black.cgColor
         imageview.layer.cornerRadius = 22
         imageview.clipsToBounds = true
         return imageview
@@ -102,8 +100,8 @@ class MessageTableViewCell: UITableViewCell {
     
     @objc func showProfile() {
         
-//        guard let username = profileImageView.userName, let url = profileImageView.profileVideoUrl else { return }
-        self.showProfileDelegate?.showVideoView(withUser: "username", profileVideoUrl: "url")
+        guard let username = profileImageView.userName, let url = profileImageView.profileVideoUrl else { return }
+        self.showProfileDelegate?.showVideoView(withUser: username, profileVideoUrl: url)
         
     }
     
@@ -177,8 +175,6 @@ class MessageTableViewCell: UITableViewCell {
     }
     
     @objc func actionToMsg() {
-        print("repy tapped")
-
         self.showProfileDelegate?.actionToMsg(message!)
     }
     

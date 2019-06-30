@@ -188,9 +188,9 @@ class WebService {
   
     //MARK: FIREBASE FECTHING
     
-    func fetchProfile(ofUser id: String, completion: @escaping (Dictionary<String,String>) -> Void) {
+    func fetchProfile(ofUser id: String, completion: @escaping (Dictionary<String,Any>) -> Void) {
         
-        var userInfo: [String: String] = [:]
+        var userInfo: [String: Any] = [:]
         
         let profileImageFileUrl: URL = {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -204,6 +204,7 @@ class WebService {
                 guard let profileImageUrl = infoObject["profileImageUrl"] as? String else {return}
                 guard let name = infoObject["name"] as? String else { return }
                 guard let profileVideo = infoObject["profileVideo"] as? String else { return }
+                let onlineStatus = infoObject["onlineStatus"] as? Bool
                 let httpreference = self.storage.reference(forURL: profileImageUrl)
                 let _ = httpreference.write(toFile: profileImageFileUrl) { (url, err) in
                     guard err == nil else { return }
@@ -211,6 +212,7 @@ class WebService {
                     userInfo["name"] = name
                     userInfo["profileVideo"] = profileVideo
                     userInfo["profileImageUrl"] = "\(url)"
+                    userInfo["onlineStatus"] = onlineStatus
                     completion(userInfo)
                 }
         }

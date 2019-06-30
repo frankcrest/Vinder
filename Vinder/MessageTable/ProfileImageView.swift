@@ -9,10 +9,18 @@
 import UIKit
 
 class ProfileImageView: UIImageView {
-
     var userID: String?
     var userName: String?
     var profileVideoUrl: String?
+    var onlineStatus: Bool? {
+        didSet {
+            if let status = onlineStatus {
+                layer.borderWidth = 2
+                layer.borderColor = status ? UIColor.green.cgColor : UIColor.gray.cgColor
+                layoutSubviews()
+            }
+        }
+    }
     
     func loadProfileImage(withID id: String) {
         
@@ -26,9 +34,10 @@ class ProfileImageView: UIImageView {
         
         WebService().fetchProfile(ofUser: id) { (userInfo) in
             DispatchQueue.main.async {
-                self.userName = userInfo["name"]
-                self.profileVideoUrl = userInfo["profileVideo"]
-                guard let url =  URL(string: userInfo["profileImageUrl"]!) else { return }
+                self.userName = userInfo["name"] as? String
+                self.profileVideoUrl = userInfo["profileVideo"] as? String
+                self.onlineStatus = userInfo["onlineStatus"] as? Bool
+                guard let url =  URL(string: userInfo["profileImageUrl"]! as! String) else { return }
                 do {
                     let image = try UIImage(data: Data(contentsOf: url))
                     guard let imageToCache = image else { return }

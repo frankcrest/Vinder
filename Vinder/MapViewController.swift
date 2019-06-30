@@ -82,11 +82,9 @@ class MapViewController: UIViewController {
         return mp
     }()
     
-    let logoutButton: UIButton = {
-        let b = UIButton()
-        b.setTitle("logout", for: .normal)
-        b.backgroundColor = .cyan
-        b.setTitleColor(.black, for: .normal)
+    let logoutButton: RoundedButton = {
+        let b = RoundedButton()
+        b.setImage(UIImage(named: "exit"), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
         b.layer.cornerRadius = 25
@@ -923,14 +921,44 @@ extension MapViewController: ShowProfileDelegate {
 }
 
 
-// MARK: TABLE/COLLECTION VIEW DELEGATE
+// MARK: TABLEVIEW DELEGATE
 extension MapViewController: UITableViewDelegate, UITableViewDataSource{
+    
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//
+//        var numOfSection: NSInteger = 0
+//
+//        if messages.count > 0
+//        {
+//            messageTableView.backgroundView = nil
+//            numOfSection = 1
+//        } else {
+//            let noMsgLabel: UILabel = UILabel(frame: CGRect(x:0, y:0, width: messageTableView.bounds.size.width,height: messageTableView.bounds.size.height))
+//            noMsgLabel.text = "No Message!"
+//            noMsgLabel.textColor = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
+//            noMsgLabel.textAlignment = NSTextAlignment.center
+//            messageTableView.backgroundView = noMsgLabel
+//        }
+//
+//        return numOfSection
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.view.bounds.width
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if messages.count > 0
+        {
+//            messageTableView.backgroundView = nil
+//            numOfSection = 1
+        } else {
+            let noMsgLabel: UILabel = UILabel(frame: CGRect(x:0, y:0, width: messageTableView.bounds.size.width,height: messageTableView.bounds.size.height))
+            noMsgLabel.text = "No Message!"
+            noMsgLabel.textColor = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
+            noMsgLabel.textAlignment = NSTextAlignment.center
+            messageTableView.backgroundView = noMsgLabel
+        }
         return messages.count
     }
     
@@ -973,6 +1001,8 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
+//MARK: COLLECTION VIEW DELEGATE
+
 extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -982,7 +1012,7 @@ extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "contactCell", for: indexPath) as! ContactsCollectionViewCell
         let friend = friends[indexPath.row]
-        cell.nameLabel.text = friend.name
+        cell.friend = friend
         return cell
     }
     

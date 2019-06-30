@@ -10,13 +10,15 @@ import UIKit
 
 class ContactsCollectionViewCell: UICollectionViewCell {
   
-  let profileImageView:UIImageView = {
-    let iv = UIImageView()
-    iv.backgroundColor = .red
+  let profileImageView:ProfileImageView = {
+    let iv = ProfileImageView()
+    iv.backgroundColor = .clear
+    iv.layer.masksToBounds = false 
     iv.clipsToBounds = true
     iv.contentMode = .scaleAspectFit
     iv.translatesAutoresizingMaskIntoConstraints = false
     return iv
+    
   }()
   
   let nameLabel:UILabel = {
@@ -27,6 +29,15 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
+    
+    var friend: User? {
+        didSet{
+            setProfileImage()
+            if let frd = friend {
+                nameLabel.text = frd.name
+            }
+        }
+    }
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -52,4 +63,11 @@ class ContactsCollectionViewCell: UICollectionViewCell {
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+    
+    func setProfileImage() {
+        if let friendID = friend?.uid {
+            profileImageView.loadProfileImage(withID:friendID)
+        }
+    }
+
 }

@@ -53,7 +53,7 @@ class NearbyUserView: MKAnnotationView {
         
         WebService().fetchProfile(ofUser: id) { (userInfo) in
             DispatchQueue.main.async {
-                guard let url =  URL(string: userInfo["profileImageUrl"]!) else { return }
+                guard let url =  URL(string: userInfo["profileImageUrl"]! as! String) else { return }
                 do {
                     let image = try UIImage(data: Data(contentsOf: url))
                     guard let imageToCache = image else { return }
