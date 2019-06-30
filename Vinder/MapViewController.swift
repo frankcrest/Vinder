@@ -441,7 +441,7 @@ class MapViewController: UIViewController {
         users.removeAll()
         webService.fetchUsers { (users) in
             guard let users = users else {
-                print("faied fetching users")
+                print("failed fetching users")
                 return
             }
             for user in users {
@@ -784,13 +784,41 @@ extension MapViewController : MKMapViewDelegate {
 //MARK: VIDEO VIEW RELATED
 extension MapViewController: ShowProfileDelegate {
     
-    func replyMsg(to userID: String) {
+    func actionToMsg(_ message: Messages) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let recordMessageVC = RecordVideoViewController()
-        recordMessageVC.mode = .messageMode
-        recordMessageVC.toUserID = userID
-        navigationController?.pushViewController(recordMessageVC, animated: true)
+        alert.addAction(UIAlertAction(title: "Reply", style: .default, handler: { (_) in
+            let recordMessageVC = RecordVideoViewController()
+            recordMessageVC.mode = .messageMode
+            recordMessageVC.toUserID = message.senderID
+            self.navigationController?.pushViewController(recordMessageVC, animated: true)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { (_) in
+            
+            let i = self.messages.firstIndex { (msg) -> Bool in
+                msg.messageID == message.messageID
+            }
+            
+            guard let index = i else { return }
+           
+            self.webService.deleteMessage(message) { (err) in
+                guard err == nil else { return }
+                DispatchQueue.main.async {
+                    self.messages.remove(at: index)
+                    self.messageTableView.beginUpdates()
+                   
+                    self.messageTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+                    self.messageTableView.endUpdates()
+                }
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
+    
+
     
     func showVideoView(withUser name: String, profileVideoUrl: String) {
         
@@ -851,7 +879,6 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            print("delete swipe")
             let msg = messages[indexPath.row]
             webService.deleteMessage(msg) { (err) in
                 guard err == nil else { return }

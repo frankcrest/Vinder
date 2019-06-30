@@ -118,18 +118,18 @@ class WebService {
   //MARK: UPLOADING
     
     func goOnline(_ userID: String) {
-        ref.child("users").child(userID).setValue(["onlineStatus": true])
+        ref.child("users").child(userID).child("onlineStatus").setValue(true)
     }
     
     func goOffline(_ userID: String) {
-        ref.child("users").child(userID).setValue(["onlineStatus": false])
+        ref.child("users").child(userID).child("onlineStatus").setValue(false)
     }
   
   func changeProfile(_ url: String, completion: @escaping (Error?) -> Void) {
     guard let userID = currentUserID else {
       return
     }
-    ref.child("users").child(userID).setValue(["profileVideo": url]) { (err, ref) in
+    ref.child("users").child(userID).child("profileVideo").setValue(url) { (err, ref) in
       completion(err)
     }
   }
@@ -302,9 +302,11 @@ class WebService {
                 if uid == Auth.auth().currentUser?.uid {
                     self.ud.set(name, forKey: "name")
                 }
-                 let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus )
+                let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
 
                 users.append(user)
+                print("user \(user.name)")
+                print("users.count \(users.count)")
             }
             completion(users)
         }

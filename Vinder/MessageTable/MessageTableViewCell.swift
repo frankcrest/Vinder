@@ -10,7 +10,7 @@ import UIKit
 
 protocol ShowProfileDelegate: AnyObject {
      func showVideoView(withUser name: String, profileVideoUrl: String)
-    func replyMsg(to userID: String)
+    func actionToMsg(_ message: Messages)
 }
 
 class MessageTableViewCell: UITableViewCell {
@@ -68,8 +68,8 @@ class MessageTableViewCell: UITableViewCell {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.setImage(UIImage(named: "reply"), for: .normal)
         b.backgroundColor = .clear
-        b.imageView?.bounds.size.height = b.bounds.size.height * 0.75
-        b.imageView?.bounds.size.width = b.bounds.size.width * 0.75
+        b.imageView?.bounds.size.height = b.bounds.size.height * 0.6
+        b.imageView?.bounds.size.width = b.bounds.size.width * 0.6
         return b
     }()
     
@@ -117,12 +117,12 @@ class MessageTableViewCell: UITableViewCell {
         containerView.addSubview(thumbnailImageView)
         addSubview(profileImageView)
         profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showProfile)))
-        replyButton.addTarget(self, action: #selector(replyMsg), for: .touchUpInside)
+        replyButton.addTarget(self, action: #selector(actionToMsg), for: .touchUpInside)
         NSLayoutConstraint.activate([
             
             replyButton.topAnchor.constraint(equalTo: topAnchor, constant: 4),
             replyButton.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: -4),
-            replyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            replyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             replyButton.widthAnchor.constraint(equalToConstant: 44.0),
             
             profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
@@ -176,9 +176,10 @@ class MessageTableViewCell: UITableViewCell {
         videoPlayer.player?.play()
     }
     
-    @objc func replyMsg() {
+    @objc func actionToMsg() {
         print("repy tapped")
-        self.showProfileDelegate?.replyMsg(to: message!.senderID)
+
+        self.showProfileDelegate?.actionToMsg(message!)
     }
     
     
