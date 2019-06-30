@@ -241,13 +241,13 @@ class WebService {
       var messages: [Messages] = []
       ref.child("messages").child(userID).observe(DataEventType.value) { (snapshot) in
         for messageID in snapshot.children.allObjects as! [DataSnapshot] {
-          guard let message = messageID.value as? [String: AnyObject] else { return }
-          guard let messageURL = message["messageURL"] as? String else { return }
-          guard let senderID = message["senderID"] as? String else { return }
-          guard let msgID = message["messageID"] as? String else {return}
-          guard let sender = message["sender"] as? String else {return}
-          guard let timestamp = message["timestamp"] as? Double else {return}
-          guard let imageURL = message["imageURL"] as? String else { return }
+          guard let message = messageID.value as? [String: AnyObject] else { continue }
+          guard let messageURL = message["messageURL"] as? String else { continue }
+          guard let senderID = message["senderID"] as? String else { continue }
+          guard let msgID = message["messageID"] as? String else {continue}
+          guard let sender = message["sender"] as? String else {continue}
+          guard let timestamp = message["timestamp"] as? Double else {continue}
+          guard let imageURL = message["imageURL"] as? String else { continue }
           let timeInterval = timestamp/1000.0
           let messageDate = Date(timeIntervalSince1970: timeInterval)
           
@@ -289,15 +289,15 @@ class WebService {
         var users: [User] = []
         ref.child("users").observe(.value) { (snapshot) in
             for user in snapshot.children.allObjects as! [DataSnapshot]{
-                guard let userObject = user.value as? [String:AnyObject] else{return}
-                guard let name = userObject["name"] as? String else {return}
-                guard let username = userObject["username"] as? String else{return}
-                guard let uid = userObject["uid"] as? String else {return}
-                guard let lat = userObject["latitude"] as? String else {return}
-                guard let lon = userObject["longitude"] as? String else{return}
-                guard let profileVideo = userObject["profileVideo"] as? String else {return}
-                guard let token = userObject["token"] as? String else {return}
-                guard let profileImageUrl = userObject["profileImageUrl"] as? String else { return }
+                guard let userObject = user.value as? [String:AnyObject] else{continue}
+                guard let name = userObject["name"] as? String else {continue}
+                guard let username = userObject["username"] as? String else{continue}
+                guard let uid = userObject["uid"] as? String else {continue}
+                guard let lat = userObject["latitude"] as? String else {continue}
+                guard let lon = userObject["longitude"] as? String else{continue}
+                guard let profileVideo = userObject["profileVideo"] as? String else {continue}
+                guard let token = userObject["token"] as? String else {continue}
+                guard let profileImageUrl = userObject["profileImageUrl"] as? String else {continue }
                 let onlineStatus = userObject["onlineStatus"] as? Bool
                 if uid == Auth.auth().currentUser?.uid {
                     self.ud.set(name, forKey: "name")

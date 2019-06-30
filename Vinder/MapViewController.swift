@@ -251,6 +251,7 @@ class MapViewController: UIViewController {
             getMessages()
             loadUsers()
         }
+        view.layoutSubviews()
         generator.prepare()
     }
     
@@ -730,15 +731,15 @@ class MapViewController: UIViewController {
         print("retrieve data called")
         for friend in friendList{
             ref.child("users").child(friend).observe(.value) { (snapshot) in
-                guard let snapshot = snapshot.value as? [String:AnyObject] else {return}
-                guard let name = snapshot["name"] as? String else {return}
-                guard let username = snapshot["username"] as? String else{return}
-                guard let uid = snapshot["uid"] as? String else {return}
-                guard let lat = snapshot["latitude"] as? String else {return}
-                guard let lon = snapshot["longitude"] as? String else{return}
-                guard let profileVideo = snapshot["profileVideo"] as? String else {return}
-                guard let token = snapshot["token"] as? String else {return}
-                guard let profileImageUrl = snapshot["profileImageUrl"] as? String else { return }
+                guard let snapshot = snapshot.value as? [String:AnyObject] else {continue}
+                guard let name = snapshot["name"] as? String else {continue}
+                guard let username = snapshot["username"] as? String else{continue}
+                guard let uid = snapshot["uid"] as? String else {continue}
+                guard let lat = snapshot["latitude"] as? String else {continuen}
+                guard let lon = snapshot["longitude"] as? String else{continue}
+                guard let profileVideo = snapshot["profileVideo"] as? String else {continue}
+                guard let token = snapshot["token"] as? String else {continue}
+                guard let profileImageUrl = snapshot["profileImageUrl"] as? String else { continue }
                 let onlineStatus = snapshot["onlineStatus"] as? Bool
                 let user = User(uid: uid, token: token, username: username, name: name, profileImageUrl: profileImageUrl, gender: .male, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
                 print(user)
