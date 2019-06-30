@@ -22,6 +22,9 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     
     
     //MARK: UI VIEW PROPERTIES
+    let centerView = UIView()
+    let topView = UIView()
+    let bottomView = UIView()
     var loading: LoadingView!
     let buttonView = ButtonView()
     let notSurebutton = UIButton()
@@ -64,6 +67,10 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             self.buttonView.isHidden = true
             self.notSurebutton.isHidden = false
             //self.videoReviewer.playVideo(atUrl:url, on: self.tutorialView)
+        }
+        
+        if mode == Mode.profileMode || mode == Mode.signupMode {
+            setupMaskView()
         }
     }
     
@@ -108,6 +115,44 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             
             notSurebutton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
             notSurebutton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            
+            ])
+    }
+    
+    
+    func setupMaskView() {
+        
+        centerView.translatesAutoresizingMaskIntoConstraints = false
+        centerView.backgroundColor = .clear
+        view.addSubview(centerView)
+        
+        topView.translatesAutoresizingMaskIntoConstraints = false
+        topView.backgroundColor = .black
+        topView.alpha = 0.9
+        view.insertSubview(topView, aboveSubview: recordPreviewView)
+        
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        bottomView.backgroundColor = .black
+        bottomView.alpha = 0.9
+        view.insertSubview(bottomView, aboveSubview: recordPreviewView)
+        
+        NSLayoutConstraint.activate([
+            
+            centerView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            centerView.heightAnchor.constraint(equalTo: view.widthAnchor),
+            centerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            centerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            topView.topAnchor.constraint(equalTo: view.topAnchor),
+            topView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topView.bottomAnchor.constraint(equalTo: centerView.topAnchor),
+            
+            bottomView.topAnchor.constraint(equalTo: centerView.bottomAnchor),
+            bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             
             ])
     }
@@ -274,23 +319,26 @@ extension RecordVideoViewController {
     
     func registerMode() {
         
-        captureRandomFrame(profileURL: cameraController.fileURL) { (profileImageURL) in
-            self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (url) -> (Void) in
-            self.webService.register(withProfileURL: url, profileImageURL: profileImageURL) { (succeeded, error) in
-                    
-                    if succeeded {
+        
+        cropVideo(videoURL: cameraController.fileURL) { (croppedURL) -> (Void) in
+            self.captureRandomFrame(profileURL: croppedURL) { (profileImageURL) in
+                self.webService.uploadVideo(atURL: croppedURL) { (url) -> (Void) in
+                    self.webService.register(withProfileURL: url, profileImageURL: profileImageURL) { (succeeded, error) in
                         
-                        self.loading.removeFromSuperview()
-                        self.clearVideoReviewLayer()
-                        self.dismiss(animated: true, completion: nil)
-                        
-                    } else {
-                        print("error:\(String(describing: error))")
+                        if succeeded {
+                            
+                            self.loading.removeFromSuperview()
+                            self.clearVideoReviewLayer()
+                            self.dismiss(animated: true, completion: nil)
+                            
+                        } else {
+                            print("error:\(String(describing: error))")
+                        }
                     }
                 }
             }
         }
-        
+
 
   }
 
@@ -299,25 +347,23 @@ extension RecordVideoViewController {
         
         guard let user = self.toUser else { return }
         
-        cropVideo(videoURL: cameraController.fileURL, completion: {(croppedURL) in
-            self.captureFirstFrame(profileURL: croppedURL) { (imageURL) in
+        self.captureFirstFrame(profileURL: cameraController.fileURL) { (imageURL) in
+            
+            self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (videoURL) -> (Void) in
                 
-                self.webService.uploadVideo(atURL: croppedURL) { (videoURL) -> (Void) in
-                    
-                    self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
-                        guard err == nil else {
-                            print("cant send message : \(String(describing: err))")
-                            return
-                        }
-                        let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
-                        mapVC.videoView.isHidden = true
-                        self.clearVideoReviewLayer()
-                        self.navigationController?.popViewController(animated: true)
-                        
+                self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
+                    guard err == nil else {
+                        print("cant send message : \(String(describing: err))")
+                        return
                     }
+                    let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
+                    mapVC.videoView.isHidden = true
+                    self.clearVideoReviewLayer()
+                    self.navigationController?.popViewController(animated: true)
+                    
                 }
             }
-        })
+        }
         
     }
     
@@ -434,7 +480,7 @@ extension RecordVideoViewController {
         exporter.exportAsynchronously( completionHandler: { () -> Void in
             
             DispatchQueue.main.async(execute: {
-                //                completion( fileURL )
+                completion( fileURL )
                 print("DONE \(exporter.error?.localizedDescription ?? "okay")")
             })
             

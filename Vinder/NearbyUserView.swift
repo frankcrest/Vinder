@@ -20,17 +20,35 @@ class NearbyUserView: MKAnnotationView {
             rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             self.userID = user.uid
             self.loadProfileImage(withID: user.uid)
+            UIView.animate(withDuration: 1.0,
+                           delay: 0,
+                           options: [.autoreverse, .repeat, .allowUserInteraction],
+                           animations: {
+                            self.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            },
+                           completion: nil
+                
+            )
 
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        contentMode = .scaleAspectFill
+        layer.cornerRadius = bounds.size.height/2.0
+        layer.masksToBounds = true
+//        layer.borderColor = UIColor.white.cgColor
+    }
+    
     func loadProfileImage(withID id: String) {
         
-         image = UIImage(named: "defaultIcon")?.scaleImage(toSize: CGSize.init(width: 25, height: 25))
+         image = UIImage(named: "defaultIcon")?.scaleImage(toSize: CGSize.init(width: 20, height: 20))
         
         if let imageFromCache = imageCache.object(forKey: id as NSString) {
 
-            image = imageFromCache.scaleImage(toSize: CGSize.init(width: 25, height: 25))
+            image = imageFromCache.scaleImage(toSize: CGSize.init(width: 20, height: 20))
             return
         }
         
