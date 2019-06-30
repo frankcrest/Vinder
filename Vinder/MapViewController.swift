@@ -28,7 +28,8 @@ class MapViewController: UIViewController {
     let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
     var selectedUser: User?
     var swipeRecog = UISwipeGestureRecognizer()
-    
+    var friendList = [String]()
+    var friends = [User]()
     //MARK: VIEW PROPERTIES
     
     let videoView : VideoView = {
@@ -114,7 +115,7 @@ class MapViewController: UIViewController {
     
     let contactButton: RoundedButton = {
         let b = RoundedButton()
-//        b.backgroundColor = .magenta
+        //        b.backgroundColor = .magenta
         b.addTarget(self, action: #selector(contactTapped), for: .touchUpInside)
         b.setImage(UIImage(named: "friends"), for: .normal)
         return b
@@ -122,7 +123,7 @@ class MapViewController: UIViewController {
     
     let mapButton: RoundedButton = {
         let b = RoundedButton()
-//        b.backgroundColor = .green
+        //        b.backgroundColor = .green
         b.addTarget(self, action: #selector(mapTapped), for: .touchUpInside)
         b.setImage(UIImage(named: "map"), for: .normal)
         return b
@@ -130,7 +131,7 @@ class MapViewController: UIViewController {
     
     let messagesButton: RoundedButton = {
         let b = RoundedButton()
-//        b.backgroundColor = .cyan
+        //        b.backgroundColor = .cyan
         b.addTarget(self, action: #selector(meTapped), for: .touchUpInside)
         b.setImage(UIImage(named:"messages"), for: .normal)
         return b
@@ -200,6 +201,15 @@ class MapViewController: UIViewController {
         return l
     }()
     
+    let favoriteLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "Favorites"
+        l.font = UIFont.systemFont(ofSize: 32, weight: .semibold)
+        l.textColor = .white
+        return l
+    }()
+    
     let generator = UIImpactFeedbackGenerator(style: .light)
     var focusedUserIndex = 0
     
@@ -225,18 +235,22 @@ class MapViewController: UIViewController {
         
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         setupViews()
-        getMessages()
+        
+        retrieveFriendList { (list) in
+            self.retrieveFriendsData(friendList: list)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-            if Auth.auth().currentUser == nil {
-              presentLogInNavigationController()
-            } else{
-              currentUser = Auth.auth().currentUser
-              determineCurrentLocation()
-              getMessages()
-            }
+        if Auth.auth().currentUser == nil {
+            presentLogInNavigationController()
+        } else{
+            currentUser = Auth.auth().currentUser
+            determineCurrentLocation()
+            getMessages()
+            loadUsers()
+        }
         generator.prepare()
     }
     
@@ -291,7 +305,9 @@ class MapViewController: UIViewController {
         self.leftView.addSubview(navViewLeft)
         self.rightView.addSubview(navViewRight)
         navViewRight.addSubview(inboxLabel)
+        navViewLeft.addSubview(favoriteLabel)
         self.view.insertSubview(finderButton, aboveSubview: mapView)
+        
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
@@ -302,6 +318,7 @@ class MapViewController: UIViewController {
         videoView.heartButton.setImage(UIImage(named:"like"), for: .normal)
         
         videoView.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+        videoView.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
         videoView.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
         videoView.addGestureRecognizer(swipeRecog)
         swipeRecog.addTarget(self, action: #selector(swipeHandler(_:)))
@@ -309,8 +326,6 @@ class MapViewController: UIViewController {
         
         leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
         rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
-        
-        //MARK: SET CONSTRAINTS PROPERTY
         
         buttonStackViewTrailingConstraint = buttonStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30)
         buttonStackViewLeadingConstraint = buttonStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30)
@@ -322,11 +337,13 @@ class MapViewController: UIViewController {
         contactButtonWidthCons = contactButton.widthAnchor.constraint(equalToConstant: 55)
         
         
-        
         NSLayoutConstraint.activate([
             
             inboxLabel.centerXAnchor.constraint(equalTo: navViewRight.centerXAnchor),
             inboxLabel.centerYAnchor.constraint(equalTo: navViewRight.centerYAnchor, constant: 15),
+            
+            favoriteLabel.centerXAnchor.constraint(equalTo: navViewLeft.centerXAnchor),
+            favoriteLabel.centerYAnchor.constraint(equalTo: navViewLeft.centerYAnchor, constant: 15),
             
             navView.topAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 0),
             navView.leadingAnchor.constraint(equalTo: self.mapView.leadingAnchor, constant: 0),
@@ -382,7 +399,7 @@ class MapViewController: UIViewController {
             messageButtonHeightCons!,
             messageButtonWidthCons!,
             
-
+            
             finderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             finderButton.heightAnchor.constraint(equalToConstant: 40),
             finderButton.widthAnchor.constraint(equalToConstant: 40),
@@ -408,10 +425,10 @@ class MapViewController: UIViewController {
             contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
             contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
             
-//            videoView.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: statusBarHeight + 58),
-//            videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 50),
-//            videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -50),
-//            videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -180),
+            //            videoView.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: statusBarHeight + 58),
+            //            videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 50),
+            //            videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -50),
+            //            videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -180),
             
             videoView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             videoView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -422,8 +439,7 @@ class MapViewController: UIViewController {
     }
     
     //MARK: LOAD USER AND LOCATE
-    func determineCurrentLocation()
-    {
+    func determineCurrentLocation() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -485,9 +501,7 @@ class MapViewController: UIViewController {
                 }
                 self.messageTableView.reloadData()
             }
-            
         }
-        
     }
     
     
@@ -498,7 +512,7 @@ class MapViewController: UIViewController {
         guard let user = currentUser else {return}
         print("uid: \(user.uid)")
         webService.updateUserWithLocation(lat: lat, lon: lon, uid: user.uid)
-        
+        //??????????????????????????
         loadUsers()
     }
     
@@ -533,6 +547,7 @@ class MapViewController: UIViewController {
         contactButtonHeightCons?.constant = 70
         contactButtonWidthCons?.constant = 70
         showAllanotations()
+        finderButton.isHidden = true
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -540,7 +555,7 @@ class MapViewController: UIViewController {
         if !videoView.isHidden {
             hideVideoView()
         }
-        if rightViewLeading.constant == -self.view.bounds.width{
+        if rightViewLeading.constant == -self.view.bounds.width {
             
             UIView.animate(withDuration: 0.2, delay: 0, options:.curveEaseOut, animations: {
                 self.rightViewLeading.constant = 0
@@ -560,29 +575,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    @objc func focusOneUser() {
-        generator.impactOccurred()
-        let annotationsInView = mapView.annotations(in: mapView.visibleMapRect)
-        guard var usersInView = Array(annotationsInView) as? [User] else { return }
-        usersInView.sort { (lhs: User, rhs: User) -> Bool in
-            lhs.name > rhs.name
-        }
-        for userInView in usersInView {
-            mapView.view(for: userInView)!.isHidden = true
-        }
-        if focusedUserIndex < usersInView.count {
-            mapView.view(for: usersInView[focusedUserIndex])!.isHidden = false
-            focusedUserIndex += 1
-            if focusedUserIndex == usersInView.count {
-                focusedUserIndex = 0
-            }
-            
-        }
-        
-    }
-    
     @objc func mapTapped(){
-        
         generator.impactOccurred()
         buttonStackViewTrailingConstraint?.constant = -30
         buttonStackViewLeadingConstraint?.constant = 30
@@ -593,6 +586,7 @@ class MapViewController: UIViewController {
         contactButtonHeightCons?.constant = 55
         contactButtonWidthCons?.constant = 55
         showAllanotations()
+        finderButton.isHidden = false
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -621,6 +615,7 @@ class MapViewController: UIViewController {
         contactButtonHeightCons?.constant = 35
         contactButtonWidthCons?.constant = 35
         showAllanotations()
+        finderButton.isHidden = true
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -656,23 +651,17 @@ class MapViewController: UIViewController {
         recordMessageVC.toUserID = user.uid
         navigationController?.pushViewController(recordMessageVC, animated: true)
     }
-    //MARK: HELPERS
-    func showAllanotations() {
-        for annotation in mapView.annotations {
-            if mapView.view(for: annotation)?.isHidden == true {
-                mapView.view(for: annotation)?.isHidden = false
-            }
-        }
-    }
+    
     
     
     //MARK: Handle user interaction
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
         guard let location = touch?.location(in: self.view) else { return }
         if !videoView.frame.contains(location) && videoView.isHidden == false{
             hideVideoView()
-        }else {
+        } else {
             
         }
     }
@@ -692,7 +681,7 @@ class MapViewController: UIViewController {
         UIView.animate(withDuration: 0.3, delay: 0.15, options: .curveEaseIn, animations: {
             self.refreshButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi*2.0)
         }, completion: nil)
-
+        
         loadUsers()
     }
     
@@ -705,7 +694,89 @@ class MapViewController: UIViewController {
         self.present(videoVC, animated: true, completion: nil)
     }
     
+    @objc func heartTapped(){
+        self.friendList.removeAll()
+        self.friends.removeAll()
+        guard let selectedUser = selectedUser else {return}
+        guard let currentUser = currentUser else {return}
+        
+        if videoView.heartButton.currentImage == UIImage(named:"heartUntap"){
+            videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+            videoView.heartButton.backgroundColor = .white
+            ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid : "true"])
+        }else{
+            videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+            videoView.heartButton.backgroundColor = .magenta
+            ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue()
+        }
+    }
     
+    func retrieveFriendList(completion: @escaping ([String]) -> Void){
+        self.friendList.removeAll()
+        guard let currentUser = currentUser else {return}
+        ref.child("friends").child(currentUser.uid).observe(.value) { (snapshot) in
+            for child in snapshot.children{
+                let snap = child as! DataSnapshot
+                let key = snap.key
+                self.friendList.append(key)
+            }
+            completion(self.friendList)
+        }
+    }
+    
+    func retrieveFriendsData(friendList: [String]){
+        self.friends.removeAll()
+        print("friend list count \(friendList.count)")
+        print("retrieve data called")
+        for friend in friendList{
+            ref.child("users").child(friend).observe(.value) { (snapshot) in
+                guard let snapshot = snapshot.value as? [String:AnyObject] else {return}
+                guard let name = snapshot["name"] as? String else {return}
+                guard let username = snapshot["username"] as? String else{return}
+                guard let uid = snapshot["uid"] as? String else {return}
+                guard let lat = snapshot["latitude"] as? String else {return}
+                guard let lon = snapshot["longitude"] as? String else{return}
+                guard let profileVideo = snapshot["profileVideo"] as? String else {return}
+                guard let token = snapshot["token"] as? String else {return}
+                guard let profileImageUrl = snapshot["profileImageUrl"] as? String else { return }
+                let onlineStatus = snapshot["onlineStatus"] as? Bool
+                let user = User(uid: uid, token: token, username: username, name: name, profileImageUrl: profileImageUrl, gender: .male, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
+                print(user)
+                self.friends.append(user)
+                DispatchQueue.main.async {
+                    self.contactsCollectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+    @objc func focusOneUser() {
+        generator.impactOccurred()
+        let annotationsInView = mapView.annotations(in: mapView.visibleMapRect)
+        guard var usersInView = Array(annotationsInView) as? [User] else { return }
+        usersInView.sort { (lhs: User, rhs: User) -> Bool in
+            lhs.name > rhs.name
+        }
+        for userInView in usersInView {
+            mapView.view(for: userInView)!.isHidden = true
+        }
+        if focusedUserIndex < usersInView.count {
+            mapView.view(for: usersInView[focusedUserIndex])!.isHidden = false
+            focusedUserIndex += 1
+            if focusedUserIndex == usersInView.count {
+                focusedUserIndex = 0
+            }
+        }
+    }
+    
+    //MARK: HELPERS
+    func showAllanotations() {
+        for annotation in mapView.annotations {
+            if mapView.view(for: annotation)?.isHidden == true {
+                mapView.view(for: annotation)?.isHidden = false
+            }
+        }
+    }
 }
 
 
@@ -724,11 +795,9 @@ extension MapViewController : CLLocationManagerDelegate {
         let center = CLLocationCoordinate2D(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
         
-        print(distanceInMeters)
-        
         if distanceInMeters > 100{
-            print("user have moved 100 metres")
             userLocation = newLocation
+            updateLocationToFirebase()
             mapView.setRegion(region, animated: true)
         }
     }
@@ -736,8 +805,6 @@ extension MapViewController : CLLocationManagerDelegate {
 
 //MARK: MKMapViewDelegate
 extension MapViewController : MKMapViewDelegate {
-    
-    
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard let annotation = annotation as? User else { return nil }
@@ -771,6 +838,17 @@ extension MapViewController : MKMapViewDelegate {
         self.selectedUser = view.annotation as? User
         guard let user = currentUser else {return}
         guard let userTapped = self.selectedUser else {return}
+        
+        ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
+            if snapshot.exists(){
+                self.videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+                self.videoView.heartButton.backgroundColor = .white
+            }else{
+                self.videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+                self.videoView.heartButton.backgroundColor = .magenta
+            }
+        }
+        
         if user.uid != userTapped.uid{
             print("did not tap self, the user uid = \(userTapped.uid)")
             print(user.uid)
@@ -778,8 +856,8 @@ extension MapViewController : MKMapViewDelegate {
         } else{
             print("you tapped on yourself, do nothing")
         }
+        
     }
-    
 }
 //MARK: VIDEO VIEW RELATED
 extension MapViewController: ShowProfileDelegate {
@@ -801,13 +879,13 @@ extension MapViewController: ShowProfileDelegate {
             }
             
             guard let index = i else { return }
-           
+            
             self.webService.deleteMessage(message) { (err) in
                 guard err == nil else { return }
                 DispatchQueue.main.async {
                     self.messages.remove(at: index)
                     self.messageTableView.beginUpdates()
-                   
+                    
                     self.messageTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
                     self.messageTableView.endUpdates()
                 }
@@ -818,7 +896,7 @@ extension MapViewController: ShowProfileDelegate {
         present(alert, animated: true, completion: nil)
     }
     
-
+    
     
     func showVideoView(withUser name: String, profileVideoUrl: String) {
         
@@ -842,6 +920,7 @@ extension MapViewController: ShowProfileDelegate {
     }
     
 }
+
 
 // MARK: TABLE/COLLECTION VIEW DELEGATE
 extension MapViewController: UITableViewDelegate, UITableViewDataSource{
@@ -891,26 +970,24 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
             }
         }
     }
-    
-    
 }
 
 extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return friends.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "contactCell", for: indexPath) as! ContactsCollectionViewCell
-        cell.nameLabel.text = "name"
+        let friend = friends[indexPath.row]
+        cell.nameLabel.text = friend.name
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (self.view.bounds.width - 40) / 4, height: (self.view.bounds.width - 40) / 4)
     }
-    
 }
 
 

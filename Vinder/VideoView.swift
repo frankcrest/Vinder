@@ -77,7 +77,7 @@ class VideoView: UIView {
     let b = UIButton()
     b.layer.cornerRadius = 25
     b.clipsToBounds = true
-    b.backgroundColor = UIColor(red: 234/255, green: 125/255, blue: 199/255, alpha: 1)
+    b.backgroundColor = .magenta
     b.imageView?.contentMode = .scaleAspectFit
     b.translatesAutoresizingMaskIntoConstraints = false
     b.imageEdgeInsets = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)

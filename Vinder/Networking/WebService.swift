@@ -303,7 +303,6 @@ class WebService {
                     self.ud.set(name, forKey: "name")
                 }
                 let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
-
                 users.append(user)
                 print("user \(user.name)")
                 print("users.count \(users.count)")

@@ -92,7 +92,6 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     guard let callResponse = notification.object as? CallResponse else {return}
     print(callResponse.status)
     let tryingToCallUserUid = callResponse.uid
-    guard let user = currentUser else {return}
     
     if callResponse.status == .accepted {
       print("the user you are trying to call have accepted your call")
