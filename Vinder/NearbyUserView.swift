@@ -29,7 +29,6 @@ class NearbyUserView: MKAnnotationView {
                            completion: nil
                 
             )
-
         }
     }
     
@@ -59,7 +58,7 @@ class NearbyUserView: MKAnnotationView {
                     let image = try UIImage(data: Data(contentsOf: url))
                     guard let imageToCache = image else { return }
                     if self.userID == id {
-                        self.image = imageToCache.scaleImage(toSize: CGSize.init(width: 25, height: 25))
+                        self.image = imageToCache.scaleImage(toSize: CGSize.init(width: 20, height: 20))
                     }
                     imageCache.setObject(imageToCache, forKey: id as NSString)
                 }catch let error {

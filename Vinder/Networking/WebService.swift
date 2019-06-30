@@ -73,13 +73,13 @@ class WebService {
     }
   }
   
-  func sendMessage(_ url: String, imageURL: String, to user: User,completion: @escaping  (Error?) -> Void)  {
+  func sendMessage(_ url: String, imageURL: String, to userID: String,completion: @escaping  (Error?) -> Void)  {
     
     guard let senderID = Auth.auth().currentUser?.uid else { return }
     guard let name = ud.string(forKey: "name") else {return}
     let messageID = UUID().uuidString
     
-    self.ref.child("messages").child(user.uid).child(messageID).setValue(["senderID": senderID, "messageURL": url, "imageURL":imageURL, "messageID": messageID, "sender": name, "timestamp": ServerValue.timestamp()]) { (err, ref) in
+    self.ref.child("messages").child(userID).child(messageID).setValue(["senderID": senderID, "messageURL": url, "imageURL":imageURL, "messageID": messageID, "sender": name, "timestamp": ServerValue.timestamp()]) { (err, ref) in
       
       completion(err)
     }

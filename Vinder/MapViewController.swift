@@ -616,7 +616,7 @@ class MapViewController: UIViewController {
         guard let user = self.selectedUser else { return }
         let recordMessageVC = RecordVideoViewController()
         recordMessageVC.mode = .messageMode
-        recordMessageVC.toUser = user
+        recordMessageVC.toUserID = user.uid
         navigationController?.pushViewController(recordMessageVC, animated: true)
     }
     
@@ -739,6 +739,17 @@ extension MapViewController : MKMapViewDelegate {
 }
 //MARK: VIDEO VIEW RELATED
 extension MapViewController: ShowProfileDelegate {
+    
+    func replyMsg(to userID: String) {
+        
+        let recordMessageVC = RecordVideoViewController()
+        recordMessageVC.mode = .messageMode
+        recordMessageVC.toUserID = userID
+        navigationController?.pushViewController(recordMessageVC, animated: true)
+    }
+    
+    
+    
     
     func showVideoView(withUser name: String, profileVideoUrl: String) {
         

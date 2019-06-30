@@ -45,7 +45,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     let cameraController = CameraController()
     var isTutorialMode = false
     var mode: Mode!
-    var toUser: User!
+    var toUserID: String?
     
     //MARK: ViewWDidLoad
     
@@ -345,13 +345,13 @@ extension RecordVideoViewController {
   
     func messageMode() {
         
-        guard let user = self.toUser else { return }
+        guard let userID = self.toUserID else { return }
         
         self.captureFirstFrame(profileURL: cameraController.fileURL) { (imageURL) in
             
             self.webService.uploadVideo(atURL: self.cameraController.fileURL) { (videoURL) -> (Void) in
                 
-                self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: user) { (err) in
+                self.webService.sendMessage("\(videoURL)", imageURL: imageURL, to: userID) { (err) in
                     guard err == nil else {
                         print("cant send message : \(String(describing: err))")
                         return

@@ -21,6 +21,13 @@ class VideoView: UIView {
   var username: String?
   
   private var circleLayer = CAShapeLayer()
+    
+    let container: UIView = {
+        let v = UIView()
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
   
   let buttonContainer:UIStackView = {
     let sv = UIStackView()
@@ -94,28 +101,45 @@ class VideoView: UIView {
   
     override func layoutSubviews() {
         super.layoutSubviews()
-        videoContainer.layer.cornerRadius = 10
-        clipsToBounds = true
+        
+        layer.backgroundColor = UIColor.clear.cgColor
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 5, height: 5)
+        layer.shadowOpacity = 0.2
+        layer.shadowRadius = 4.0
+        layer.masksToBounds = false
+        
+        container.layer.cornerRadius = 10.0
+        videoContainer.layer.cornerRadius = 10.0
+        videoContainer.layer.masksToBounds = true
+        print("\(layer.masksToBounds) \(container.layer.masksToBounds)")
     }
   
   //UI setup
   func setUpViews(){
     
-    self.addSubview(buttonContainer)
-    self.addSubview(videoContainer)
+    addSubview(container)
+    container.addSubview(buttonContainer)
+    container.addSubview(videoContainer)
+    container.clipsToBounds = true
     self.buttonContainer.addArrangedSubview(leftButton)
     self.buttonContainer.addArrangedSubview(heartButton)
     self.buttonContainer.addArrangedSubview(rightButton)
     
-    self.addSubview(percentageLabel)
+    container.addSubview(percentageLabel)
     setupCircleProgressBar()
-    self.layer.addSublayer(circleLayer)
+    container.layer.addSublayer(circleLayer)
     self.circleLayer.isHidden = true
     self.percentageLabel.isHidden = true
 
     
     NSLayoutConstraint.activate([
       
+        container.heightAnchor.constraint(equalTo: heightAnchor),
+        container.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0),
+        container.centerYAnchor.constraint(equalTo: centerYAnchor),
+        container.centerXAnchor.constraint(equalTo: centerXAnchor),
+        
       leftButton.heightAnchor.constraint(equalToConstant:  50),
       leftButton.widthAnchor.constraint(equalToConstant: 50),
       

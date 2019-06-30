@@ -10,6 +10,7 @@ import UIKit
 
 protocol ShowProfileDelegate: AnyObject {
      func showVideoView(withUser name: String, profileVideoUrl: String)
+    func replyMsg(to userID: String)
 }
 
 class MessageTableViewCell: UITableViewCell {
@@ -25,7 +26,7 @@ class MessageTableViewCell: UITableViewCell {
     
     let nameLabel:UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 24)
+        label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
@@ -34,7 +35,7 @@ class MessageTableViewCell: UITableViewCell {
     
     let timestampLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
@@ -49,7 +50,7 @@ class MessageTableViewCell: UITableViewCell {
         imageview.layer.borderWidth = 1
         imageview.layer.masksToBounds = false
         imageview.layer.borderColor = UIColor.black.cgColor
-        imageview.layer.cornerRadius = 33
+        imageview.layer.cornerRadius = 22
         imageview.clipsToBounds = true
         return imageview
     }()
@@ -60,6 +61,16 @@ class MessageTableViewCell: UITableViewCell {
         imageview.contentMode = .scaleAspectFill
         imageview.clipsToBounds = true
         return imageview
+    }()
+    
+    var replyButton: UIButton = {
+        let b = UIButton()
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setImage(UIImage(named: "reply"), for: .normal)
+        b.backgroundColor = .clear
+        b.imageView?.bounds.size.height = b.bounds.size.height * 0.75
+        b.imageView?.bounds.size.width = b.bounds.size.width * 0.75
+        return b
     }()
     
 
@@ -102,26 +113,32 @@ class MessageTableViewCell: UITableViewCell {
         addSubview(containerView)
         addSubview(nameLabel)
         addSubview(timestampLabel)
+        addSubview(replyButton)
         containerView.addSubview(thumbnailImageView)
         addSubview(profileImageView)
         profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showProfile)))
-        
+        replyButton.addTarget(self, action: #selector(replyMsg), for: .touchUpInside)
         NSLayoutConstraint.activate([
             
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            profileImageView.bottomAnchor.constraint(equalTo: self.containerView.topAnchor, constant: -8),
-            profileImageView.widthAnchor.constraint(equalToConstant: 66.0),
-            profileImageView.heightAnchor.constraint(equalToConstant: 66.0),
+            replyButton.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            replyButton.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: -4),
+            replyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            replyButton.widthAnchor.constraint(equalToConstant: 44.0),
             
-            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            profileImageView.bottomAnchor.constraint(equalTo: self.containerView.topAnchor, constant: -4),
+            profileImageView.widthAnchor.constraint(equalToConstant: 44.0),
+            profileImageView.heightAnchor.constraint(equalToConstant: 44.0),
+            
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4),
             nameLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 16),
-            nameLabel.heightAnchor.constraint(equalToConstant: 40),
+            nameLabel.heightAnchor.constraint(equalToConstant: 25),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8),
             
-            timestampLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 8),
+            timestampLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 4),
             timestampLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 16),
-            timestampLabel.heightAnchor.constraint(equalToConstant: 18),
+            timestampLabel.heightAnchor.constraint(equalToConstant: 12),
             timestampLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8),
            
             containerView.topAnchor.constraint(equalTo: self.profileImageView.bottomAnchor, constant: 8),
@@ -158,6 +175,12 @@ class MessageTableViewCell: UITableViewCell {
         videoPlayer.isLoop = false
         videoPlayer.player?.play()
     }
+    
+    @objc func replyMsg() {
+        print("repy tapped")
+        self.showProfileDelegate?.replyMsg(to: message!.senderID)
+    }
+    
     
     private func serverToLocal(date:Date) -> String? {
         let dateFormatter = DateFormatter()
