@@ -25,7 +25,8 @@ class LoadingView: UIView {
         
         progressLabel.translatesAutoresizingMaskIntoConstraints = false
         progressLabel.text = "uploading: ..."
-        progressLabel.textColor = .purple
+        progressLabel.textColor = .white
+        progressLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         
         addSubview(lottieView)
         addSubview(progressLabel)
