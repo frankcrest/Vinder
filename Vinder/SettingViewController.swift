@@ -207,7 +207,7 @@
     }
     
     func updateUserInfo(){
-        print("\(currentUser?.profileVideoUrl)")
+      print("\(String(describing: currentUser?.profileVideoUrl))")
         let userID = Auth.auth().currentUser?.uid
         ref.child("users").child(userID!).observeSingleEvent(of: .value, with: { (snapshot) in
             
