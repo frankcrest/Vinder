@@ -44,7 +44,7 @@ class ButtonView: UIStackView {
         
         func backButtonConfig() {
             backButton = UIButton()
-            backButton.setTitle("back", for: .normal)
+            backButton.setTitle("Back", for: .normal)
             backButton.setTitleColor(.white, for: .normal)
         }
         
@@ -59,7 +59,7 @@ class ButtonView: UIStackView {
             
             switchCameraButton = UIButton()
             switchCameraButton.translatesAutoresizingMaskIntoConstraints = false
-            switchCameraButton.setTitle("switch", for: .normal)
+            switchCameraButton.setTitle("Switch", for: .normal)
             switchCameraButton.setTitleColor(.white, for: .normal)
             
             switchButtonView.addSubview(switchCameraButton)

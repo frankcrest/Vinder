@@ -27,8 +27,8 @@ exports.observeCalling = functions.database.ref('/calling/{uid}/{callingId}').on
 
           var payload = {
             notification:{
-              title:"Someone is attempting to call you~",
-              body: userDoingCalling.username +  ' wants to call you!'
+              title:"You have an incoming call!",
+              body: userDoingCalling.username +  ' wants to video chat with you.'
             },
             data:{
               "callerId": userDoingCalling.uid

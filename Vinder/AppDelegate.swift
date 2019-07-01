@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     ref = Database.database().reference()
     
     WebService().checkAuth { (err) in
-        print("auth error \(err)")
+      print("auth error \(String(describing: err))")
         if err != nil {
             print("auth err \(String(describing: err))")
             do{
@@ -56,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     application.registerForRemoteNotifications()
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
+    self.window!.tintColor = UIColor.white
     let initialController = MapViewController()
     let nav = UINavigationController()
     nav.viewControllers = [initialController]
