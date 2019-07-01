@@ -11,6 +11,10 @@
   import FirebaseDatabase
   import FirebaseAuth
   
+  protocol UpdateUserInfoDelegate {
+    func updateUserInfo()
+  }
+  
   class SettingViewController: UIViewController,UINavigationControllerDelegate,UIImagePickerControllerDelegate {
     
     var currentUser : User?
@@ -20,6 +24,9 @@
     var playerLayer: AVPlayerLayer!
     var player: AVPlayer!
     var isLoop: Bool = false
+    
+    let ud = UserDefaults.standard
+    
     
     let editButton : UIButton = {
         let b = UIButton(type: .system)
@@ -54,6 +61,7 @@
     let imageView : UIImageView = {
         let v = UIImageView()
         v.backgroundColor = .white
+        v.contentMode = .scaleAspectFill
         v.isUserInteractionEnabled = true
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -70,10 +78,20 @@
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ref = Database.database().reference()
         tableView.dataSource = self
         tableView.delegate = self
         setupViews()
+        updateUserInfo()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        updateUserInfo()
+        
+        setupViews()
+    }
+    
     
     override func viewDidLayoutSubviews() {
         //Match size of view-controller
@@ -110,7 +128,8 @@
             profileHeader.topAnchor.constraint(equalTo: self.view.topAnchor),
             profileHeader.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             profileHeader.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            profileHeader.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -580),
+//            profileHeader.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -580),
+            profileHeader.heightAnchor.constraint(equalToConstant: self.view.frame.height*3/8),
             
             //imageview constraint
             imageView.topAnchor.constraint(equalTo: profileHeader.topAnchor),
@@ -119,17 +138,17 @@
             imageView.bottomAnchor.constraint(equalTo: profileHeader.bottomAnchor),
             
             //profileVid constraint
-//            profileVideo.bottomAnchor.constraint(equalTo: profileHeader.bottomAnchor, constant: -100),
-            profileVideo.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80),
-            profileVideo.heightAnchor.constraint(equalToConstant: 250),
+            profileVideo.bottomAnchor.constraint(equalTo: profileHeader.bottomAnchor, constant: 15),
+//            profileVideo.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80),
+            profileVideo.heightAnchor.constraint(equalToConstant: self.view.frame.width*3/5),
             profileVideo.widthAnchor.constraint(equalTo: profileVideo.heightAnchor),
             profileVideo.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
             //editButton constraint
-            editButton.heightAnchor.constraint(equalToConstant: 40),
-            editButton.widthAnchor.constraint(equalToConstant: 40),
-            editButton.trailingAnchor.constraint(equalTo: profileHeader.trailingAnchor, constant: -90),
-            editButton.bottomAnchor.constraint(equalTo: profileHeader.bottomAnchor, constant: -20),
+            editButton.heightAnchor.constraint(equalToConstant: self.view.frame.width*3/5/5.5),
+            editButton.widthAnchor.constraint(equalToConstant: self.view.frame.width*3/5/5.5),
+            editButton.trailingAnchor.constraint(equalTo: profileVideo.trailingAnchor, constant: -10),
+            editButton.bottomAnchor.constraint(equalTo: profileVideo.bottomAnchor, constant: -20),
             
             //tableView constraint
             tableView.topAnchor.constraint(equalTo: profileHeader.bottomAnchor),
@@ -141,14 +160,16 @@
         setUpProfileVideo()
         self.view.bringSubviewToFront(profileVideo)
         self.view.bringSubviewToFront(editButton)
-        profileVideo.layer.cornerRadius = 125
+        profileVideo.layer.cornerRadius = self.view.frame.width*3/5/2
         profileVideo.layer.borderColor = UIColor.white.cgColor
         profileVideo.layer.borderWidth = 5
         
-        editButton.layer.cornerRadius = 20
+        editButton.layer.cornerRadius = self.view.frame.width*3/5/5.5/2
         editButton.layer.borderColor = UIColor.white.cgColor
         editButton.layer.borderWidth = 3.5
         
+        guard let imageData = ud.data(forKey: "background") else {return}
+        self.imageView.image = UIImage.init(data: imageData)
     }
     
     func setUpProfileVideo(){
@@ -187,7 +208,30 @@
     @objc func editTapped(){
         let recordController = RecordVideoViewController()
         recordController.mode = .profileMode
-        self.present(recordController, animated: true, completion: nil)
+        self.present(recordController, animated: true, completion: {
+            self.player = nil
+            self.playerLayer = nil
+        })
+        updateUserInfo()
+        setUpProfileVideo()
+        
+        self.view.layoutIfNeeded()
+    }
+    
+    func updateUserInfo(){
+        let userID = Auth.auth().currentUser?.uid
+        ref.child("users").child(userID!).observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            let value = snapshot.value as? NSDictionary
+            self.currentUser?.name = value?["name"] as? String ?? ""
+            self.currentUser?.email = value?["email"] as? String ?? ""
+            self.currentUser?.profileVideoUrl = value?["profileVideo"] as? String ?? ""
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
+        
     }
     
     func changeName(){
@@ -204,6 +248,7 @@
             cell.subtitleLabel.text = alertText
             print("OK")
             self.ref.child("users").child(user.uid).updateChildValues(["name": alertText])
+            self.currentUser?.name = alertText
         })
         let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {
             UIAlertAction in
@@ -214,32 +259,10 @@
         self.present(alert, animated: true, completion: nil)
     }
     
-    func changePassword(){
-        print("password")
-        let indexPath = IndexPath(row: 1, section: 0)
-        let alert = UIAlertController(title: "Change Password", message: "", preferredStyle: .alert)
-        alert.addTextField(configurationHandler: {(textField: UITextField!)-> Void in
-            textField.placeholder = "Enter New Password"
-        })
-        let confirm = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: {
-            UIAlertAction in
-            let cell = self.tableView.cellForRow(at: indexPath) as! SettingTableViewCell
-            cell.subtitleLabel.text = alert.textFields!.first!.text
-            print("OK")
-            //            self.ref.child("users").child(self.uid).updateChildValues(["password": cell.subtitleLabel.text])
-        })
-        let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {
-            UIAlertAction in
-            print("cancel")
-        })
-        alert.addAction(confirm)
-        alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
-    }
     
     func changeEmail(){
         guard let user = currentUser else {return}
-        let indexPath = IndexPath(row: 2, section: 0)
+        let indexPath = IndexPath(row: 1, section: 0)
         let alert = UIAlertController(title: "Change Email", message: "", preferredStyle: .alert)
         alert.addTextField(configurationHandler: {(textField: UITextField!)-> Void in
             textField.placeholder = "Enter New Email"
@@ -249,12 +272,10 @@
             let cell = self.tableView.cellForRow(at: indexPath) as! SettingTableViewCell
             guard let alertText = alert.textFields?.first?.text else {return}
             cell.subtitleLabel.text = alertText
-            print("OK")
             self.ref.child("users").child(user.uid).updateChildValues(["email": alertText])
         })
         let cancel = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {
             UIAlertAction in
-            print("cancel")
         })
         alert.addAction(confirm)
         alert.addAction(cancel)
@@ -286,6 +307,9 @@
         }
         
         self.imageView.image = pickedImage
+        ud.removeObject(forKey: "background")
+        let pickedImageData = pickedImage.jpegData(compressionQuality: 1.0)
+        ud.set(pickedImageData, forKey: "background")
         dismiss(animated: true, completion: nil)
     }
 
@@ -297,7 +321,7 @@
   extension SettingViewController : UITableViewDataSource , UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 2
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -324,13 +348,10 @@
         switch indexPath.row {
         case 0:
             cell.titleLabel.text = "Display Name"
-            cell.subtitleLabel.text = user.username
-        case 1:
-            cell.titleLabel.text = "Password"
-            cell.subtitleLabel.text = "12345678"
-        case 2:
-            cell.titleLabel.text = "Email"
             cell.subtitleLabel.text = user.name
+        case 1:
+            cell.titleLabel.text = "Email"
+            cell.subtitleLabel.text = user.email
         default:
             return cell
         }
@@ -343,8 +364,6 @@
         case 0:
             changeName()
         case 1:
-            changePassword()
-        case 2:
             changeEmail()
         default:
             print("default selected")

@@ -732,6 +732,7 @@ class MapViewController: UIViewController {
                 guard let snapshot = snapshot.value as? [String:AnyObject] else {return}
                 guard let name = snapshot["name"] as? String else {return}
                 guard let username = snapshot["username"] as? String else{return}
+                guard let email = snapshot["email"] as? String else {return}
                 guard let uid = snapshot["uid"] as? String else {return}
                 guard let lat = snapshot["latitude"] as? String else {return}
                 guard let lon = snapshot["longitude"] as? String else{return}
@@ -739,7 +740,7 @@ class MapViewController: UIViewController {
                 guard let token = snapshot["token"] as? String else {return}
                 guard let profileImageUrl = snapshot["profileImageUrl"] as? String else { return }
                 let onlineStatus = snapshot["onlineStatus"] as? Bool
-                let user = User(uid: uid, token: token, username: username, name: name, profileImageUrl: profileImageUrl, gender: .male, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
+                let user = User(uid: uid, token: token, username: username, name: name, email: email, profileImageUrl: profileImageUrl, gender: .male, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
                 print(user)
                 self.friends.append(user)
                 DispatchQueue.main.async {
