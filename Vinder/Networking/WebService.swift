@@ -299,6 +299,7 @@ class WebService {
                 guard let userObject = user.value as? [String:AnyObject] else{continue}
                 guard let name = userObject["name"] as? String else {continue}
                 guard let username = userObject["username"] as? String else{continue}
+                guard let email = userObject["email"] as? String else {continue}
                 guard let uid = userObject["uid"] as? String else {continue}
                 guard let lat = userObject["latitude"] as? String else {continue}
                 guard let lon = userObject["longitude"] as? String else{continue}
@@ -309,7 +310,7 @@ class WebService {
                 if uid == Auth.auth().currentUser?.uid {
                     self.ud.set(name, forKey: "name")
                 }
-                let user = User(uid: uid, token:token , username: username, name: name , profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
+                let user = User(uid: uid, token:token , username: username, name: name, email: email, profileImageUrl: profileImageUrl, gender: .female, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
                 users.append(user)
                 print("user \(user.name)")
                 print("users.count \(users.count)")

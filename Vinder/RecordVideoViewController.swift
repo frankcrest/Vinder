@@ -369,17 +369,21 @@ extension RecordVideoViewController {
     
     func profileMode() {
 
-        webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
-            
-            self.webService.changeProfile("\(url)") { (err) in
-                guard err == nil else {
-                    print("cant change video profile: \(String(describing: err))")
-                    return
+        cropVideo(videoURL: cameraController.fileURL, completion: {(croppedURL) -> (Void) in
+                
+                self.webService.uploadVideo(atURL: croppedURL) { (url) -> (Void) in
+                    
+                    self.webService.changeProfile("\(url)") { (err) in
+                        guard err == nil else {
+                            print("cant change video profile: \(String(describing: err))")
+                            return
+                        }
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
-
+            
+        })
+        
     }
     
   
