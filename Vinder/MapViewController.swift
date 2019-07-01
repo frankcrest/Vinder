@@ -593,6 +593,11 @@ class MapViewController: UIViewController {
         showAllanotations()
         finderButton.isHidden = false
         focusedUserIndex = 0
+        if let coordinate = userLocation?.coordinate {
+            mapView.setCenter(coordinate, animated: true)
+        }
+        
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)

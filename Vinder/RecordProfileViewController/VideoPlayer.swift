@@ -29,11 +29,9 @@ class VideoPlayer {
     }
     
     @objc func playerItemDidReachEnd(notification: Notification) {
-//        if isLoop {
             if let playerItem = notification.object as? AVPlayerItem {
                 playerItem.seek(to: CMTime.zero, completionHandler: nil)
                 player?.play()
-//            }
         }
 
     }

@@ -219,29 +219,25 @@ class ProfileView: RoundedCornerView {
         if let url = videoURL {
             WebService().fetchProfileVideo(at: url) { (url, err) -> (Void) in
                 guard err == nil, let url = url else { return }
-                self.player = AVPlayer(url: url)
-                self.playerLayer = AVPlayerLayer(player: self.player)
-                self.playerLayer.frame = self.videoContainer.frame
-                self.layer.addSublayer(self.playerLayer)
-                self.player.play()
+                DispatchQueue.main.async {
+                    self.player = AVPlayer(url: url)
+                    self.playerLayer = AVPlayerLayer(player: self.player)
+                    self.playerLayer.frame = self.videoContainer.frame
+                    self.layer.addSublayer(self.playerLayer)
+                    self.player.play()
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemDidReachEnd(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+                }
             }
         }
     }
     
-    //  func play() {
-    //    self.circleLayer.isHidden = true
-    //    self.percentageLabel.isHidden = true
-    //    if player.timeControlStatus != AVPlayer.TimeControlStatus.playing {
-    //      player.play()
-    //    }
-    //  }
-    
-    func pause() {
-        if player != nil {
-            player.pause()
+    @objc func playerItemDidReachEnd(notification: Notification) {
+        if let playerItem = notification.object as? AVPlayerItem {
+            playerItem.seek(to: CMTime.zero, completionHandler: nil)
+            player?.play()
         }
     }
-    
+
     func stop() {
         
         if player != nil {
@@ -252,46 +248,6 @@ class ProfileView: RoundedCornerView {
         
     }
     
-    @objc func reachTheEndOfTheVideo(_ notification: Notification) {
-        if isLoop {
-            player.pause()
-            player.seek(to: CMTime.zero)
-            player.play()
-        }
-    }
+
     
 }
-
-//extension VideoView: CAAnimationDelegate,UpdateProgressDelegate {
-//
-//  func setupCircleProgressBar() {
-//
-//    let center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-//    let radius = self.bounds.height/8.0
-//    let circularPath = UIBezierPath(arcCenter: center, radius: radius , startAngle: -CGFloat.pi/2, endAngle: 1.5 * CGFloat.pi, clockwise: true)
-//
-//    circleLayer.frame = self.bounds
-//    circleLayer.path = circularPath.cgPath
-//    circleLayer.strokeColor = UIColor.purple.cgColor
-//    circleLayer.lineWidth = 5
-//    circleLayer.fillColor = UIColor.clear.cgColor
-//    circleLayer.lineCap = CAShapeLayerLineCap.round
-//    circleLayer.strokeEnd = 0
-//
-//  }
-//
-//  func updateProgress(progress: Double) {
-//    print("updatingggggggg")
-//    self.circleLayer.isHidden = false
-//    self.percentageLabel.isHidden = false
-//    percentageLabel.text = "\(round(progress))%"
-//    circleLayer.isHidden = false
-//    let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-//    basicAnimation.delegate = self
-//    basicAnimation.toValue = progress/100.0
-//    basicAnimation.fillMode = CAMediaTimingFillMode.forwards
-//    basicAnimation.isRemovedOnCompletion = false
-//    circleLayer.add(basicAnimation, forKey: "animate")
-//  }
-//
-//}
