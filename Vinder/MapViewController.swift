@@ -32,15 +32,13 @@ class MapViewController: UIViewController {
     var friends = [User]()
     //MARK: VIEW PROPERTIES
     
-    let videoView : VideoView = {
-        let v = VideoView()
-        v.backgroundColor = .white
-        v.layer.cornerRadius = 10
-        v.clipsToBounds = true
+    let profileview : ProfileView = {
+        let v = ProfileView()
+        v.backgroundColor = .clear
         v.isHidden = true
-        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+    
     
     let buttonContainer:UIView = {
         let v = UIView()
@@ -113,7 +111,6 @@ class MapViewController: UIViewController {
     
     let contactButton: RoundedButton = {
         let b = RoundedButton()
-        //        b.backgroundColor = .magenta
         b.addTarget(self, action: #selector(contactTapped), for: .touchUpInside)
         b.setImage(UIImage(named: "friends"), for: .normal)
         return b
@@ -121,7 +118,6 @@ class MapViewController: UIViewController {
     
     let mapButton: RoundedButton = {
         let b = RoundedButton()
-        //        b.backgroundColor = .green
         b.addTarget(self, action: #selector(mapTapped), for: .touchUpInside)
         b.setImage(UIImage(named: "map"), for: .normal)
         return b
@@ -129,7 +125,6 @@ class MapViewController: UIViewController {
     
     let messagesButton: RoundedButton = {
         let b = RoundedButton()
-        //        b.backgroundColor = .cyan
         b.addTarget(self, action: #selector(meTapped), for: .touchUpInside)
         b.setImage(UIImage(named:"messages"), for: .normal)
         return b
@@ -255,7 +250,7 @@ class MapViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(true)
         ref.child("users").removeAllObservers()
-        if !videoView.isHidden {
+        if !profileview.isHidden {
             hideVideoView()
             
         }
@@ -276,6 +271,7 @@ class MapViewController: UIViewController {
     
     //MARK: SETUP VIEWS
     func setupViews(){
+        
         self.view.addSubview(centerView)
         self.view.addSubview(leftView)
         self.view.addSubview(rightView)
@@ -298,7 +294,7 @@ class MapViewController: UIViewController {
         contactsCollectionView.delegate = self
         contactsCollectionView.dataSource = self
         
-        self.view.addSubview(videoView)
+        self.view.addSubview(profileview)
         
         self.leftView.addSubview(navViewLeft)
         self.rightView.addSubview(navViewRight)
@@ -311,14 +307,15 @@ class MapViewController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.navigationBar.isHidden = true
         
-        videoView.rightButton.setImage(UIImage(named: "call"), for: .normal)
-        videoView.leftButton.setImage(UIImage(named: "message"), for: .normal)
-        videoView.heartButton.setImage(UIImage(named:"like"), for: .normal)
+        profileview.rightButton.setImage(UIImage(named: "call"), for: .normal)
+        profileview.leftButton.setImage(UIImage(named: "message"), for: .normal)
+        profileview.heartButton.setImage(UIImage(named:"like"), for: .normal)
         
-        videoView.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
-        videoView.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
-        videoView.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
-        videoView.addGestureRecognizer(swipeRecog)
+        profileview.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+        profileview.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
+        profileview.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
+        profileview.dissmissButton.addTarget(self, action: #selector(hideVideoView), for: .touchUpInside )
+        profileview.addGestureRecognizer(swipeRecog)
         swipeRecog.addTarget(self, action: #selector(swipeHandler(_:)))
         swipeRecog.direction = .up
         
@@ -401,7 +398,7 @@ class MapViewController: UIViewController {
             finderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             finderButton.heightAnchor.constraint(equalToConstant: 40),
             finderButton.widthAnchor.constraint(equalToConstant: 40),
-            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -20),
+            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -30),
             
             buttonStackViewLeadingConstraint!,
             buttonStackViewTrailingConstraint!,
@@ -422,16 +419,12 @@ class MapViewController: UIViewController {
             contactsCollectionView.leadingAnchor.constraint(equalTo: self.leftView.leadingAnchor, constant: 0),
             contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
             contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
+
             
-            //            videoView.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: statusBarHeight + 58),
-            //            videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 50),
-            //            videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -50),
-            //            videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -180),
-            
-            videoView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            videoView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            videoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3.0/4.0),
-            videoView.heightAnchor.constraint(equalTo: view.widthAnchor),
+            profileview.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileview.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            profileview.widthAnchor.constraint(equalTo: view.widthAnchor),
+            profileview.heightAnchor.constraint(equalTo: view.heightAnchor),
             ])
         
     }
@@ -456,6 +449,8 @@ class MapViewController: UIViewController {
                 print("failed fetching users")
                 return
             }
+          
+          print("inside load users \(users.count)")
             DispatchQueue.main.async {
                 self.mapView.removeAnnotations(self.mapView.annotations)
                 print("annotations after \(self.mapView.annotations.count)")
@@ -513,13 +508,11 @@ class MapViewController: UIViewController {
         guard let user = currentUser else {return}
         print("uid: \(user.uid)")
         webService.updateUserWithLocation(lat: lat, lon: lon, uid: user.uid)
-        //??????????????????????????
-        loadUsers()
     }
     
     //MARK: BUTTON ACTIONS
     @objc func logoutTapped(){
-        videoView.isHidden = true
+        profileview.isHidden = true
         do{
             try webService.logOut()
             UserDefaults.standard.set(false, forKey: "isLoggedIn")
@@ -554,7 +547,7 @@ class MapViewController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: nil)
         
-        if !videoView.isHidden {
+        if !profileview.isHidden {
             hideVideoView()
         }
         if rightViewLeading.constant == -self.view.bounds.width {
@@ -590,11 +583,16 @@ class MapViewController: UIViewController {
         showAllanotations()
         finderButton.isHidden = false
         focusedUserIndex = 0
+        if let coordinate = userLocation?.coordinate {
+            mapView.setCenter(coordinate, animated: true)
+        }
+        
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
         
-        if !videoView.isHidden {
+        if !profileview.isHidden {
             hideVideoView()
         }
         
@@ -624,7 +622,7 @@ class MapViewController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: nil)
         
-        if !videoView.isHidden {
+        if !profileview.isHidden {
             hideVideoView()
         }
         
@@ -660,15 +658,6 @@ class MapViewController: UIViewController {
     
     //MARK: Handle user interaction
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first
-        guard let location = touch?.location(in: self.view) else { return }
-        if !videoView.frame.contains(location) && videoView.isHidden == false{
-            hideVideoView()
-        } else {
-            
-        }
-    }
     
     @objc func swipeHandler(_ sender: UISwipeGestureRecognizer) {
         if sender.state == .ended {
@@ -704,13 +693,13 @@ class MapViewController: UIViewController {
         guard let selectedUser = selectedUser else {return}
         guard let currentUser = currentUser else {return}
         
-        if videoView.heartButton.currentImage == UIImage(named:"heartUntap"){
-            videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-            videoView.heartButton.backgroundColor = .white
+        if profileview.heartButton.currentImage == UIImage(named:"heartUntap"){
+            profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+//            videoView.heartButton.backgroundColor = .white
             ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid : "true"])
         }else{
-            videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-            videoView.heartButton.backgroundColor = .magenta
+            profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+//            videoView.heartButton.backgroundColor = .magenta
             ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue()
         }
     }
@@ -846,18 +835,18 @@ extension MapViewController : MKMapViewDelegate {
         
         ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
             if snapshot.exists(){
-                self.videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-                self.videoView.heartButton.backgroundColor = .white
+                self.profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+//                self.videoView.heartButton.backgroundColor = .white
             }else{
-                self.videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-                self.videoView.heartButton.backgroundColor = .magenta
+                self.profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+//                self.videoView.heartButton.backgroundColor = .magenta
             }
         }
         
         if user.uid != userTapped.uid{
             print("did not tap self, the user uid = \(userTapped.uid)")
             print(user.uid)
-            showVideoView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
+            showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
         } else{
             print("you tapped on yourself, do nothing")
         }
@@ -870,7 +859,7 @@ extension MapViewController: ShowProfileDelegate {
     
     func actionToMsg(_ message: Messages) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
+        alert.view.tintColor = .blueColor
         alert.addAction(UIAlertAction(title: "Reply", style: .default, handler: { (_) in
             let recordMessageVC = RecordVideoViewController()
             recordMessageVC.mode = .messageMode
@@ -904,25 +893,22 @@ extension MapViewController: ShowProfileDelegate {
     
     
     
-    func showVideoView(withUser name: String, profileVideoUrl: String) {
-        
-        view.bringSubviewToFront(videoView)
-        videoView.isHidden = false
+    func showProfileView(withUser name: String, profileVideoUrl: String) {
+        view.bringSubviewToFront(profileview)
+        profileview.isHidden = false
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
-            self.videoView.alpha = 1
+            self.profileview.alpha = 1
         }, completion: nil)
-        videoView.videoURL = profileVideoUrl
-        videoView.username = name
-//        videoView.configureView()
-//        videoView.play()
+        profileview.videoURL = profileVideoUrl
+        profileview.username = name
     }
     
-    func hideVideoView() {
+    @objc func hideVideoView() {
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
-            self.videoView.alpha = 0
+            self.profileview.alpha = 0
         }, completion: nil)
-        self.videoView.stop()
-        self.videoView.isHidden = true
+        self.profileview.stop()
+        self.profileview.isHidden = true
     }
     
 }
@@ -943,7 +929,7 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
 //            numOfSection = 1
         } else {
             let noMsgLabel: UILabel = UILabel(frame: CGRect(x:0, y:0, width: messageTableView.bounds.size.width,height: messageTableView.bounds.size.height))
-            noMsgLabel.text = "No Message!"
+            noMsgLabel.text = "No Messages!"
             noMsgLabel.textColor = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
             noMsgLabel.textAlignment = NSTextAlignment.center
             messageTableView.backgroundView = noMsgLabel
@@ -954,7 +940,7 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
         cell.showProfileDelegate = self
-        cell.isProfileHidden = videoView.isHidden
+        cell.isProfileHidden = profileview.isHidden
         cell.message = messages[indexPath.row]
         
         return cell

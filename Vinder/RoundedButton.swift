@@ -8,14 +8,16 @@
 import UIKit
 
 class RoundedButton: UIButton {
-
+    
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.cornerRadius = bounds.size.height / 2.0
-        clipsToBounds = true
-        imageView?.bounds.size.height = bounds.size.height * 0.75
-        imageView?.bounds.size.width = bounds.size.width * 0.75
-        translatesAutoresizingMaskIntoConstraints = false 
+        self.layer.cornerRadius = bounds.size.height / 2.0
+        self.clipsToBounds = true
+        self.imageView?.bounds.size.height = bounds.size.height * 0.75
+        self.imageView?.bounds.size.width = bounds.size.width * 0.75
+        translatesAutoresizingMaskIntoConstraints = false
     }
+  
 
 }

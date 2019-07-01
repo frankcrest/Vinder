@@ -30,7 +30,7 @@ class VideoView: UIView {
         }
     }
   
-  private var circleLayer = CAShapeLayer()
+//  private var circleLayer = CAShapeLayer()
     
     let container: UIView = {
         let v = UIView()
@@ -90,14 +90,14 @@ class VideoView: UIView {
     return b
   }()
   
-  let percentageLabel: UILabel = {
-    let label = UILabel()
-    label.textAlignment = .center
-    label.text = ""
-    label.textColor = .purple
-    label.translatesAutoresizingMaskIntoConstraints = false
-    return label
-  }()
+//  let percentageLabel: UILabel = {
+//    let label = UILabel()
+//    label.textAlignment = .center
+//    label.text = ""
+//    label.textColor = .purple
+//    label.translatesAutoresizingMaskIntoConstraints = false
+//    return label
+//  }()
     
     let nameLabelContainer: UIView = {
         let v = UIView()
@@ -118,7 +118,7 @@ class VideoView: UIView {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    WebService().updateProgressDelegate = self
+//    WebService().updateProgressDelegate = self
     setUpViews()
   }
   
@@ -157,11 +157,11 @@ class VideoView: UIView {
     nameLabelContainer.addSubview(nameLabel)
     container.insertSubview(nameLabelContainer, aboveSubview: videoContainer)
     
-    container.addSubview(percentageLabel)
-    setupCircleProgressBar()
-    container.layer.addSublayer(circleLayer)
-    self.circleLayer.isHidden = false
-    self.percentageLabel.isHidden = false
+//    container.addSubview(percentageLabel)
+//    setupCircleProgressBar()
+//    container.layer.addSublayer(circleLayer)
+//    self.circleLayer.isHidden = false
+//    self.percentageLabel.isHidden = false
 
     
     NSLayoutConstraint.activate([
@@ -197,8 +197,8 @@ class VideoView: UIView {
 //      videoContainer.bottomAnchor.constraint(equalTo: buttonContainer.topAnchor, constant: -4),
         videoContainer.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 3.0/4.0),
       
-      percentageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-      percentageLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+//      percentageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+//      percentageLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
       ])
     
   }
@@ -227,7 +227,9 @@ class VideoView: UIView {
 //  }
   
   func pause() {
-    player.pause()
+    if player != nil {
+        player.pause()
+    }
   }
   
   func stop() {
@@ -246,38 +248,39 @@ class VideoView: UIView {
       player.play()
     }
   }
+    
 }
 
-extension VideoView: CAAnimationDelegate,UpdateProgressDelegate {
-  
-  func setupCircleProgressBar() {
-    
-    let center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-    let radius = self.bounds.height/8.0
-    let circularPath = UIBezierPath(arcCenter: center, radius: radius , startAngle: -CGFloat.pi/2, endAngle: 1.5 * CGFloat.pi, clockwise: true)
-    
-    circleLayer.frame = self.bounds
-    circleLayer.path = circularPath.cgPath
-    circleLayer.strokeColor = UIColor.purple.cgColor
-    circleLayer.lineWidth = 5
-    circleLayer.fillColor = UIColor.clear.cgColor
-    circleLayer.lineCap = CAShapeLayerLineCap.round
-    circleLayer.strokeEnd = 0
-    
-  }
-  
-  func updateProgress(progress: Double) {
-    print("updatingggggggg")
-    self.circleLayer.isHidden = false
-    self.percentageLabel.isHidden = false
-    percentageLabel.text = "\(round(progress))%"
-    circleLayer.isHidden = false
-    let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-    basicAnimation.delegate = self
-    basicAnimation.toValue = progress/100.0
-    basicAnimation.fillMode = CAMediaTimingFillMode.forwards
-    basicAnimation.isRemovedOnCompletion = false
-    circleLayer.add(basicAnimation, forKey: "animate")
-  }
-  
-}
+//extension VideoView: CAAnimationDelegate,UpdateProgressDelegate {
+//
+//  func setupCircleProgressBar() {
+//
+//    let center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
+//    let radius = self.bounds.height/8.0
+//    let circularPath = UIBezierPath(arcCenter: center, radius: radius , startAngle: -CGFloat.pi/2, endAngle: 1.5 * CGFloat.pi, clockwise: true)
+//
+//    circleLayer.frame = self.bounds
+//    circleLayer.path = circularPath.cgPath
+//    circleLayer.strokeColor = UIColor.purple.cgColor
+//    circleLayer.lineWidth = 5
+//    circleLayer.fillColor = UIColor.clear.cgColor
+//    circleLayer.lineCap = CAShapeLayerLineCap.round
+//    circleLayer.strokeEnd = 0
+//
+//  }
+//
+//  func updateProgress(progress: Double) {
+//    print("updatingggggggg")
+//    self.circleLayer.isHidden = false
+//    self.percentageLabel.isHidden = false
+//    percentageLabel.text = "\(round(progress))%"
+//    circleLayer.isHidden = false
+//    let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
+//    basicAnimation.delegate = self
+//    basicAnimation.toValue = progress/100.0
+//    basicAnimation.fillMode = CAMediaTimingFillMode.forwards
+//    basicAnimation.isRemovedOnCompletion = false
+//    circleLayer.add(basicAnimation, forKey: "animate")
+//  }
+//
+//}

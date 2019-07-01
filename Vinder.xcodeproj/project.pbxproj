@@ -31,8 +31,6 @@
 		E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F122BC159600AE8155 /* MessageTableViewCell.swift */; };
 		E97F74F422BC313800AE8155 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F322BC313800AE8155 /* SettingViewController.swift */; };
 		E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97F74F622BC3F0000AE8155 /* VideoView.swift */; };
-		ED31021B22BEAE8200D2211B /* simple loading.aep in Resources */ = {isa = PBXBuildFile; fileRef = ED31021922BEAE8200D2211B /* simple loading.aep */; };
-		ED31021C22BEAE8200D2211B /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = ED31021A22BEAE8200D2211B /* simple.json */; };
 		ED31022022BEAF1200D2211B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED31021F22BEAF1200D2211B /* LoadingView.swift */; };
 		ED3BE84222BBF89F0046E35C /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE84122BBF89F0046E35C /* ButtonView.swift */; };
 		ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BE86522BC1F330046E35C /* RecordButtonView.swift */; };
@@ -42,6 +40,10 @@
 		ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */; };
 		ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */; };
 		ED64C2C522C174170077DCF7 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED64C2C422C174170077DCF7 /* Messages.swift */; };
+		EDA2A28022CA6F9A00391D23 /* RoundedRectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA2A27F22CA6F9A00391D23 /* RoundedRectButton.swift */; };
+		EDA2A28222CA733900391D23 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA2A28122CA733900391D23 /* ProfileView.swift */; };
+		EDA2A28422CA73FF00391D23 /* RoundedCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA2A28322CA73FF00391D23 /* RoundedCornerView.swift */; };
+		EDA2A28822CAA01C00391D23 /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = EDA2A28622CAA01C00391D23 /* simple.json */; };
 		EDC730C322C52CCB00773F67 /* TNImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C222C52CCB00773F67 /* TNImageView.swift */; };
 		EDC730C622C5360100773F67 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C522C5360100773F67 /* ProfileImageView.swift */; };
 		EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4476222BABFBA0048BAE2 /* CameraController.swift */; };
@@ -75,8 +77,6 @@
 		E97F74F322BC313800AE8155 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		E97F74F622BC3F0000AE8155 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		E9DE1A1E22C29609006BD148 /* Vinder.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Vinder.entitlements; sourceTree = "<group>"; };
-		ED31021922BEAE8200D2211B /* simple loading.aep */ = {isa = PBXFileReference; lastKnownFileType = file; path = "simple loading.aep"; sourceTree = "<group>"; };
-		ED31021A22BEAE8200D2211B /* simple.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = simple.json; sourceTree = "<group>"; };
 		ED31021F22BEAF1200D2211B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		ED3BE84122BBF89F0046E35C /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
 		ED3BE86522BC1F330046E35C /* RecordButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButtonView.swift; sourceTree = "<group>"; };
@@ -87,6 +87,10 @@
 		ED5DEC9D22B98B4B0013142C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		ED64C2C422C174170077DCF7 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		EDA2A27F22CA6F9A00391D23 /* RoundedRectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedRectButton.swift; sourceTree = "<group>"; };
+		EDA2A28122CA733900391D23 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		EDA2A28322CA73FF00391D23 /* RoundedCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerView.swift; sourceTree = "<group>"; };
+		EDA2A28622CAA01C00391D23 /* simple.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = simple.json; sourceTree = "<group>"; };
 		EDC730C222C52CCB00773F67 /* TNImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TNImageView.swift; sourceTree = "<group>"; };
 		EDC730C522C5360100773F67 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		EDF4476222BABFBA0048BAE2 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
@@ -156,8 +160,8 @@
 				E97F74F622BC3F0000AE8155 /* VideoView.swift */,
 				0D9162A222C1522000C58DCF /* IncomeCallViewController.swift */,
 				ED5DEC9F22B98C3B0013142C /* VideoViewController.swift */,
-				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
 				E942743322C7F14E00715166 /* LoginViewController.swift */,
+				E935544822B99B3C00CD7958 /* LoginFormViewController.swift */,
 				0D91629F22C1475F00C58DCF /* SignUpViewController.swift */,
 				0D3E98D322BAA60200D02311 /* MapViewController.swift */,
 				E97F74EF22BC157900AE8155 /* ContactsCollectionViewCell.swift */,
@@ -165,7 +169,10 @@
 				E97F74F322BC313800AE8155 /* SettingViewController.swift */,
 				0D91629322BD6D6300C58DCF /* SettingTableViewCell.swift */,
 				ED31021F22BEAF1200D2211B /* LoadingView.swift */,
+				EDA2A28122CA733900391D23 /* ProfileView.swift */,
 				E942743522C91D6000715166 /* RoundedButton.swift */,
+				EDA2A28322CA73FF00391D23 /* RoundedCornerView.swift */,
+				EDA2A27F22CA6F9A00391D23 /* RoundedRectButton.swift */,
 				EDC730C422C533E400773F67 /* MessageTable */,
 				ED3BE86D22BD715D0046E35C /* Networking */,
 				EDF4476622BAD6130048BAE2 /* RecordProfileViewController */,
@@ -180,8 +187,7 @@
 		ED31021822BEAE8200D2211B /* loading */ = {
 			isa = PBXGroup;
 			children = (
-				ED31021922BEAE8200D2211B /* simple loading.aep */,
-				ED31021A22BEAE8200D2211B /* simple.json */,
+				EDA2A28622CAA01C00391D23 /* simple.json */,
 			);
 			path = loading;
 			sourceTree = "<group>";
@@ -301,9 +307,8 @@
 			files = (
 				E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */,
 				E935543C22B9736000CD7958 /* Assets.xcassets in Resources */,
-				ED31021B22BEAE8200D2211B /* simple loading.aep in Resources */,
 				ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */,
-				ED31021C22BEAE8200D2211B /* simple.json in Resources */,
+				EDA2A28822CAA01C00391D23 /* simple.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E935544922B99B3C00CD7958 /* LoginFormViewController.swift in Sources */,
+				EDA2A28222CA733900391D23 /* ProfileView.swift in Sources */,
 				E97F74F022BC157900AE8155 /* ContactsCollectionViewCell.swift in Sources */,
 				ED31022022BEAF1200D2211B /* LoadingView.swift in Sources */,
 				E942743622C91D6000715166 /* RoundedButton.swift in Sources */,
@@ -372,6 +378,7 @@
 				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				ED3BE86822BD58280046E35C /* TutorialView.swift in Sources */,
+				EDA2A28422CA73FF00391D23 /* RoundedCornerView.swift in Sources */,
 				0D91629422BD6D6300C58DCF /* SettingTableViewCell.swift in Sources */,
 				0D9162A122C1479000C58DCF /* VideoPlayer.swift in Sources */,
 				ED3BE86C22BD714E0046E35C /* WebService.swift in Sources */,
@@ -380,6 +387,7 @@
 				E9035D6822C18EFF00D9D170 /* CallResponse.swift in Sources */,
 				E942743222C7F14700715166 /* User.swift in Sources */,
 				E90C498222C2F42E00606A03 /* UserLocation.swift in Sources */,
+				EDA2A28022CA6F9A00391D23 /* RoundedRectButton.swift in Sources */,
 				E97F74F722BC3F0100AE8155 /* VideoView.swift in Sources */,
 				EDC730C622C5360100773F67 /* ProfileImageView.swift in Sources */,
 				ED5DECA022B98C3B0013142C /* VideoViewController.swift in Sources */,

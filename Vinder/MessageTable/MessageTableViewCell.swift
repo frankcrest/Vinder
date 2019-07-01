@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ShowProfileDelegate: AnyObject {
-     func showVideoView(withUser name: String, profileVideoUrl: String)
+     func showProfileView(withUser name: String, profileVideoUrl: String)
     func actionToMsg(_ message: Messages)
 }
 
@@ -99,9 +99,9 @@ class MessageTableViewCell: UITableViewCell {
     }
     
     @objc func showProfile() {
-        
+        print("tapppped profile ")
         guard let username = profileImageView.userName, let url = profileImageView.profileVideoUrl else { return }
-        self.showProfileDelegate?.showVideoView(withUser: username, profileVideoUrl: url)
+        self.showProfileDelegate?.showProfileView(withUser: username, profileVideoUrl: url)
         
     }
     
