@@ -295,6 +295,7 @@ class WebService {
         
         var users: [User] = []
         ref.child("users").observe(.value) { (snapshot) in
+          users.removeAll()
             for user in snapshot.children.allObjects as! [DataSnapshot]{
                 guard let userObject = user.value as? [String:AnyObject] else{continue}
                 guard let name = userObject["name"] as? String else {continue}
