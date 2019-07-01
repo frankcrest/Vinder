@@ -193,6 +193,7 @@ class ProfileView: RoundedCornerView {
             
             buttonContainer.topAnchor.constraint(equalTo: infoContainer.bottomAnchor, constant: 40),
             buttonContainer.widthAnchor.constraint(equalTo: videoContainer.widthAnchor),
+            buttonContainer.heightAnchor.constraint(equalToConstant: 50),
             buttonContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             leftButton.widthAnchor.constraint(equalTo: buttonContainer.widthAnchor, multiplier: 0.45),

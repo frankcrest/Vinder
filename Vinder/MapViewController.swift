@@ -32,16 +32,6 @@ class MapViewController: UIViewController {
     var friends = [User]()
     //MARK: VIEW PROPERTIES
     
-//    let videoView : VideoView = {
-//        let v = VideoView()
-//        v.backgroundColor = .white
-//        v.layer.cornerRadius = 10
-//        v.clipsToBounds = true
-//        v.isHidden = true
-//        v.translatesAutoresizingMaskIntoConstraints = false
-//        return v
-//    }()
-    
     let profileview : ProfileView = {
         let v = ProfileView()
         v.backgroundColor = .clear
@@ -135,7 +125,6 @@ class MapViewController: UIViewController {
     
     let messagesButton: RoundedButton = {
         let b = RoundedButton()
-        //        b.backgroundColor = .cyan
         b.addTarget(self, action: #selector(meTapped), for: .touchUpInside)
         b.setImage(UIImage(named:"messages"), for: .normal)
         return b
@@ -282,6 +271,7 @@ class MapViewController: UIViewController {
     
     //MARK: SETUP VIEWS
     func setupViews(){
+        
         self.view.addSubview(centerView)
         self.view.addSubview(leftView)
         self.view.addSubview(rightView)
@@ -408,7 +398,7 @@ class MapViewController: UIViewController {
             finderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             finderButton.heightAnchor.constraint(equalToConstant: 40),
             finderButton.widthAnchor.constraint(equalToConstant: 40),
-            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -20),
+            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -30),
             
             buttonStackViewLeadingConstraint!,
             buttonStackViewTrailingConstraint!,
@@ -869,7 +859,7 @@ extension MapViewController: ShowProfileDelegate {
     
     func actionToMsg(_ message: Messages) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
+        alert.view.tintColor = .blueColor
         alert.addAction(UIAlertAction(title: "Reply", style: .default, handler: { (_) in
             let recordMessageVC = RecordVideoViewController()
             recordMessageVC.mode = .messageMode
@@ -904,7 +894,6 @@ extension MapViewController: ShowProfileDelegate {
     
     
     func showProfileView(withUser name: String, profileVideoUrl: String) {
-        
         view.bringSubviewToFront(profileview)
         profileview.isHidden = false
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
@@ -912,8 +901,6 @@ extension MapViewController: ShowProfileDelegate {
         }, completion: nil)
         profileview.videoURL = profileVideoUrl
         profileview.username = name
-//        videoView.configureView()
-//        videoView.play()
     }
     
     @objc func hideVideoView() {

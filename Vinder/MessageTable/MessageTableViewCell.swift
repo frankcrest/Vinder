@@ -99,7 +99,7 @@ class MessageTableViewCell: UITableViewCell {
     }
     
     @objc func showProfile() {
-        
+        print("tapppped profile ")
         guard let username = profileImageView.userName, let url = profileImageView.profileVideoUrl else { return }
         self.showProfileDelegate?.showProfileView(withUser: username, profileVideoUrl: url)
         
