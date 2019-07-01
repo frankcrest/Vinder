@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     application.registerForRemoteNotifications()
     
     self.window = UIWindow(frame:UIScreen.main.bounds)
+    self.window!.tintColor = UIColor.white
     let initialController = MapViewController()
     let nav = UINavigationController()
     nav.viewControllers = [initialController]

@@ -941,7 +941,7 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
 //            numOfSection = 1
         } else {
             let noMsgLabel: UILabel = UILabel(frame: CGRect(x:0, y:0, width: messageTableView.bounds.size.width,height: messageTableView.bounds.size.height))
-            noMsgLabel.text = "No Message!"
+            noMsgLabel.text = "No Messages!"
             noMsgLabel.textColor = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
             noMsgLabel.textAlignment = NSTextAlignment.center
             messageTableView.backgroundView = noMsgLabel

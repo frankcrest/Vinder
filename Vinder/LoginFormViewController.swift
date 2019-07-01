@@ -16,7 +16,7 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
     label.text = "Email"
-    label.textColor = .black
+    label.textColor = .white
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
@@ -25,14 +25,20 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
     label.text = "Password"
-    label.textColor = .black
+    label.textColor = .white
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
   
   let emailTextField: UITextField = {
     let tf = UITextField()
-    tf.placeholder = "email"
+    tf.borderStyle = UITextField.BorderStyle.none
+    tf.textColor = UIColor.pinkColor
+    tf.font = UIFont.systemFont(ofSize: 25)
+    tf.backgroundColor = .white
+    tf.layer.cornerRadius = 10
+    tf.tintColor = UIColor.pinkColor
+    tf.addPadding(.left(4))
     tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
@@ -40,7 +46,13 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
   
   let passwordTextfield: UITextField = {
     let tf = UITextField()
-    tf.placeholder = "password"
+    tf.backgroundColor = .white
+    tf.font = UIFont.systemFont(ofSize: 25)
+    tf.textColor = UIColor.pinkColor
+    tf.borderStyle = UITextField.BorderStyle.none
+    tf.layer.cornerRadius = 10
+    tf.tintColor = UIColor.pinkColor
+    tf.addPadding(.left(4))
     tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     tf.isSecureTextEntry = true
@@ -52,9 +64,9 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     b.setTitle("Log In", for: .normal)
     b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
     b.setTitleColor(.white, for: .normal)
-    b.backgroundColor = .magenta
+    b.backgroundColor = UIColor.pinkColor
     b.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
-    b.layer.cornerRadius = 20
+    b.layer.cornerRadius = 25
     b.translatesAutoresizingMaskIntoConstraints = false
     return b
   }()
@@ -73,32 +85,34 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
   }
   
   func setupViews(){
-    self.view.backgroundColor = .white
+    self.view.backgroundColor = UIColor.yellowColor
     self.view.addSubview(emailLabel)
     self.view.addSubview(passwordLabel)
     self.view.addSubview(emailTextField)
     self.view.addSubview(passwordTextfield)
     self.view.addSubview(loginButton)
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(screenTapped))
+    self.view.addGestureRecognizer(tapGesture)
     
     NSLayoutConstraint.activate([
-      emailLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -200),
+      emailLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -210),
       emailLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       emailLabel.widthAnchor.constraint(equalToConstant: 250),
-      emailLabel.heightAnchor.constraint(equalToConstant: 20),
+      emailLabel.heightAnchor.constraint(equalToConstant: 30),
       
       emailTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      emailTextField.topAnchor.constraint(equalTo: self.emailLabel.bottomAnchor, constant: 8),
-      emailTextField.heightAnchor.constraint(equalToConstant: 20),
+      emailTextField.topAnchor.constraint(equalTo: self.emailLabel.bottomAnchor, constant: 4),
+      emailTextField.heightAnchor.constraint(equalToConstant: 40),
       emailTextField.widthAnchor.constraint(equalToConstant: 250),
       
       passwordLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       passwordLabel.topAnchor.constraint(equalTo: self.emailTextField.bottomAnchor, constant: 8),
       passwordLabel.widthAnchor.constraint(equalToConstant: 250),
-      passwordLabel.heightAnchor.constraint(equalToConstant: 20),
+      passwordLabel.heightAnchor.constraint(equalToConstant: 30),
       
       passwordTextfield.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      passwordTextfield.topAnchor.constraint(equalTo: self.passwordLabel.bottomAnchor, constant: 8),
-      passwordTextfield.heightAnchor.constraint(equalToConstant: 20),
+      passwordTextfield.topAnchor.constraint(equalTo: self.passwordLabel.bottomAnchor, constant: 4),
+      passwordTextfield.heightAnchor.constraint(equalToConstant: 40),
       passwordTextfield.widthAnchor.constraint(equalToConstant: 250),
       
       loginButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
@@ -113,10 +127,10 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
     
     if isFormValid {
       loginButton.isEnabled = true
-      loginButton.backgroundColor = .blue
+      loginButton.backgroundColor = UIColor.blueColor
     } else {
       loginButton.isEnabled = false
-      loginButton.backgroundColor = .red
+      loginButton.backgroundColor = UIColor.pinkColor
     }
   }
   
@@ -142,6 +156,10 @@ class LoginFormViewController: UIViewController,UITextFieldDelegate {
       UserDefaults.standard.set(true, forKey: "isLoggedIn")
       self.dismiss(animated: true, completion: nil)
     }
+  }
+  
+  @objc func screenTapped(){
+    self.view.endEditing(true)
   }
   
 }

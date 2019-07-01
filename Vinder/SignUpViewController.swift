@@ -11,12 +11,22 @@ import UIKit
 class SignUpViewController: UIViewController,UITextFieldDelegate {
   
   let ud = UserDefaults.standard
+  var topConstraint : NSLayoutConstraint!
+  
+  let welcomeLabel:UILabel = {
+    let label = UILabel()
+    label.font = UIFont.boldSystemFont(ofSize: 20)
+    label.text = "Welcome"
+    label.textColor = .white
+    label.translatesAutoresizingMaskIntoConstraints = false
+    return label
+  }()
   
   let emailLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
     label.text = "Tell Us Your Email"
-    label.textColor = .black
+    label.textColor = .white
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
@@ -25,7 +35,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
     label.text = "Choose Your Username"
-    label.textColor = .black
+    label.textColor = .white
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
@@ -34,7 +44,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
     label.text = "Tell Us Your Name"
-    label.textColor = .black
+    label.textColor = .white
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
@@ -42,15 +52,21 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   let passwordLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
-    label.text = "Choose Your Password"
-    label.textColor = .black
+    label.text = "Choose A Password"
+    label.textColor = .white
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
   
   let emailTextfield: UITextField = {
     let tf = UITextField()
-    tf.placeholder = "email"
+    tf.borderStyle = UITextField.BorderStyle.none
+    tf.textColor = UIColor.pinkColor
+    tf.font = UIFont.systemFont(ofSize: 25)
+    tf.backgroundColor = .white
+    tf.layer.cornerRadius = 8
+    tf.addPadding(.left(4))
+    tf.tintColor = UIColor.pinkColor
     tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
@@ -58,7 +74,13 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   
   let usernameTextfield: UITextField = {
     let tf = UITextField()
-    tf.placeholder = "username"
+    tf.borderStyle = UITextField.BorderStyle.none
+    tf.textColor = UIColor.pinkColor
+    tf.font = UIFont.systemFont(ofSize: 25)
+    tf.backgroundColor = .white
+    tf.layer.cornerRadius = 8
+    tf.addPadding(.left(4))
+    tf.tintColor = UIColor.pinkColor
     tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
@@ -66,7 +88,13 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   
   let nameTextfield: UITextField = {
     let tf = UITextField()
-    tf.placeholder = "name"
+    tf.borderStyle = UITextField.BorderStyle.none
+    tf.textColor = UIColor.pinkColor
+    tf.font = UIFont.systemFont(ofSize: 25)
+    tf.backgroundColor = .white
+    tf.layer.cornerRadius = 8
+    tf.addPadding(.left(4))
+    tf.tintColor = UIColor.pinkColor
     tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
@@ -75,7 +103,13 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   let passwordTextfield: UITextField = {
     let tf = UITextField()
     tf.isSecureTextEntry = true
-    tf.placeholder = "password"
+    tf.borderStyle = UITextField.BorderStyle.none
+    tf.textColor = UIColor.pinkColor
+    tf.font = UIFont.systemFont(ofSize: 25)
+    tf.backgroundColor = .white
+    tf.layer.cornerRadius = 8
+    tf.addPadding(.left(4))
+    tf.tintColor = UIColor.pinkColor
     tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
     tf.translatesAutoresizingMaskIntoConstraints = false
     return tf
@@ -88,8 +122,8 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     b.translatesAutoresizingMaskIntoConstraints = false
     b.setTitleColor(.white, for: .normal)
     b.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
-    b.backgroundColor = .cyan
-    b.layer.cornerRadius = 20
+    b.backgroundColor = UIColor.pinkColor
+    b.layer.cornerRadius = 25
     return b
   }()
   
@@ -100,6 +134,11 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
+                                           name: UIResponder.keyboardWillShowNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
+                                           name: UIResponder.keyboardWillHideNotification, object: nil)
     
     signUpButton.isEnabled = false
     
@@ -114,7 +153,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   }
   
   func setupViews(){
-    self.view.backgroundColor = .white
+    self.view.backgroundColor = UIColor.yellowColor
     self.view.addSubview(emailLabel)
     self.view.addSubview(usernameLabel)
     self.view.addSubview(nameLabel)
@@ -125,46 +164,48 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     self.view.addSubview(passwordTextfield)
     self.view.addSubview(signUpButton)
     
+     topConstraint = emailLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -210)
+    
     NSLayoutConstraint.activate([
-      emailLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -200),
+      topConstraint,
       emailLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       emailLabel.widthAnchor.constraint(equalToConstant: 250),
-      emailLabel.heightAnchor.constraint(equalToConstant: 20),
+      emailLabel.heightAnchor.constraint(equalToConstant: 30),
       
       emailTextfield.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      emailTextfield.topAnchor.constraint(equalTo: self.emailLabel.bottomAnchor, constant: 8),
-      emailTextfield.heightAnchor.constraint(equalToConstant: 20),
+      emailTextfield.topAnchor.constraint(equalTo: self.emailLabel.bottomAnchor, constant: 4),
+      emailTextfield.heightAnchor.constraint(equalToConstant: 40),
       emailTextfield.widthAnchor.constraint(equalToConstant: 250),
       
       usernameLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       usernameLabel.topAnchor.constraint(equalTo: self.emailTextfield.bottomAnchor, constant: 8),
       usernameLabel.widthAnchor.constraint(equalToConstant: 250),
-      usernameLabel.heightAnchor.constraint(equalToConstant: 20),
+      usernameLabel.heightAnchor.constraint(equalToConstant: 30),
       
       usernameTextfield.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      usernameTextfield.topAnchor.constraint(equalTo: self.usernameLabel.bottomAnchor, constant: 8),
-      usernameTextfield.heightAnchor.constraint(equalToConstant: 20),
+      usernameTextfield.topAnchor.constraint(equalTo: self.usernameLabel.bottomAnchor, constant: 4),
+      usernameTextfield.heightAnchor.constraint(equalToConstant: 40),
       usernameTextfield.widthAnchor.constraint(equalToConstant: 250),
       
       nameLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       nameLabel.topAnchor.constraint(equalTo: self.usernameTextfield.bottomAnchor, constant: 8),
-      nameLabel.heightAnchor.constraint(equalToConstant: 20),
+      nameLabel.heightAnchor.constraint(equalToConstant: 30),
       nameLabel.widthAnchor.constraint(equalToConstant: 250),
       
       nameTextfield.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      nameTextfield.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 8),
-      nameTextfield.heightAnchor.constraint(equalToConstant: 20),
+      nameTextfield.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 4),
+      nameTextfield.heightAnchor.constraint(equalToConstant: 40),
       nameTextfield.widthAnchor.constraint(equalToConstant: 250),
       
       passwordLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       passwordLabel.topAnchor.constraint(equalTo: self.nameTextfield.bottomAnchor, constant: 8),
       passwordLabel.widthAnchor.constraint(equalToConstant: 250),
-      passwordLabel.heightAnchor.constraint(equalToConstant: 20),
+      passwordLabel.heightAnchor.constraint(equalToConstant: 30),
       
       passwordTextfield.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      passwordTextfield.topAnchor.constraint(equalTo: self.passwordLabel.bottomAnchor, constant: 8),
+      passwordTextfield.topAnchor.constraint(equalTo: self.passwordLabel.bottomAnchor, constant: 4),
       passwordTextfield.widthAnchor.constraint(equalToConstant: 250),
-      passwordTextfield.heightAnchor.constraint(equalToConstant: 20),
+      passwordTextfield.heightAnchor.constraint(equalToConstant: 40),
       
       signUpButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
       signUpButton.topAnchor.constraint(equalTo: self.passwordTextfield.bottomAnchor, constant: 20),
@@ -174,7 +215,6 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
   }
   
   @objc func signUpTapped(){
-    
     ud.set(emailTextfield.text, forKey: "email")
     ud.set(usernameTextfield.text, forKey: "username")
     ud.set(nameTextfield.text, forKey: "name")
@@ -183,8 +223,6 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     recordProfileVideoController.isTutorialMode = true
     recordProfileVideoController.mode = .signupMode
     navigationController?.pushViewController(recordProfileVideoController, animated: true)
-    
-   
   }
   
   @objc func screenTapped(){
@@ -196,10 +234,24 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     
     if isFormValid {
       signUpButton.isEnabled = true
-      signUpButton.backgroundColor = .blue
+      signUpButton.backgroundColor = UIColor.blueColor
     } else {
       signUpButton.isEnabled = false
-      signUpButton.backgroundColor = .red
+      signUpButton.backgroundColor = UIColor.pinkColor
+    }
+  }
+  
+  @objc func handleKeyboardShow(notification: Notification) {
+    topConstraint.constant = -310
+    UIView.animate(withDuration: 0.1) {
+      self.view.layoutIfNeeded()
+    }
+  }
+  
+  @objc func handleKeyboardHide(notification: Notification) {
+    topConstraint.constant = -210
+    UIView.animate(withDuration: 0.1) {
+      self.view.layoutIfNeeded()
     }
   }
   

@@ -27,7 +27,7 @@ class TutorialView: UIView {
     
     let promptLabel : UILabel = {
         let label = UILabel()
-        label.text = "Take a short 10-15 second introduction video to show your interests & personality"
+        label.text = "Take A Short 10 To 15 Second Intro Video To Show Your Personality & Interests"
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .white
@@ -39,13 +39,14 @@ class TutorialView: UIView {
         let button = UIButton()
         button.setTitle("Replay", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     let gotItButton:UIButton = {
         let button = UIButton()
-        button.setTitle("GOT IT!", for: .normal)
+        button.setTitle("Next", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -56,7 +57,7 @@ class TutorialView: UIView {
     func setupViews(){
         translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .darkGray
+        backgroundColor = .lightGray
         stackView.addArrangedSubview(replayButton)
         stackView.addArrangedSubview(gotItButton)
         addSubview(promptLabel)
@@ -68,7 +69,7 @@ class TutorialView: UIView {
         
         NSLayoutConstraint.activate([
 
-            promptLabel.topAnchor.constraint(equalTo: self.topAnchor),
+            promptLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
             promptLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
             promptLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
             promptLabel.heightAnchor.constraint(equalToConstant: 100),
