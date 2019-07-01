@@ -261,17 +261,15 @@ class WebService {
       }
     }
     
-  func fetchProfileVideo(of user: User, completion: @escaping (URL?, Error?) -> (Void)) {
+  func fetchProfileVideo(at url: String  , completion: @escaping (URL?, Error?) -> (Void)) {
     
     let profileFileURL: URL = {
       let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-      let fileURL = paths[0].appendingPathComponent("userProfile/\(user.uid).mov")
+      let fileURL = paths[0].appendingPathComponent("userProfile/\(url).mov")
       try? FileManager.default.removeItem(at: fileURL)
       return fileURL
     }()
     
-    
-    let url = user.profileVideoUrl
     let httpReference = storage.reference(forURL: url)
     let downloadTask = httpReference.write(toFile: profileFileURL) { (url, error) in
       completion(url,error)
@@ -279,6 +277,7 @@ class WebService {
     downloadTask.observe(.progress) { (snapshot) in
       let percent = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
       DispatchQueue.main.async {
+        print("gonna delegate")
         self.updateProgressDelegate?.updateProgress(progress: percent)
       }
       print("downloading: \(percent)%")

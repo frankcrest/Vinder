@@ -228,9 +228,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         
         mapView.delegate = self
-        webService.updateProgressDelegate = videoView
         mapView.register(NearbyUserView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         setupViews()
         
@@ -452,22 +450,25 @@ class MapViewController: UIViewController {
     
     func loadUsers(){
         print("fetching users")
-        mapView.removeAnnotations(users)
-        users.removeAll()
         webService.fetchUsers { (users) in
             guard let users = users else {
                 print("failed fetching users")
                 return
             }
-            for user in users {
-                if user.uid == self.currentUser?.uid{
-                    self.selfUser = user
-                }
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                self.mapView.removeAnnotations(self.mapView.annotations)
+                print("annotations after \(self.mapView.annotations.count)")
+                self.users.removeAll()
+                for user in users {
+                    if user.uid == self.currentUser?.uid{
+                        self.selfUser = user
+                    }
                     self.mapView.addAnnotation(user)
+                    self.users.append(user)
                 }
-                self.users.append(user)
+                print("annotations \(self.mapView.annotations.count)")
             }
+
         }
     }
     
@@ -547,6 +548,7 @@ class MapViewController: UIViewController {
         contactButtonWidthCons?.constant = 70
         showAllanotations()
         finderButton.isHidden = true
+        focusedUserIndex = 0
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -586,6 +588,7 @@ class MapViewController: UIViewController {
         contactButtonWidthCons?.constant = 55
         showAllanotations()
         finderButton.isHidden = false
+        focusedUserIndex = 0
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -615,6 +618,7 @@ class MapViewController: UIViewController {
         contactButtonWidthCons?.constant = 35
         showAllanotations()
         finderButton.isHidden = true
+        focusedUserIndex = 0
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -860,6 +864,7 @@ extension MapViewController : MKMapViewDelegate {
 }
 //MARK: VIDEO VIEW RELATED
 extension MapViewController: ShowProfileDelegate {
+
     
     func actionToMsg(_ message: Messages) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -906,8 +911,8 @@ extension MapViewController: ShowProfileDelegate {
         }, completion: nil)
         videoView.videoURL = profileVideoUrl
         videoView.username = name
-        videoView.configureView()
-        videoView.play()
+//        videoView.configureView()
+//        videoView.play()
     }
     
     func hideVideoView() {
@@ -924,24 +929,6 @@ extension MapViewController: ShowProfileDelegate {
 // MARK: TABLEVIEW DELEGATE
 extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//
-//        var numOfSection: NSInteger = 0
-//
-//        if messages.count > 0
-//        {
-//            messageTableView.backgroundView = nil
-//            numOfSection = 1
-//        } else {
-//            let noMsgLabel: UILabel = UILabel(frame: CGRect(x:0, y:0, width: messageTableView.bounds.size.width,height: messageTableView.bounds.size.height))
-//            noMsgLabel.text = "No Message!"
-//            noMsgLabel.textColor = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
-//            noMsgLabel.textAlignment = NSTextAlignment.center
-//            messageTableView.backgroundView = noMsgLabel
-//        }
-//
-//        return numOfSection
-//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.view.bounds.width

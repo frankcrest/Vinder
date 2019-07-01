@@ -16,8 +16,14 @@ class VideoView: UIView {
   var playerLayer: AVPlayerLayer!
   var player: AVPlayer!
   var isLoop: Bool = false
+    let ws = WebService()
   
-  var videoURL: String?
+    var videoURL: String? {
+        didSet {
+            configureView()
+        }
+    }
+
     var username: String? {
         didSet {
             nameLabel.text = username
@@ -133,7 +139,6 @@ class VideoView: UIView {
         container.layer.cornerRadius = 10.0
 //        videoContainer.layer.cornerRadius = 10.0
         videoContainer.layer.masksToBounds = true
-        print("\(layer.masksToBounds) \(container.layer.masksToBounds)")
     }
   
   //UI setup
@@ -154,8 +159,8 @@ class VideoView: UIView {
     container.addSubview(percentageLabel)
     setupCircleProgressBar()
     container.layer.addSublayer(circleLayer)
-    self.circleLayer.isHidden = true
-    self.percentageLabel.isHidden = true
+    self.circleLayer.isHidden = false
+    self.percentageLabel.isHidden = false
 
     
     NSLayoutConstraint.activate([
@@ -199,28 +204,33 @@ class VideoView: UIView {
   
   
   func configureView() {
-    guard let videoURL = videoURL else { return }
-    guard let url = URL(string: videoURL) else { return }
-    player = AVPlayer(url: url)
-    playerLayer = AVPlayerLayer(player: player)
-    playerLayer.frame = self.videoContainer.frame
-    self.layer.addSublayer(playerLayer)
-    player.play()
-  }
-  
-  func play() {
-    self.circleLayer.isHidden = true
-    self.percentageLabel.isHidden = true
-    if player.timeControlStatus != AVPlayer.TimeControlStatus.playing {
-      player.play()
+    
+    if let url = videoURL {
+        WebService().fetchProfileVideo(at: url) { (url, err) -> (Void) in
+            guard err == nil, let url = url else { return }
+            self.player = AVPlayer(url: url)
+            self.playerLayer = AVPlayerLayer(player: self.player)
+            self.playerLayer.frame = self.videoContainer.frame
+            self.layer.addSublayer(self.playerLayer)
+            self.player.play()
+        }
     }
   }
+  
+//  func play() {
+//    self.circleLayer.isHidden = true
+//    self.percentageLabel.isHidden = true
+//    if player.timeControlStatus != AVPlayer.TimeControlStatus.playing {
+//      player.play()
+//    }
+//  }
   
   func pause() {
     player.pause()
   }
   
   func stop() {
+    playerLayer.removeFromSuperlayer()
     player.pause()
     player = nil
   }
@@ -234,7 +244,7 @@ class VideoView: UIView {
   }
 }
 
-extension VideoView: CAAnimationDelegate, UpdateProgressDelegate {
+extension VideoView: CAAnimationDelegate,UpdateProgressDelegate {
   
   func setupCircleProgressBar() {
     
@@ -252,11 +262,8 @@ extension VideoView: CAAnimationDelegate, UpdateProgressDelegate {
     
   }
   
-  func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-    
-  }
-  
   func updateProgress(progress: Double) {
+    print("updatingggggggg")
     self.circleLayer.isHidden = false
     self.percentageLabel.isHidden = false
     percentageLabel.text = "\(round(progress))%"
