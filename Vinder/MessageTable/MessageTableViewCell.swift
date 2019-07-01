@@ -17,6 +17,7 @@ class MessageTableViewCell: UITableViewCell {
     
     var showProfileDelegate: ShowProfileDelegate?
     var isProfileHidden: Bool?
+    
     let containerView:UIView = {
         let v = UIView()
         v.backgroundColor = .gray
@@ -55,9 +56,6 @@ class MessageTableViewCell: UITableViewCell {
     
     var thumbnailImageView: TNImageView = {
         let imageview = TNImageView()
-        imageview.translatesAutoresizingMaskIntoConstraints = false
-        imageview.contentMode = .scaleAspectFill
-        imageview.clipsToBounds = true
         return imageview
     }()
     

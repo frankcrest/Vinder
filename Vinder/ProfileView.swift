@@ -141,6 +141,7 @@ class ProfileView: RoundedCornerView {
     //UI setup
     func setUpViews(){
         
+        
         lottieView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(videoContainer)

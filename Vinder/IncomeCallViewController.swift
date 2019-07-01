@@ -15,10 +15,23 @@ class IncomeCallViewController: UIViewController {
     let ref = Database.database().reference()
     let currentUser = Auth.auth().currentUser
     let ud = UserDefaults.standard
-    var callerId :String?
+    let ws = WebService()
+    var callerId :String? {
+        didSet {
+            if let id = callerId {
+                ws.fetchProfile(ofUser: id) { (userInfo) in
+                    DispatchQueue.main.async {
+                        guard let profileImageURL = userInfo["profileImageUrl"] as? String, let name = userInfo["name"] as? String else { return }
+                        self.callerView.profileImageURL = profileImageURL
+                        self.callerView.username = name
+                    }
+                }
+            }
+        }
+    }
   
-    lazy var videoView : VideoView = {
-        let v = VideoView()
+    lazy var callerView : CallerVideoView = {
+        let v = CallerVideoView()
         v.backgroundColor = .white
         v.layer.cornerRadius = 20
         v.isHidden = false
@@ -26,28 +39,24 @@ class IncomeCallViewController: UIViewController {
         return v
     }()
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .yellow
         setUpViews()
-//        videoView.configureView(url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
     }
   
     func setUpViews(){
-        self.view.addSubview(videoView)
-        
-        videoView.leftButton.setImage(UIImage(named: "hangup"), for: .normal)
-        videoView.rightButton.setImage(UIImage(named: "call"), for: .normal)
-        videoView.leftButton.backgroundColor = .red
-        
-        videoView.leftButton.addTarget(self, action: #selector(rejectCallTapped), for: .touchUpInside)
-        videoView.rightButton.addTarget(self, action: #selector(pickUpCallTapped), for: .touchUpInside)
+        self.view.addSubview(callerView)
+    
+        callerView.declineButton.addTarget(self, action: #selector(rejectCallTapped), for: .touchUpInside)
+        callerView.answerButton.addTarget(self, action: #selector(pickUpCallTapped), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            videoView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            videoView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            videoView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            videoView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            callerView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            callerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            callerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            callerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ])
     }
     

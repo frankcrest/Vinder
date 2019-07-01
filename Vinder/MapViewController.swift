@@ -234,6 +234,10 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        let loginNav = UINavigationController()
+//        loginNav.viewControllers = [IncomeCallViewController()]
+//        loginNav.modalPresentationStyle = .fullScreen
+//        present(loginNav, animated: false, completion: nil)
         if Auth.auth().currentUser == nil {
             presentLogInNavigationController()
         } else{
@@ -251,7 +255,7 @@ class MapViewController: UIViewController {
         super.viewWillAppear(true)
         ref.child("users").removeAllObservers()
         if !profileview.isHidden {
-            hideVideoView()
+            hideProfileView()
             
         }
     }
@@ -314,7 +318,7 @@ class MapViewController: UIViewController {
         profileview.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         profileview.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
         profileview.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
-        profileview.dissmissButton.addTarget(self, action: #selector(hideVideoView), for: .touchUpInside )
+        profileview.dissmissButton.addTarget(self, action: #selector(hideProfileView), for: .touchUpInside )
         profileview.addGestureRecognizer(swipeRecog)
         swipeRecog.addTarget(self, action: #selector(swipeHandler(_:)))
         swipeRecog.direction = .up
@@ -548,7 +552,7 @@ class MapViewController: UIViewController {
         }, completion: nil)
         
         if !profileview.isHidden {
-            hideVideoView()
+            hideProfileView()
         }
         if rightViewLeading.constant == -self.view.bounds.width {
             
@@ -593,7 +597,7 @@ class MapViewController: UIViewController {
         }, completion: nil)
         
         if !profileview.isHidden {
-            hideVideoView()
+            hideProfileView()
         }
         
         if leftViewTrailing.constant == self.view.bounds.width || rightViewLeading.constant == -self.view.bounds.width{
@@ -623,7 +627,7 @@ class MapViewController: UIViewController {
         }, completion: nil)
         
         if !profileview.isHidden {
-            hideVideoView()
+            hideProfileView()
         }
         
         if leftViewTrailing.constant == self.view.bounds.width{
@@ -661,7 +665,7 @@ class MapViewController: UIViewController {
     
     @objc func swipeHandler(_ sender: UISwipeGestureRecognizer) {
         if sender.state == .ended {
-            hideVideoView()
+            hideProfileView()
         }
     }
     
@@ -903,7 +907,7 @@ extension MapViewController: ShowProfileDelegate {
         profileview.username = name
     }
     
-    @objc func hideVideoView() {
+    @objc func hideProfileView() {
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
             self.profileview.alpha = 0
         }, completion: nil)

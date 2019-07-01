@@ -14,6 +14,13 @@ class TNImageView: UIImageView {
     
     var imageUrlString: String?
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        translatesAutoresizingMaskIntoConstraints = false
+        contentMode = .scaleAspectFill
+        clipsToBounds = true
+    }
+    
     func loadThumbnailImage(withURL imageURL: String) {
         
         imageUrlString = imageURL
@@ -38,7 +45,6 @@ class TNImageView: UIImageView {
                     if self.imageUrlString == imageURL {
                         self.image = imageToCache
                     }
-                    
                     imageCache.setObject(imageToCache, forKey: imageURL as NSString)
                 }catch let error {
                     print(error)
