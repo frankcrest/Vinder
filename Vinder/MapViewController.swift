@@ -7,6 +7,7 @@ import Firebase
 class MapViewController: UIViewController {
     
     //MARK: PROPERTIES
+    var loadUserCalledCount = 0
     private let webService = WebService()
     private var messages: [Messages] = []
     let ref = Database.database().reference()
@@ -419,7 +420,7 @@ class MapViewController: UIViewController {
             contactsCollectionView.leadingAnchor.constraint(equalTo: self.leftView.leadingAnchor, constant: 0),
             contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
             contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
-
+            
             
             profileview.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             profileview.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -443,17 +444,18 @@ class MapViewController: UIViewController {
     }
     
     func loadUsers(){
+        loadUserCalledCount += 1
         print("fetching users")
         webService.fetchUsers { (users) in
             guard let users = users else {
                 print("failed fetching users")
                 return
             }
-          
-          print("inside load users \(users.count)")
+            
+//            print("inside load users \(users.count)")
             DispatchQueue.main.async {
                 self.mapView.removeAnnotations(self.mapView.annotations)
-                print("annotations after \(self.mapView.annotations.count)")
+//                print("annotations after \(self.mapView.annotations.count)")
                 self.users.removeAll()
                 for user in users {
                     if user.uid == self.currentUser?.uid{
@@ -462,10 +464,11 @@ class MapViewController: UIViewController {
                     self.mapView.addAnnotation(user)
                     self.users.append(user)
                 }
-                print("annotations \(self.mapView.annotations.count)")
+//                print("annotations \(self.mapView.annotations.count)")
             }
-
+            
         }
+        print("LoadUsers called count: \(loadUserCalledCount)")
     }
     
     func loadUserLocations(){
@@ -695,11 +698,11 @@ class MapViewController: UIViewController {
         
         if profileview.heartButton.currentImage == UIImage(named:"heartUntap"){
             profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-//            videoView.heartButton.backgroundColor = .white
+            //            videoView.heartButton.backgroundColor = .white
             ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid : "true"])
         }else{
             profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-//            videoView.heartButton.backgroundColor = .magenta
+            //            videoView.heartButton.backgroundColor = .magenta
             ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue()
         }
     }
@@ -836,10 +839,10 @@ extension MapViewController : MKMapViewDelegate {
         ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
             if snapshot.exists(){
                 self.profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-//                self.videoView.heartButton.backgroundColor = .white
+                //                self.videoView.heartButton.backgroundColor = .white
             }else{
                 self.profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-//                self.videoView.heartButton.backgroundColor = .magenta
+                //                self.videoView.heartButton.backgroundColor = .magenta
             }
         }
         
@@ -855,7 +858,7 @@ extension MapViewController : MKMapViewDelegate {
 }
 //MARK: VIDEO VIEW RELATED
 extension MapViewController: ShowProfileDelegate {
-
+    
     
     func actionToMsg(_ message: Messages) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -925,8 +928,8 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if messages.count > 0
         {
-//            messageTableView.backgroundView = nil
-//            numOfSection = 1
+            //            messageTableView.backgroundView = nil
+            //            numOfSection = 1
         } else {
             let noMsgLabel: UILabel = UILabel(frame: CGRect(x:0, y:0, width: messageTableView.bounds.size.width,height: messageTableView.bounds.size.height))
             noMsgLabel.text = "No Messages!"

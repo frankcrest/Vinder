@@ -19,6 +19,7 @@ class ProfileView: RoundedCornerView {
     var isLoop: Bool = false
     let ws = WebService()
     
+    
     var videoURL: String? {
         didSet {
             configureView()
@@ -43,6 +44,7 @@ class ProfileView: RoundedCornerView {
     let videoView:UIView = {
         let v = UIView()
         v.backgroundColor = .white
+        v.isUserInteractionEnabled = true
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -117,11 +119,15 @@ class ProfileView: RoundedCornerView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapped))
+        self.videoView.addGestureRecognizer(tapGesture)
         setUpViews()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapped))
+        self.videoView.addGestureRecognizer(tapGesture)
         setUpViews()
     }
     
@@ -226,7 +232,7 @@ class ProfileView: RoundedCornerView {
                     self.playerLayer.frame = self.videoContainer.frame
                     self.layer.addSublayer(self.playerLayer)
                     self.player.play()
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemDidReachEnd(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+//                    NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemDidReachEnd(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
                 }
             }
         }
@@ -249,6 +255,10 @@ class ProfileView: RoundedCornerView {
         
     }
     
-
+    @objc func tapped(){
+        print("tapped")
+        self.player.seek(to: CMTime.zero)
+        self.player.play()
+    }
     
 }
