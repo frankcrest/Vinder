@@ -254,7 +254,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
             if isTutorialMode {
                 notSurebutton.isHidden = false
             }
-
+            
             buttonView.switchCameraButton.setTitle("switch", for: .normal)
             sender.setTitle("back", for: .normal)
             clearVideoReviewLayer()
@@ -311,7 +311,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
             default:
                 self.buttonView.switchCameraButton.setTitle("confirm", for: .normal)
             }
-          
+            
             self.notSurebutton.isHidden = true
         }
     }
@@ -325,7 +325,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
 //MARK: MODES
 
 extension RecordVideoViewController {
-
+    
     
     func registerMode() {
         
@@ -347,13 +347,13 @@ extension RecordVideoViewController {
                     }
                 }
             }
-
+            
         }
-
-
-  }
-
-  
+        
+        
+    }
+    
+    
     func messageMode() {
         
         guard let user = self.toUser else { return }
@@ -379,7 +379,7 @@ extension RecordVideoViewController {
     }
     
     func profileMode() {
-
+        
         webService.uploadVideo(atURL: cameraController.fileURL) { (url) -> (Void) in
             
             self.webService.changeProfile("\(url)") { (err) in
@@ -390,10 +390,10 @@ extension RecordVideoViewController {
                 self.dismiss(animated: true, completion: nil)
             }
         }
-
+        
     }
     
-  
+    
 }
 
 
@@ -411,7 +411,7 @@ extension RecordVideoViewController {
         do{
             thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: 0, preferredTimescale: 1), actualTime: nil))
         } catch let error  {
-          print(error)
+            print(error)
             print("No image")
         }
         
@@ -439,7 +439,7 @@ extension RecordVideoViewController {
         do{
             thumbnail = try UIImage(cgImage: imageGenerator.copyCGImage(at: CMTime(seconds: captureTime, preferredTimescale: 1), actualTime: nil))
         } catch let error {
-          print(error)
+            print(error)
             print("No image")
         }
         
@@ -456,7 +456,7 @@ extension RecordVideoViewController {
         let duration = videoAsset.duration
         let durationTime = CMTimeGetSeconds(duration)
         let clipVideoTrack = videoAsset.tracks(withMediaType: AVMediaType.video).first! as AVAssetTrack
-//        let clipAudioTrack = videoAsset.tracks(withMediaType: AVMediaType.audio).first! as AVAssetTrack
+        //        let clipAudioTrack = videoAsset.tracks(withMediaType: AVMediaType.audio).first! as AVAssetTrack
         
         let videoComposition = AVMutableVideoComposition(propertiesOf: videoAsset)
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -470,14 +470,13 @@ extension RecordVideoViewController {
         videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 60)
         
         let transformer = AVMutableVideoCompositionLayerInstruction( assetTrack: clipVideoTrack )
-                let transform1 = CGAffineTransform( translationX: clipVideoTrack.naturalSize.height, y: -( clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height ) / 2 )
-                let transform2 = transform1.rotated(by: CGFloat( Double.pi / 2 ) )
-                transformer.setTransform( transform2, at: CMTime.zero)
+        let transform1 = CGAffineTransform( translationX: clipVideoTrack.naturalSize.height, y: -( clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height ) / 2 )
+        let transform2 = transform1.rotated(by: CGFloat( Double.pi / 2 ) )
+        transformer.setTransform( transform2, at: CMTime.zero)
         
         
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.enablePostProcessing = true
-//        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: CMTimeMakeWithSeconds(durationTime, preferredTimescale: 1200000))
         instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: duration)
         
         instruction.layerInstructions = [transformer]
