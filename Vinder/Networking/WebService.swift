@@ -17,7 +17,6 @@ protocol UpdateProgressDelegate: AnyObject {
 
 class WebService {
 
-    
     //MARK: PROPERTIES
     
     var updateProgressDelegate: UpdateProgressDelegate?
@@ -292,8 +291,9 @@ class WebService {
   
     
     func fetchUsers(completion: @escaping ([User]?) -> Void) {
-        
+        print("inside fetch users of web service")
         var users: [User] = []
+        users.removeAll()
         ref.child("users").observe(.value) { (snapshot) in
             for user in snapshot.children.allObjects as! [DataSnapshot]{
                 guard let userObject = user.value as? [String:AnyObject] else{continue}

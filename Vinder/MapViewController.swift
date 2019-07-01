@@ -453,14 +453,13 @@ class MapViewController: UIViewController {
     }
     
     func loadUsers(){
-        print("fetching users")
+        print("inside load users")
         webService.fetchUsers { (users) in
             guard let users = users else {
                 print("failed fetching users")
                 return
             }
           
-          print("inside load users \(users.count)")
             DispatchQueue.main.async {
                 self.mapView.removeAnnotations(self.mapView.annotations)
                 print("annotations after \(self.mapView.annotations.count)")
