@@ -915,9 +915,9 @@ extension MapViewController: ShowProfileDelegate {
 // MARK: TABLEVIEW DELEGATE
 extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.view.bounds.width
+
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return self.view.bounds.width + 52
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
