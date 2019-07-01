@@ -113,7 +113,6 @@ class MapViewController: UIViewController {
     
     let contactButton: RoundedButton = {
         let b = RoundedButton()
-        //        b.backgroundColor = .magenta
         b.addTarget(self, action: #selector(contactTapped), for: .touchUpInside)
         b.setImage(UIImage(named: "friends"), for: .normal)
         return b
@@ -121,7 +120,6 @@ class MapViewController: UIViewController {
     
     let mapButton: RoundedButton = {
         let b = RoundedButton()
-        //        b.backgroundColor = .green
         b.addTarget(self, action: #selector(mapTapped), for: .touchUpInside)
         b.setImage(UIImage(named: "map"), for: .normal)
         return b
@@ -455,6 +453,8 @@ class MapViewController: UIViewController {
                 print("failed fetching users")
                 return
             }
+          
+          print("inside load users \(users.count)")
             DispatchQueue.main.async {
                 self.mapView.removeAnnotations(self.mapView.annotations)
                 print("annotations after \(self.mapView.annotations.count)")
@@ -512,8 +512,6 @@ class MapViewController: UIViewController {
         guard let user = currentUser else {return}
         print("uid: \(user.uid)")
         webService.updateUserWithLocation(lat: lat, lon: lon, uid: user.uid)
-        //??????????????????????????
-        loadUsers()
     }
     
     //MARK: BUTTON ACTIONS
