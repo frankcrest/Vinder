@@ -18,13 +18,6 @@ class MessageTableViewCell: UITableViewCell {
     var showProfileDelegate: ShowProfileDelegate?
     var isProfileHidden: Bool?
     
-    let containerView:UIView = {
-        let v = UIView()
-        v.backgroundColor = .gray
-        v.translatesAutoresizingMaskIntoConstraints = false
-        return v
-    }()
-    
     let nameLabel:UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20)
@@ -56,6 +49,9 @@ class MessageTableViewCell: UITableViewCell {
     
     var thumbnailImageView: TNImageView = {
         let imageview = TNImageView()
+        imageview.translatesAutoresizingMaskIntoConstraints = false
+        imageview.contentMode = .scaleAspectFill
+        imageview.clipsToBounds = true
         return imageview
     }()
     
@@ -68,8 +64,7 @@ class MessageTableViewCell: UITableViewCell {
         b.imageView?.bounds.size.width = b.bounds.size.width * 0.6
         return b
     }()
-    
-
+  
     var thumbnail: UIImage!
     
     var message: Messages? {
@@ -105,46 +100,40 @@ class MessageTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        addSubview(containerView)
+      
         addSubview(nameLabel)
         addSubview(timestampLabel)
         addSubview(replyButton)
-        containerView.addSubview(thumbnailImageView)
         addSubview(profileImageView)
+        addSubview(thumbnailImageView)
         profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showProfile)))
         replyButton.addTarget(self, action: #selector(actionToMsg), for: .touchUpInside)
         NSLayoutConstraint.activate([
+          
+          profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+          profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+          profileImageView.widthAnchor.constraint(equalToConstant: 44),
+          profileImageView.heightAnchor.constraint(equalToConstant: 44),
+          
+          nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+          nameLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 16),
+          nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+          nameLabel.heightAnchor.constraint(equalToConstant: 24),
+          
+          timestampLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 4),
+          timestampLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 16),
+          timestampLabel.heightAnchor.constraint(equalToConstant: 12),
+          timestampLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+          
+          replyButton.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+          replyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+          replyButton.widthAnchor.constraint(equalToConstant: 44.0),
+          replyButton.heightAnchor.constraint(equalToConstant: 44.0),
             
-            replyButton.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            replyButton.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: -4),
-            replyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            replyButton.widthAnchor.constraint(equalToConstant: 44.0),
-            
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            profileImageView.bottomAnchor.constraint(equalTo: self.containerView.topAnchor, constant: -4),
-            profileImageView.widthAnchor.constraint(equalToConstant: 44.0),
-            profileImageView.heightAnchor.constraint(equalToConstant: 44.0),
-            
-            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            nameLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 16),
-            nameLabel.heightAnchor.constraint(equalToConstant: 25),
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8),
-            
-            timestampLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 4),
-            timestampLabel.leadingAnchor.constraint(equalTo: self.profileImageView.trailingAnchor, constant: 16),
-            timestampLabel.heightAnchor.constraint(equalToConstant: 12),
-            timestampLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8),
-           
-            containerView.topAnchor.constraint(equalTo: self.profileImageView.bottomAnchor, constant: 8),
-            containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
-            containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
-            containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
-            
-            thumbnailImageView.widthAnchor.constraint(equalTo: containerView.widthAnchor),
-            thumbnailImageView.heightAnchor.constraint(equalTo: containerView.heightAnchor),
-            
+            thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            thumbnailImageView.topAnchor.constraint(equalTo: self.profileImageView.bottomAnchor, constant: 4),
+            thumbnailImageView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: 0),
+           thumbnailImageView.heightAnchor.constraint(equalTo: self.widthAnchor, constant: 0)
             ])
     }
     

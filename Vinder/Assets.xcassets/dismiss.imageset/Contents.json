@@ -2,11 +2,15 @@
   "images" : [
     {
       "idiom" : "universal",
+<<<<<<< HEAD
       "filename" : "cancel.png",
+=======
+>>>>>>> fixbug3
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "error.png",
       "scale" : "2x"
     },
     {

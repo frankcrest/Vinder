@@ -85,7 +85,6 @@ class MapViewController: UIViewController {
         b.setImage(UIImage(named: "exit"), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
-        b.layer.cornerRadius = 25
         return b
     }()
     
@@ -328,14 +327,13 @@ class MapViewController: UIViewController {
         
         buttonStackViewTrailingConstraint = buttonStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30)
         buttonStackViewLeadingConstraint = buttonStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30)
-        mapButtonWidthCons =  mapButton.widthAnchor.constraint(equalToConstant: 70)
-        mapButtonHeightCons =  mapButton.heightAnchor.constraint(equalToConstant: 70)
-        messageButtonHeightCons = messagesButton.heightAnchor.constraint(equalToConstant: 55)
-        messageButtonWidthCons = messagesButton.widthAnchor.constraint(equalToConstant: 55)
-        contactButtonHeightCons = contactButton.heightAnchor.constraint(equalToConstant: 55)
-        contactButtonWidthCons = contactButton.widthAnchor.constraint(equalToConstant: 55)
-        
-        
+        mapButtonWidthCons =  mapButton.widthAnchor.constraint(equalToConstant: 50)
+        mapButtonHeightCons =  mapButton.heightAnchor.constraint(equalToConstant: 50)
+        messageButtonHeightCons = messagesButton.heightAnchor.constraint(equalToConstant: 35)
+        messageButtonWidthCons = messagesButton.widthAnchor.constraint(equalToConstant: 35)
+        contactButtonHeightCons = contactButton.heightAnchor.constraint(equalToConstant: 35)
+        contactButtonWidthCons = contactButton.widthAnchor.constraint(equalToConstant: 35)
+      
         NSLayoutConstraint.activate([
             
             inboxLabel.centerXAnchor.constraint(equalTo: navViewRight.centerXAnchor),
@@ -542,8 +540,8 @@ class MapViewController: UIViewController {
         messageButtonHeightCons?.constant = 35
         mapButtonWidthCons?.constant = 35
         mapButtonHeightCons?.constant = 35
-        contactButtonHeightCons?.constant = 70
-        contactButtonWidthCons?.constant = 70
+        contactButtonHeightCons?.constant = 55
+        contactButtonWidthCons?.constant = 55
         showAllanotations()
         finderButton.isHidden = true
         focusedUserIndex = 0
@@ -578,12 +576,12 @@ class MapViewController: UIViewController {
         generator.impactOccurred()
         buttonStackViewTrailingConstraint?.constant = -30
         buttonStackViewLeadingConstraint?.constant = 30
-        messageButtonWidthCons?.constant = 55
-        messageButtonHeightCons?.constant = 55
-        mapButtonWidthCons?.constant = 70
-        mapButtonHeightCons?.constant = 70
-        contactButtonHeightCons?.constant = 55
-        contactButtonWidthCons?.constant = 55
+        messageButtonWidthCons?.constant = 35
+        messageButtonHeightCons?.constant = 35
+        mapButtonWidthCons?.constant = 50
+        mapButtonHeightCons?.constant = 50
+        contactButtonHeightCons?.constant = 35
+        contactButtonWidthCons?.constant = 35
         showAllanotations()
         finderButton.isHidden = false
         focusedUserIndex = 0
@@ -613,8 +611,8 @@ class MapViewController: UIViewController {
         generator.impactOccurred()
         buttonStackViewTrailingConstraint?.constant = -100
         buttonStackViewLeadingConstraint?.constant = 100
-        messageButtonWidthCons?.constant = 70
-        messageButtonHeightCons?.constant = 70
+        messageButtonWidthCons?.constant = 50
+        messageButtonHeightCons?.constant = 50
         mapButtonWidthCons?.constant = 35
         mapButtonHeightCons?.constant = 35
         contactButtonHeightCons?.constant = 35
@@ -921,9 +919,9 @@ extension MapViewController: ShowProfileDelegate {
 // MARK: TABLEVIEW DELEGATE
 extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.view.bounds.width
+
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return self.view.bounds.width + 52
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
