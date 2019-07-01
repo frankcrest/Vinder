@@ -32,15 +32,23 @@ class MapViewController: UIViewController {
     var friends = [User]()
     //MARK: VIEW PROPERTIES
     
-    let videoView : VideoView = {
-        let v = VideoView()
-        v.backgroundColor = .white
-        v.layer.cornerRadius = 10
-        v.clipsToBounds = true
+//    let videoView : VideoView = {
+//        let v = VideoView()
+//        v.backgroundColor = .white
+//        v.layer.cornerRadius = 10
+//        v.clipsToBounds = true
+//        v.isHidden = true
+//        v.translatesAutoresizingMaskIntoConstraints = false
+//        return v
+//    }()
+    
+    let videoView : ProfileView = {
+        let v = ProfileView()
+        v.backgroundColor = .clear
         v.isHidden = true
-        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+    
     
     let buttonContainer:UIView = {
         let v = UIView()
@@ -316,6 +324,7 @@ class MapViewController: UIViewController {
         videoView.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         videoView.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
         videoView.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
+        videoView.dissmissButton.addTarget(self, action: #selector(hideVideoView), for: .touchUpInside )
         videoView.addGestureRecognizer(swipeRecog)
         swipeRecog.addTarget(self, action: #selector(swipeHandler(_:)))
         swipeRecog.direction = .up
@@ -420,16 +429,12 @@ class MapViewController: UIViewController {
             contactsCollectionView.leadingAnchor.constraint(equalTo: self.leftView.leadingAnchor, constant: 0),
             contactsCollectionView.trailingAnchor.constraint(equalTo: self.leftView.trailingAnchor, constant: 0),
             contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
-            
-            //            videoView.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: statusBarHeight + 58),
-            //            videoView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 50),
-            //            videoView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor ,constant: -50),
-            //            videoView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: -180),
+
             
             videoView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             videoView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            videoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3.0/4.0),
-            videoView.heightAnchor.constraint(equalTo: view.widthAnchor),
+            videoView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            videoView.heightAnchor.constraint(equalTo: view.heightAnchor),
             ])
         
     }
@@ -658,15 +663,6 @@ class MapViewController: UIViewController {
     
     //MARK: Handle user interaction
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first
-        guard let location = touch?.location(in: self.view) else { return }
-        if !videoView.frame.contains(location) && videoView.isHidden == false{
-            hideVideoView()
-        } else {
-            
-        }
-    }
     
     @objc func swipeHandler(_ sender: UISwipeGestureRecognizer) {
         if sender.state == .ended {
@@ -704,11 +700,11 @@ class MapViewController: UIViewController {
         
         if videoView.heartButton.currentImage == UIImage(named:"heartUntap"){
             videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-            videoView.heartButton.backgroundColor = .white
+//            videoView.heartButton.backgroundColor = .white
             ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid : "true"])
         }else{
             videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-            videoView.heartButton.backgroundColor = .magenta
+//            videoView.heartButton.backgroundColor = .magenta
             ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue()
         }
     }
@@ -845,10 +841,10 @@ extension MapViewController : MKMapViewDelegate {
         ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
             if snapshot.exists(){
                 self.videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-                self.videoView.heartButton.backgroundColor = .white
+//                self.videoView.heartButton.backgroundColor = .white
             }else{
                 self.videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-                self.videoView.heartButton.backgroundColor = .magenta
+//                self.videoView.heartButton.backgroundColor = .magenta
             }
         }
         
@@ -915,7 +911,7 @@ extension MapViewController: ShowProfileDelegate {
 //        videoView.play()
     }
     
-    func hideVideoView() {
+    @objc func hideVideoView() {
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
             self.videoView.alpha = 0
         }, completion: nil)
