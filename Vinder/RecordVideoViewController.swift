@@ -360,7 +360,7 @@ extension RecordVideoViewController {
             return
           }
           let mapVC = self.navigationController?.viewControllers[0] as! MapViewController
-          mapVC.videoView.isHidden = true
+          mapVC.profileview.isHidden = true
           self.clearVideoReviewLayer()
           self.navigationController?.popViewController(animated: true)
           

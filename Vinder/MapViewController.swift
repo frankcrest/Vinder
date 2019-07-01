@@ -42,7 +42,7 @@ class MapViewController: UIViewController {
 //        return v
 //    }()
     
-    let videoView : ProfileView = {
+    let profileview : ProfileView = {
         let v = ProfileView()
         v.backgroundColor = .clear
         v.isHidden = true
@@ -261,7 +261,7 @@ class MapViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(true)
         ref.child("users").removeAllObservers()
-        if !videoView.isHidden {
+        if !profileview.isHidden {
             hideVideoView()
             
         }
@@ -304,7 +304,7 @@ class MapViewController: UIViewController {
         contactsCollectionView.delegate = self
         contactsCollectionView.dataSource = self
         
-        self.view.addSubview(videoView)
+        self.view.addSubview(profileview)
         
         self.leftView.addSubview(navViewLeft)
         self.rightView.addSubview(navViewRight)
@@ -317,15 +317,15 @@ class MapViewController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.navigationBar.isHidden = true
         
-        videoView.rightButton.setImage(UIImage(named: "call"), for: .normal)
-        videoView.leftButton.setImage(UIImage(named: "message"), for: .normal)
-        videoView.heartButton.setImage(UIImage(named:"like"), for: .normal)
+        profileview.rightButton.setImage(UIImage(named: "call"), for: .normal)
+        profileview.leftButton.setImage(UIImage(named: "message"), for: .normal)
+        profileview.heartButton.setImage(UIImage(named:"like"), for: .normal)
         
-        videoView.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
-        videoView.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
-        videoView.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
-        videoView.dissmissButton.addTarget(self, action: #selector(hideVideoView), for: .touchUpInside )
-        videoView.addGestureRecognizer(swipeRecog)
+        profileview.leftButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+        profileview.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
+        profileview.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
+        profileview.dissmissButton.addTarget(self, action: #selector(hideVideoView), for: .touchUpInside )
+        profileview.addGestureRecognizer(swipeRecog)
         swipeRecog.addTarget(self, action: #selector(swipeHandler(_:)))
         swipeRecog.direction = .up
         
@@ -431,10 +431,10 @@ class MapViewController: UIViewController {
             contactsCollectionView.bottomAnchor.constraint(equalTo: self.leftView.bottomAnchor, constant: 0),
 
             
-            videoView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            videoView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            videoView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            videoView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            profileview.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileview.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            profileview.widthAnchor.constraint(equalTo: view.widthAnchor),
+            profileview.heightAnchor.constraint(equalTo: view.heightAnchor),
             ])
         
     }
@@ -522,7 +522,7 @@ class MapViewController: UIViewController {
     
     //MARK: BUTTON ACTIONS
     @objc func logoutTapped(){
-        videoView.isHidden = true
+        profileview.isHidden = true
         do{
             try webService.logOut()
             UserDefaults.standard.set(false, forKey: "isLoggedIn")
@@ -557,7 +557,7 @@ class MapViewController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: nil)
         
-        if !videoView.isHidden {
+        if !profileview.isHidden {
             hideVideoView()
         }
         if rightViewLeading.constant == -self.view.bounds.width {
@@ -597,7 +597,7 @@ class MapViewController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: nil)
         
-        if !videoView.isHidden {
+        if !profileview.isHidden {
             hideVideoView()
         }
         
@@ -627,7 +627,7 @@ class MapViewController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: nil)
         
-        if !videoView.isHidden {
+        if !profileview.isHidden {
             hideVideoView()
         }
         
@@ -698,12 +698,12 @@ class MapViewController: UIViewController {
         guard let selectedUser = selectedUser else {return}
         guard let currentUser = currentUser else {return}
         
-        if videoView.heartButton.currentImage == UIImage(named:"heartUntap"){
-            videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+        if profileview.heartButton.currentImage == UIImage(named:"heartUntap"){
+            profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
 //            videoView.heartButton.backgroundColor = .white
             ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid : "true"])
         }else{
-            videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+            profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
 //            videoView.heartButton.backgroundColor = .magenta
             ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue()
         }
@@ -840,10 +840,10 @@ extension MapViewController : MKMapViewDelegate {
         
         ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
             if snapshot.exists(){
-                self.videoView.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+                self.profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
 //                self.videoView.heartButton.backgroundColor = .white
             }else{
-                self.videoView.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+                self.profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
 //                self.videoView.heartButton.backgroundColor = .magenta
             }
         }
@@ -851,7 +851,7 @@ extension MapViewController : MKMapViewDelegate {
         if user.uid != userTapped.uid{
             print("did not tap self, the user uid = \(userTapped.uid)")
             print(user.uid)
-            showVideoView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
+            showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
         } else{
             print("you tapped on yourself, do nothing")
         }
@@ -898,25 +898,25 @@ extension MapViewController: ShowProfileDelegate {
     
     
     
-    func showVideoView(withUser name: String, profileVideoUrl: String) {
+    func showProfileView(withUser name: String, profileVideoUrl: String) {
         
-        view.bringSubviewToFront(videoView)
-        videoView.isHidden = false
+        view.bringSubviewToFront(profileview)
+        profileview.isHidden = false
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
-            self.videoView.alpha = 1
+            self.profileview.alpha = 1
         }, completion: nil)
-        videoView.videoURL = profileVideoUrl
-        videoView.username = name
+        profileview.videoURL = profileVideoUrl
+        profileview.username = name
 //        videoView.configureView()
 //        videoView.play()
     }
     
     @objc func hideVideoView() {
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
-            self.videoView.alpha = 0
+            self.profileview.alpha = 0
         }, completion: nil)
-        self.videoView.stop()
-        self.videoView.isHidden = true
+        self.profileview.stop()
+        self.profileview.isHidden = true
     }
     
 }
@@ -948,7 +948,7 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
         cell.showProfileDelegate = self
-        cell.isProfileHidden = videoView.isHidden
+        cell.isProfileHidden = profileview.isHidden
         cell.message = messages[indexPath.row]
         
         return cell
