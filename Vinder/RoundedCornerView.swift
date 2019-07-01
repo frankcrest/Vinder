@@ -9,12 +9,17 @@
 import UIKit
 
 class RoundedCornerView: UIView {
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        layer.cornerRadius = 25
-        clipsToBounds = true
-        translatesAutoresizingMaskIntoConstraints = false
-    }
+  
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    
+    layer.cornerRadius = 25
+    clipsToBounds = true
+    translatesAutoresizingMaskIntoConstraints = false
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
 }
