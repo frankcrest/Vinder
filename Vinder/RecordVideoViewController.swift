@@ -378,7 +378,8 @@ extension RecordVideoViewController {
                             print("cant change video profile: \(String(describing: err))")
                             return
                         }
-                        self.dismiss(animated: true, completion: nil)
+                        self.clearVideoReviewLayer()
+                        self.navigationController?.popViewController(animated: true)
                     }
                 }
             

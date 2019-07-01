@@ -183,7 +183,6 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     recordProfileVideoController.isTutorialMode = true
     recordProfileVideoController.mode = .signupMode
     navigationController?.pushViewController(recordProfileVideoController, animated: true)
-    
    
   }
   

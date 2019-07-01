@@ -534,7 +534,7 @@ class MapViewController: UIViewController {
         let settingsVC = SettingViewController()
         guard let user = selfUser else {return}
         settingsVC.currentUser = user
-        self.present(settingsVC, animated: true, completion: nil)
+        navigationController?.pushViewController(settingsVC, animated: true)
     }
     
     @objc func contactTapped(){

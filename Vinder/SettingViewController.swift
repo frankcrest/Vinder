@@ -10,10 +10,7 @@
   import Photos
   import FirebaseDatabase
   import FirebaseAuth
-  
-  protocol UpdateUserInfoDelegate {
-    func updateUserInfo()
-  }
+ 
   
   class SettingViewController: UIViewController,UINavigationControllerDelegate,UIImagePickerControllerDelegate {
     
@@ -82,19 +79,16 @@
         tableView.dataSource = self
         tableView.delegate = self
         setupViews()
-        updateUserInfo()
+//        updateUserInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         updateUserInfo()
-        
-        setupViews()
     }
     
     
     override func viewDidLayoutSubviews() {
-        //Match size of view-controller
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         self.playerLayer.frame = self.profileVideo.bounds
@@ -115,8 +109,8 @@
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
         self.imageView.addGestureRecognizer(longPressGesture)
         
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeDown))
-        swipeGesture.direction = .down
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight))
+        swipeGesture.direction = .right
         self.view.addGestureRecognizer(swipeGesture)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTap))
@@ -128,7 +122,7 @@
             profileHeader.topAnchor.constraint(equalTo: self.view.topAnchor),
             profileHeader.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             profileHeader.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//            profileHeader.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -580),
+            //            profileHeader.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -580),
             profileHeader.heightAnchor.constraint(equalToConstant: self.view.frame.height*3/8),
             
             //imageview constraint
@@ -139,7 +133,7 @@
             
             //profileVid constraint
             profileVideo.bottomAnchor.constraint(equalTo: profileHeader.bottomAnchor, constant: 15),
-//            profileVideo.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80),
+            //            profileVideo.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80),
             profileVideo.heightAnchor.constraint(equalToConstant: self.view.frame.width*3/5),
             profileVideo.widthAnchor.constraint(equalTo: profileVideo.heightAnchor),
             profileVideo.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
@@ -173,30 +167,31 @@
     }
     
     func setUpProfileVideo(){
+        player = nil
+        playerLayer = nil
         guard let videoURL = currentUser?.profileVideoUrl else { return }
         guard let url = URL(string: videoURL) else { return }
         player = AVPlayer(url: url)
         playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = self.profileVideo.frame
         self.profileVideo.layer.addSublayer(playerLayer)
-        player.play()
     }
     
-    @objc func swipeDown(){
-        self.dismiss(animated: true, completion: nil)
+    @objc func swipeRight(){
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func longPress(){
         print("long press")
-            let alert = UIAlertController(title: "Choose Photo From", message: "", preferredStyle: .actionSheet)
-            alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
-                self.getImage(fromSourceType: .camera)
-            }))
-            alert.addAction(UIAlertAction(title: "Photo Album", style: .default, handler: {(action: UIAlertAction) in
-                self.getImage(fromSourceType: .photoLibrary)
-            }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: "Choose Photo From", message: "", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
+            self.getImage(fromSourceType: .camera)
+        }))
+        alert.addAction(UIAlertAction(title: "Photo Album", style: .default, handler: {(action: UIAlertAction) in
+            self.getImage(fromSourceType: .photoLibrary)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func profileTap(){
@@ -208,17 +203,11 @@
     @objc func editTapped(){
         let recordController = RecordVideoViewController()
         recordController.mode = .profileMode
-        self.present(recordController, animated: true, completion: {
-            self.player = nil
-            self.playerLayer = nil
-        })
-        updateUserInfo()
-        setUpProfileVideo()
-        
-        self.view.layoutIfNeeded()
+        self.navigationController?.pushViewController(recordController, animated: true)
     }
     
     func updateUserInfo(){
+        print("\(currentUser?.profileVideoUrl)")
         let userID = Auth.auth().currentUser?.uid
         ref.child("users").child(userID!).observeSingleEvent(of: .value, with: { (snapshot) in
             
@@ -227,6 +216,7 @@
             self.currentUser?.email = value?["email"] as? String ?? ""
             self.currentUser?.profileVideoUrl = value?["profileVideo"] as? String ?? ""
             
+
         }) { (error) in
             print(error.localizedDescription)
         }
@@ -312,7 +302,7 @@
         ud.set(pickedImageData, forKey: "background")
         dismiss(animated: true, completion: nil)
     }
-
+    
     
     
   }
