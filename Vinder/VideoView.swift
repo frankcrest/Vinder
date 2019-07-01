@@ -118,6 +118,7 @@ class VideoView: UIView {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
+    WebService().updateProgressDelegate = self
     setUpViews()
   }
   
@@ -231,8 +232,11 @@ class VideoView: UIView {
   
   func stop() {
     playerLayer.removeFromSuperlayer()
-    player.pause()
-    player = nil
+    if player != nil {
+        player.pause()
+        player = nil
+    }
+
   }
   
   @objc func reachTheEndOfTheVideo(_ notification: Notification) {

@@ -243,6 +243,7 @@ class MapViewController: UIViewController {
             presentLogInNavigationController()
         } else{
             currentUser = Auth.auth().currentUser
+            webService.goOnline(currentUser!.uid)
             determineCurrentLocation()
             getMessages()
             loadUsers()

@@ -24,8 +24,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     FirebaseApp.configure()
     ref = Database.database().reference()
     
-    if let userID = Auth.auth().currentUser?.uid {
-        WebService().goOnline(userID)
+    WebService().checkAuth { (err) in
+        print("auth error \(err)")
+        if err != nil {
+            print("auth err \(String(describing: err))")
+            do{
+                try WebService().logOut()
+            }catch let err{
+                print("can not log out \(err)")
+            }
+        }
     }
     
     

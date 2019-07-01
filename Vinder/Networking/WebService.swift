@@ -51,6 +51,12 @@ class WebService {
   }()
   
   //MARK: AUTH AND UPDATE
+    
+    func checkAuth(completion: @escaping (Error?) -> Void) {
+        Auth.auth().currentUser?.reload(completion: { (err) in
+            completion(err)
+        })
+    }
   
   func updateUserWithLocation(lat: String, lon: String, uid:String) {
     ref.child("users").child(uid).updateChildValues(["latitude":lat])
