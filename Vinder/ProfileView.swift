@@ -34,7 +34,7 @@ class ProfileView: RoundedCornerView {
     let rootStackView:UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
-        sv.distribution = .fillProportionally
+        sv.distribution = .equalSpacing
         sv.spacing = 16
         sv.alignment = .center
         sv.backgroundColor = .red
@@ -61,7 +61,7 @@ class ProfileView: RoundedCornerView {
     let infoStackView:UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
-        sv.distribution = .equalCentering
+        sv.distribution = .equalSpacing
         sv.alignment = .center
         sv.backgroundColor = .green
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -204,16 +204,18 @@ class ProfileView: RoundedCornerView {
             infoStackView.widthAnchor.constraint(equalTo: videoContainer.widthAnchor),
             infoStackView.heightAnchor.constraint(equalTo: rootStackView.heightAnchor, multiplier: 0.12),
             
-            infoContainer.heightAnchor.constraint(equalTo: infoStackView.heightAnchor),
-             infoContainer.widthAnchor.constraint(equalTo: infoStackView.widthAnchor, multiplier: 0.75),
-            heartButton.heightAnchor.constraint(equalTo: infoStackView.heightAnchor),
-            heartButton.widthAnchor.constraint(equalTo: infoStackView.heightAnchor),
+            
+            heartButton.widthAnchor.constraint(equalTo: videoContainer.widthAnchor, multiplier: 1.0/6.0),
+            heartButton.heightAnchor.constraint(equalTo: heartButton.widthAnchor),
+            infoContainer.heightAnchor.constraint(equalTo: heartButton.widthAnchor),
+            infoContainer.widthAnchor.constraint(equalTo: videoContainer.widthAnchor, multiplier:  5.0/6.0),
+
             
             nameLabel.centerYAnchor.constraint(equalTo: infoContainer.centerYAnchor),
             nameLabel.centerXAnchor.constraint(equalTo: infoContainer.centerXAnchor),
             
             buttonContainer.widthAnchor.constraint(equalTo: videoContainer.widthAnchor),
-            buttonContainer.heightAnchor.constraint(equalTo: rootStackView.heightAnchor, multiplier: 0.09),
+            buttonContainer.heightAnchor.constraint(equalTo: videoContainer.heightAnchor, multiplier: 1.0/6.0),
             
             leftButton.widthAnchor.constraint(equalTo: buttonContainer.widthAnchor, multiplier: 0.48),
             leftButton.heightAnchor.constraint(equalTo: buttonContainer.heightAnchor),
@@ -221,7 +223,7 @@ class ProfileView: RoundedCornerView {
             rightButton.widthAnchor.constraint(equalTo: buttonContainer.widthAnchor, multiplier: 0.48),
             
             dissmissButton.widthAnchor.constraint(equalTo: dissmissButton.heightAnchor),
-            dissmissButton.heightAnchor.constraint(equalTo: rootStackView.heightAnchor, multiplier: 0.11),
+            dissmissButton.heightAnchor.constraint(equalTo: videoContainer.heightAnchor, multiplier: 1.0/6.0),
             
             
             ])

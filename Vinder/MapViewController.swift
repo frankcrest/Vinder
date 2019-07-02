@@ -336,6 +336,14 @@ class MapViewController: UIViewController {
         messageButtonWidthCons = messagesButton.widthAnchor.constraint(equalToConstant: 35)
         contactButtonHeightCons = contactButton.heightAnchor.constraint(equalToConstant: 35)
         contactButtonWidthCons = contactButton.widthAnchor.constraint(equalToConstant: 35)
+        
+        let swipeToRight = UISwipeGestureRecognizer(target: self, action: #selector(mapTapped))
+        swipeToRight.direction = .right
+        rightView.addGestureRecognizer(swipeToRight)
+        
+        let swipeToLeft = UISwipeGestureRecognizer(target: self, action: #selector(mapTapped))
+        swipeToLeft.direction = .left
+        leftView.addGestureRecognizer(swipeToLeft)
       
         NSLayoutConstraint.activate([
             
@@ -705,9 +713,10 @@ class MapViewController: UIViewController {
     }
     
     func retrieveFriendList(completion: @escaping ([String]) -> Void){
-        self.friendList.removeAll()
+       
         guard let currentUser = currentUser else {return}
         ref.child("friends").child(currentUser.uid).observe(.value) { (snapshot) in
+             self.friendList.removeAll()
             for child in snapshot.children{
                 let snap = child as! DataSnapshot
                 let key = snap.key
@@ -859,7 +868,7 @@ extension MapViewController: ShowProfileDelegate {
     
     func actionToMsg(_ message: Messages) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.view.tintColor = .blueColor
+        alert.view.tintColor = .blue
         alert.addAction(UIAlertAction(title: "Reply", style: .default, handler: { (_) in
             let recordMessageVC = RecordVideoViewController()
             recordMessageVC.mode = .messageMode
