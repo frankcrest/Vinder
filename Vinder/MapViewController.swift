@@ -93,7 +93,7 @@ class MapViewController: UIViewController {
         b.backgroundColor = .clear
         b.setImage(UIImage(named:"settings"), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.layer.cornerRadius = 25
+        b.clipsToBounds = true
         b.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
         return b
     }()
@@ -386,8 +386,8 @@ class MapViewController: UIViewController {
             
             settingButton.topAnchor.constraint(equalTo: self.navView.topAnchor, constant: statusBarHeight),
             settingButton.trailingAnchor.constraint(equalTo: self.navView.trailingAnchor, constant: -10),
-            settingButton.heightAnchor.constraint(equalToConstant: 50),
-            settingButton.widthAnchor.constraint(equalToConstant: 50),
+            settingButton.heightAnchor.constraint(equalToConstant: 35),
+            settingButton.widthAnchor.constraint(equalToConstant: 35),
             
             contactButtonWidthCons!,
             contactButtonHeightCons!,
@@ -400,19 +400,19 @@ class MapViewController: UIViewController {
             
             
             finderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            finderButton.heightAnchor.constraint(equalToConstant: 40),
-            finderButton.widthAnchor.constraint(equalToConstant: 40),
-            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -30),
+            finderButton.heightAnchor.constraint(equalToConstant: 35),
+            finderButton.widthAnchor.constraint(equalToConstant: 35),
+            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -10),
             
             buttonStackViewLeadingConstraint!,
             buttonStackViewTrailingConstraint!,
-            buttonStackView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            buttonStackView.heightAnchor.constraint(equalToConstant: 75),
+            buttonStackView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            buttonStackView.heightAnchor.constraint(equalToConstant: 55),
             
-            refreshButton.bottomAnchor.constraint(equalTo: self.buttonStackView.topAnchor, constant: -10),
-            refreshButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-            refreshButton.heightAnchor.constraint(equalToConstant: 50),
-            refreshButton.widthAnchor.constraint(equalToConstant: 50),
+            refreshButton.bottomAnchor.constraint(equalTo: self.buttonStackView.topAnchor, constant: 0),
+            refreshButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
+            refreshButton.heightAnchor.constraint(equalToConstant: 35),
+            refreshButton.widthAnchor.constraint(equalToConstant: 35),
             
             messageTableView.topAnchor.constraint(equalTo: self.navViewRight.bottomAnchor, constant: 0),
             messageTableView.leadingAnchor.constraint(equalTo: self.rightView.leadingAnchor, constant: 0),
