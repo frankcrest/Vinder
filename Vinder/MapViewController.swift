@@ -233,23 +233,23 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let loginNav = UINavigationController()
-        let incomeview = IncomeCallViewController()
-        incomeview.callerId = "OWOkfkXlLTdzwGT0zG0b9mTJyK13"
-        loginNav.viewControllers = [incomeview]
-        loginNav.modalPresentationStyle = .fullScreen
-        present(loginNav, animated: false, completion: nil)
-//        if Auth.auth().currentUser == nil {
-//            presentLogInNavigationController()
-//        } else{
-//            currentUser = Auth.auth().currentUser
-//            webService.goOnline(currentUser!.uid)
-//            determineCurrentLocation()
-//            getMessages()
-//            loadUsers()
-//        }
-//        view.layoutSubviews()
-//        generator.prepare()
+//        let loginNav = UINavigationController()
+//        let incomeview = IncomeCallViewController()
+//        incomeview.callerId = "OWOkfkXlLTdzwGT0zG0b9mTJyK13"
+//        loginNav.viewControllers = [incomeview]
+//        loginNav.modalPresentationStyle = .fullScreen
+//        present(loginNav, animated: false, completion: nil)
+        if Auth.auth().currentUser == nil {
+            presentLogInNavigationController()
+        } else{
+            currentUser = Auth.auth().currentUser
+            webService.goOnline(currentUser!.uid)
+            determineCurrentLocation()
+            getMessages()
+            loadUsers()
+        }
+        view.layoutSubviews()
+        generator.prepare()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

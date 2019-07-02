@@ -31,7 +31,6 @@ class ProfileView: RoundedCornerView {
         }
     }
     
-    //  private var circleLayer = CAShapeLayer()
     
     let videoContainer: RoundedCornerView = {
         let v = RoundedCornerView()
@@ -140,7 +139,6 @@ class ProfileView: RoundedCornerView {
     
     //UI setup
     func setUpViews(){
-        
         
         lottieView.translatesAutoresizingMaskIntoConstraints = false
         
