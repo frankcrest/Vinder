@@ -14,8 +14,6 @@ class RoundedRectButton: UIButton {
         super.layoutSubviews()
         layer.cornerRadius = bounds.size.height / 2.0
         clipsToBounds = true
-//        imageView?.bounds.size.height = bounds.size.height * 0.75
-//        imageView?.bounds.size.width = bounds.size.width * 0.75
         translatesAutoresizingMaskIntoConstraints = false
     }
 }

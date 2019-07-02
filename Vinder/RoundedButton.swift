@@ -9,14 +9,6 @@ import UIKit
 
 class RoundedButton: UIButton {
     
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        imageView?.bounds.size.height = bounds.size.height * 0.75
-        imageView?.bounds.size.width = bounds.size.width * 0.75
-        
-    }
-  
   override init(frame: CGRect) {
     super.init(frame: frame)
 
