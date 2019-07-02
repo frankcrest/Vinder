@@ -151,7 +151,7 @@ class MessageTableViewCell: UITableViewCell {
     
     func setProfileImage() {
         if let senderID = message?.senderID {
-            profileImageView.loadProfileImage(withID: senderID)
+            profileImageView.loadProfileImage(withID: senderID){ (_) in }
         }
     }
     

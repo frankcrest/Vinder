@@ -66,7 +66,7 @@ class ContactsCollectionViewCell: UICollectionViewCell {
     
     func setProfileImage() {
         if let friendID = friend?.uid {
-            profileImageView.loadProfileImage(withID:friendID)
+            profileImageView.loadProfileImage(withID: friendID) { (_) in }
         }
     }
 

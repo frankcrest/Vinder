@@ -22,7 +22,7 @@ class TNImageView: UIImageView {
     }
     
     func loadThumbnailImage(withURL imageURL: String) {
-        
+        print("loading TN \(imageURL)")
         imageUrlString = imageURL
         guard let url = URL(string: imageURL) else { return }
         

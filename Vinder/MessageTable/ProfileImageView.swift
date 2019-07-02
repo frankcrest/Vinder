@@ -22,7 +22,7 @@ class ProfileImageView: UIImageView {
         }
     }
   
-    func loadProfileImage(withID id: String) {
+    func loadProfileImage(withID id: String, completion: @escaping (Dictionary<String,Any>) -> Void) {
         
         userID = id
         image = nil
@@ -34,6 +34,7 @@ class ProfileImageView: UIImageView {
         
         WebService().fetchProfile(ofUser: id) { (userInfo) in
             DispatchQueue.main.async {
+                completion(userInfo)
                 self.userName = userInfo["name"] as? String
                 self.profileVideoUrl = userInfo["profileVideo"] as? String
                 self.onlineStatus = userInfo["onlineStatus"] as? Bool

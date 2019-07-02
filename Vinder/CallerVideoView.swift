@@ -12,17 +12,21 @@ class CallerVideoView: UIView {
 
     let ws = WebService()
     
-    var profileImageURL: String? {
+    var userID: String? {
         didSet {
-            if let url = profileImageURL {
-                 profileImageView.loadThumbnailImage(withURL: url)
+            if let id = userID {
+                profileImageView.loadProfileImage(withID: id) { (userInfo) in
+                    DispatchQueue.main.async {
+                        self.userName = userInfo["name"] as? String
+                    }
+                }
             }
         }
     }
     
-    var username: String? {
+    var userName: String? {
         didSet {
-            nameLabel.text = username
+            nameLabel.text = userName
         }
     }
     
@@ -40,6 +44,7 @@ class CallerVideoView: UIView {
     let callerProfileView:UIView = {
         let v = UIView()
         v.backgroundColor = .black
+        v.alpha = 0.5
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -66,14 +71,15 @@ class CallerVideoView: UIView {
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         label.textColor = .white
-        label.text = "caller"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let profileImageView: TNImageView = {
-        let v = TNImageView()
-        v.image = UIImage(named: "Ray")
+    let profileImageView: ProfileImageView = {
+        let v = ProfileImageView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
         return v
     }()
     
@@ -91,7 +97,7 @@ class CallerVideoView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        profileImageViewTopCons?.constant = bounds.height*1.0/5.0
+
     }
     
     
@@ -113,7 +119,8 @@ class CallerVideoView: UIView {
             profileImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             profileImageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.6),
             profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor),
-            profileImageViewTopCons!,
+            profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 200),
+//            profileImageViewTopCons!,
             
             nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 22),

@@ -19,16 +19,11 @@ class IncomeCallViewController: UIViewController {
     var callerId :String? {
         didSet {
             if let id = callerId {
-                ws.fetchProfile(ofUser: id) { (userInfo) in
-                    DispatchQueue.main.async {
-                        guard let profileImageURL = userInfo["profileImageUrl"] as? String, let name = userInfo["name"] as? String else { return }
-                        self.callerView.profileImageURL = profileImageURL
-                        self.callerView.username = name
-                    }
+                callerView.userID = id
                 }
             }
         }
-    }
+    
   
     lazy var callerView : CallerVideoView = {
         let v = CallerVideoView()
