@@ -25,10 +25,11 @@ class MapViewController: UIViewController {
     var rightViewLeading: NSLayoutConstraint!
     var users : [User] = []
     let maleColor : UIColor = UIColor(red: 98, green: 98, blue: 247, alpha: 1)
-    let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
-    var selectedUser: User?
-    var swipeRecog = UISwipeGestureRecognizer()
-    var friendList = [String]()
+  let femaleColor : UIColor = UIColor(red: 255, green: 166, blue: 236, alpha: 1)
+  var selectedUser: User?
+  var selectUserFav: User?
+  var swipeRecog = UISwipeGestureRecognizer()
+  var friendList = [String]()
     var friends = [User]()
     //MARK: VIEW PROPERTIES
     
@@ -226,9 +227,8 @@ class MapViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         setupViews()
         
-        retrieveFriendList { (list) in
-            self.retrieveFriendsData(friendList: list)
-        }
+        retrieveFriendList()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -682,61 +682,54 @@ class MapViewController: UIViewController {
         let videoVC = VideoViewController()
         self.present(videoVC, animated: true, completion: nil)
     }
+  
+  @objc func heartTapped(){
+    guard let currentUser = currentUser else {return}
+    guard let userToUpdate = self.selectedUser ?? self.selectUserFav else {return}
     
-    @objc func heartTapped(){
+    if profileview.heartButton.currentImage == UIImage(named:"heartUntap"){
+      profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+      ref.child("friends").child(currentUser.uid).updateChildValues([userToUpdate.uid: "true"])
+    }else{
+      profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+      ref.child("friends").child(currentUser.uid).child(userToUpdate.uid).removeValue()
+    }
+  }
+  
+  func retrieveFriendList(){
+    guard let currentUser = currentUser else {return}
+    ref.child("friends").child(currentUser.uid).observe(.value) { (snapshot) in
+      self.friends.removeAll()
+      self.contactsCollectionView.reloadData()
+      var friendList = [String]()
+      for child in snapshot.children{
+        let snap = child as! DataSnapshot
+        let key = snap.key
+        friendList.append(key)
+      }
       
-        guard let selectedUser = selectedUser else {return}
-        guard let currentUser = currentUser else {return}
-        
-        if profileview.heartButton.currentImage == UIImage(named:"heartUntap"){
-            profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-          ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid: "true"]) { (err, ref) in
-             self.contactsCollectionView.reloadData()
+      for friend in friendList{
+        self.ref.child("users").child(friend).observeSingleEvent(of: .value, with: { (snapshot) in
+          guard let snapshot = snapshot.value as? [String:AnyObject] else {return}
+          guard let name = snapshot["name"] as? String else {return}
+          guard let username = snapshot["username"] as? String else{return}
+          guard let email = snapshot["email"] as? String else {return}
+          guard let uid = snapshot["uid"] as? String else {return}
+          guard let lat = snapshot["latitude"] as? String else {return}
+          guard let lon = snapshot["longitude"] as? String else{return}
+          guard let profileVideo = snapshot["profileVideo"] as? String else {return}
+          guard let token = snapshot["token"] as? String else {return}
+          guard let profileImageUrl = snapshot["profileImageUrl"] as? String else { return }
+          let onlineStatus = snapshot["onlineStatus"] as? Bool
+          let user = User(uid: uid, token: token, username: username, name: name, email: email, profileImageUrl: profileImageUrl, gender: .male, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
+          self.friends.append(user)
+          DispatchQueue.main.async {
+            self.contactsCollectionView.reloadData()
           }
-        }else{
-            profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-          ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue { (err, ref) in
-             self.contactsCollectionView.reloadData()
-          }
-        }
+        })
+      }
     }
-    
-    func retrieveFriendList(completion: @escaping ([String]) -> Void){
-        guard let currentUser = currentUser else {return}
-        ref.child("friends").child(currentUser.uid).observe(.value) { (snapshot) in
-          self.friendList.removeAll()
-            for child in snapshot.children{
-                let snap = child as! DataSnapshot
-                let key = snap.key
-                self.friendList.append(key)
-            }
-            completion(self.friendList)
-        }
-    }
-    
-    func retrieveFriendsData(friendList: [String]){
-        for friend in friendList{
-           self.friends.removeAll()
-            ref.child("users").child(friend).observe(.value) { (snapshot) in
-                guard let snapshot = snapshot.value as? [String:AnyObject] else {return}
-                guard let name = snapshot["name"] as? String else {return}
-                guard let username = snapshot["username"] as? String else{return}
-                guard let email = snapshot["email"] as? String else {return}
-                guard let uid = snapshot["uid"] as? String else {return}
-                guard let lat = snapshot["latitude"] as? String else {return}
-                guard let lon = snapshot["longitude"] as? String else{return}
-                guard let profileVideo = snapshot["profileVideo"] as? String else {return}
-                guard let token = snapshot["token"] as? String else {return}
-                guard let profileImageUrl = snapshot["profileImageUrl"] as? String else { return }
-                let onlineStatus = snapshot["onlineStatus"] as? Bool
-                let user = User(uid: uid, token: token, username: username, name: name, email: email, profileImageUrl: profileImageUrl, gender: .male, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
-                self.friends.append(user)
-                DispatchQueue.main.async {
-                    self.contactsCollectionView.reloadData()
-                }
-            }
-        }
-    }
+  }
     
     @objc func focusOneUser() {
         generator.impactOccurred()
@@ -828,8 +821,8 @@ extension MapViewController : MKMapViewDelegate {
         self.selectedUser = view.annotation as? User
         guard let user = currentUser else {return}
         guard let userTapped = self.selectedUser else {return}
-        
-        ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
+      
+      ref.child("friends").child(user.uid).child(userTapped.uid).observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.exists(){
                 self.profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
             }else{
@@ -903,6 +896,8 @@ extension MapViewController: ShowProfileDelegate {
         self.profileview.stop()
         self.profileview.isHidden = true
         // THIS IS WORK AROUND
+        self.selectedUser = nil
+        self.selectUserFav = nil
         loadUsers()
     }
     
@@ -976,6 +971,7 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
 extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    print("friend count \(friends.count)")
     return friends.count
   }
   
@@ -994,8 +990,8 @@ extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource
     
     guard let user = currentUser else {return}
     let userTapped = friends[indexPath.row]
-    
-    ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
+    selectUserFav = userTapped
+    ref.child("friends").child(user.uid).child(userTapped.uid).observeSingleEvent(of: .value) { (snapshot) in
       if snapshot.exists(){
         self.profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
       }else{
