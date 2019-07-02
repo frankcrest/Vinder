@@ -218,7 +218,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     
     //MARK: CONFIRM BUTTON
     
-    if sender.titleLabel?.text == "Confirm" || sender.titleLabel?.text == "Send"{
+    if sender.titleLabel?.text == "Confirm"{
       presentLoadingView()
       
       switch mode! {
@@ -298,6 +298,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
       self.videoReviewer.playVideo(atUrl: self.cameraController.fileURL, on: self.recordPreviewView )
       
       self.buttonView.backButton.setTitle("Retake", for: .normal)
+        self.buttonView.switchCameraButton.setTitle("Confirm", for: .normal)
       self.buttonView.switchCameraButton.setImage(UIImage(named: "confirm"), for: .normal)
       
       self.notSurebutton.isHidden = true
