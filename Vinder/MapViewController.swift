@@ -454,10 +454,8 @@ class MapViewController: UIViewController {
                 return
             }
           
-          print("inside load users \(users.count)")
             DispatchQueue.main.async {
                 self.mapView.removeAnnotations(self.mapView.annotations)
-                print("annotations after \(self.mapView.annotations.count)")
                 self.users.removeAll()
                 for user in users {
                     if user.uid == self.currentUser?.uid{
@@ -466,7 +464,6 @@ class MapViewController: UIViewController {
                     self.mapView.addAnnotation(user)
                     self.users.append(user)
                 }
-                print("annotations \(self.mapView.annotations.count)")
             }
 
         }
@@ -510,7 +507,6 @@ class MapViewController: UIViewController {
         let lat = String(format: "%f", location.coordinate.latitude)
         let lon = String(format: "%f", location.coordinate.longitude)
         guard let user = currentUser else {return}
-        print("uid: \(user.uid)")
         webService.updateUserWithLocation(lat: lat, lon: lon, uid: user.uid)
     }
     
@@ -699,19 +695,22 @@ class MapViewController: UIViewController {
         
         if profileview.heartButton.currentImage == UIImage(named:"heartUntap"){
             profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-//            videoView.heartButton.backgroundColor = .white
             ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid : "true"])
+          ref.child("friends").child(currentUser.uid).updateChildValues([selectedUser.uid: "true"]) { (err, ref) in
+             self.contactsCollectionView.reloadData()
+          }
         }else{
             profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-//            videoView.heartButton.backgroundColor = .magenta
-            ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue()
+          ref.child("friends").child(currentUser.uid).child(selectedUser.uid).removeValue { (err, ref) in
+             self.contactsCollectionView.reloadData()
+          }
         }
     }
     
     func retrieveFriendList(completion: @escaping ([String]) -> Void){
-        self.friendList.removeAll()
         guard let currentUser = currentUser else {return}
         ref.child("friends").child(currentUser.uid).observe(.value) { (snapshot) in
+          self.friendList.removeAll()
             for child in snapshot.children{
                 let snap = child as! DataSnapshot
                 let key = snap.key
@@ -722,10 +721,8 @@ class MapViewController: UIViewController {
     }
     
     func retrieveFriendsData(friendList: [String]){
-        self.friends.removeAll()
-        print("friend list count \(friendList.count)")
-        print("retrieve data called")
         for friend in friendList{
+           self.friends.removeAll()
             ref.child("users").child(friend).observe(.value) { (snapshot) in
                 guard let snapshot = snapshot.value as? [String:AnyObject] else {return}
                 guard let name = snapshot["name"] as? String else {return}
@@ -739,7 +736,6 @@ class MapViewController: UIViewController {
                 guard let profileImageUrl = snapshot["profileImageUrl"] as? String else { return }
                 let onlineStatus = snapshot["onlineStatus"] as? Bool
                 let user = User(uid: uid, token: token, username: username, name: name, email: email, profileImageUrl: profileImageUrl, gender: .male, lat: lat, lon: lon, profileVideoUrl: profileVideo, onlineStatus: onlineStatus)
-                print(user)
                 self.friends.append(user)
                 DispatchQueue.main.async {
                     self.contactsCollectionView.reloadData()
@@ -840,16 +836,13 @@ extension MapViewController : MKMapViewDelegate {
         ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
             if snapshot.exists(){
                 self.profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-//                self.videoView.heartButton.backgroundColor = .white
             }else{
                 self.profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-//                self.videoView.heartButton.backgroundColor = .magenta
             }
         }
         
         if user.uid != userTapped.uid{
             print("did not tap self, the user uid = \(userTapped.uid)")
-            print(user.uid)
             showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
         } else{
             print("you tapped on yourself, do nothing")
@@ -1000,7 +993,17 @@ extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    
+    guard let user = currentUser else {return}
     let userTapped = friends[indexPath.row]
+    
+    ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
+      if snapshot.exists(){
+        self.profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
+      }else{
+        self.profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
+      }
+    }
     
     showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
   }
