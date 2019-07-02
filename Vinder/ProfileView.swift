@@ -31,6 +31,18 @@ class ProfileView: RoundedCornerView {
         }
     }
     
+    let rootStackView:UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .vertical
+        sv.distribution = .fillProportionally
+        sv.spacing = 16
+        sv.alignment = .center
+        sv.backgroundColor = .red
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }()
+    
+    
     
     let videoContainer: RoundedCornerView = {
         let v = RoundedCornerView()
@@ -44,6 +56,16 @@ class ProfileView: RoundedCornerView {
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
+    }()
+    
+    let infoStackView:UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .horizontal
+        sv.distribution = .equalCentering
+        sv.alignment = .center
+        sv.backgroundColor = .green
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
     }()
     
     let infoContainer: RoundedCornerView = {
@@ -130,10 +152,10 @@ class ProfileView: RoundedCornerView {
         layer.backgroundColor = UIColor.clear.cgColor
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 5, height: 5)
-        layer.shadowOpacity = 0.2
+        layer.shadowOpacity = 0.5
         layer.shadowRadius = 4.0
         layer.masksToBounds = false
-        centerYCons?.constant = bounds.height*1.0/5.0
+
     }
     var centerYCons: NSLayoutConstraint?
     
@@ -141,31 +163,33 @@ class ProfileView: RoundedCornerView {
     func setUpViews(){
         
         lottieView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(rootStackView)
         
-        addSubview(videoContainer)
+        rootStackView.addArrangedSubview(videoContainer)
         videoContainer.addSubview(videoView)
         videoView.addSubview(lottieView)
         
-        addSubview(infoContainer)
+        rootStackView.addArrangedSubview(infoStackView)
+        
+        infoStackView.addArrangedSubview(infoContainer)
+        infoStackView.addArrangedSubview(heartButton)
         infoContainer.addSubview(nameLabel)
         
-        addSubview(buttonContainer)
+        rootStackView.addArrangedSubview(buttonContainer)
         
-        self.buttonContainer.addArrangedSubview(leftButton)
-        self.buttonContainer.addArrangedSubview(rightButton)
+        buttonContainer.addArrangedSubview(leftButton)
+        buttonContainer.addArrangedSubview(rightButton)
         
-        addSubview(heartButton)
+        rootStackView.addArrangedSubview(dissmissButton)
         
-        addSubview(dissmissButton)
-        
-        centerYCons = videoContainer.topAnchor.constraint(equalTo: topAnchor, constant: 0)
         
         NSLayoutConstraint.activate([
             
+            rootStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            rootStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
             videoContainer.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 3.0/4.0),
             videoContainer.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 3.0/4.0),
-            centerYCons!,
-            videoContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             videoView.centerXAnchor.constraint(equalTo: videoContainer.centerXAnchor),
             videoView.centerYAnchor.constraint(equalTo: videoContainer.centerYAnchor),
@@ -177,33 +201,27 @@ class ProfileView: RoundedCornerView {
             lottieView.widthAnchor.constraint(equalToConstant: 150),
             lottieView.heightAnchor.constraint(equalToConstant: 150),
             
-            infoContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
-            infoContainer.widthAnchor.constraint(equalTo: videoContainer.widthAnchor),
-            infoContainer.heightAnchor.constraint(equalTo: videoContainer.widthAnchor, multiplier: 1.0/5.0),
-            infoContainer.topAnchor.constraint(equalTo: videoContainer.bottomAnchor, constant: 20),
+            infoStackView.widthAnchor.constraint(equalTo: videoContainer.widthAnchor),
+            infoStackView.heightAnchor.constraint(equalTo: rootStackView.heightAnchor, multiplier: 0.12),
+            
+            infoContainer.heightAnchor.constraint(equalTo: infoStackView.heightAnchor),
+             infoContainer.widthAnchor.constraint(equalTo: infoStackView.widthAnchor, multiplier: 0.75),
+            heartButton.heightAnchor.constraint(equalTo: infoStackView.heightAnchor),
+            heartButton.widthAnchor.constraint(equalTo: infoStackView.heightAnchor),
             
             nameLabel.centerYAnchor.constraint(equalTo: infoContainer.centerYAnchor),
             nameLabel.centerXAnchor.constraint(equalTo: infoContainer.centerXAnchor),
             
-            heartButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            heartButton.widthAnchor.constraint(equalToConstant: 66),
-            heartButton.heightAnchor.constraint(equalToConstant: 66),
-            heartButton.bottomAnchor.constraint(equalTo: infoContainer.bottomAnchor, constant: 40),
-            
-            buttonContainer.topAnchor.constraint(equalTo: infoContainer.bottomAnchor, constant: 40),
             buttonContainer.widthAnchor.constraint(equalTo: videoContainer.widthAnchor),
-            buttonContainer.heightAnchor.constraint(equalToConstant: 50),
-            buttonContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
+            buttonContainer.heightAnchor.constraint(equalTo: rootStackView.heightAnchor, multiplier: 0.09),
             
-            leftButton.widthAnchor.constraint(equalTo: buttonContainer.widthAnchor, multiplier: 0.45),
-            leftButton.heightAnchor.constraint(equalToConstant: 44),
-            rightButton.heightAnchor.constraint(equalToConstant: 44),
-            rightButton.widthAnchor.constraint(equalTo: buttonContainer.widthAnchor, multiplier: 0.45),
+            leftButton.widthAnchor.constraint(equalTo: buttonContainer.widthAnchor, multiplier: 0.48),
+            leftButton.heightAnchor.constraint(equalTo: buttonContainer.heightAnchor),
+            rightButton.heightAnchor.constraint(equalTo: buttonContainer.heightAnchor),
+            rightButton.widthAnchor.constraint(equalTo: buttonContainer.widthAnchor, multiplier: 0.48),
             
-            dissmissButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            dissmissButton.widthAnchor.constraint(equalToConstant: 66),
-            dissmissButton.heightAnchor.constraint(equalToConstant: 66),
-            dissmissButton.topAnchor.constraint(equalTo: buttonContainer.bottomAnchor, constant: 33),
+            dissmissButton.widthAnchor.constraint(equalTo: dissmissButton.heightAnchor),
+            dissmissButton.heightAnchor.constraint(equalTo: rootStackView.heightAnchor, multiplier: 0.11),
             
             
             ])
@@ -223,7 +241,7 @@ class ProfileView: RoundedCornerView {
                     self.player = AVPlayer(url: url)
                     self.playerLayer = AVPlayerLayer(player: self.player)
                     self.playerLayer.frame = self.videoContainer.frame
-                    self.layer.addSublayer(self.playerLayer)
+                    self.videoView.layer.addSublayer(self.playerLayer)
                     self.player.play()
                     NotificationCenter.default.addObserver(self, selector: #selector(self.playerItemDidReachEnd(notification:)), name: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
                 }

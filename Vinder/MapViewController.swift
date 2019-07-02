@@ -250,6 +250,7 @@ class MapViewController: UIViewController {
             getMessages()
             loadUsers()
         }
+        mapView.showsUserLocation = true
         view.layoutSubviews()
         generator.prepare()
     }
@@ -462,9 +463,11 @@ class MapViewController: UIViewController {
                 for user in users {
                     if user.uid == self.currentUser?.uid{
                         self.selfUser = user
+                    } else {
+                        self.mapView.addAnnotation(user)
+                        self.users.append(user)
                     }
-                    self.mapView.addAnnotation(user)
-                    self.users.append(user)
+                    
                 }
                 print("annotations \(self.mapView.annotations.count)")
             }
@@ -744,7 +747,8 @@ class MapViewController: UIViewController {
     @objc func focusOneUser() {
         generator.impactOccurred()
         let annotationsInView = mapView.annotations(in: mapView.visibleMapRect)
-        guard var usersInView = Array(annotationsInView) as? [User] else { return }
+        let filtered = annotationsInView.filter { $0 is User}
+        guard var usersInView = Array(filtered) as? [User] else { return }
         usersInView.sort { (lhs: User, rhs: User) -> Bool in
             lhs.name > rhs.name
         }
@@ -768,6 +772,7 @@ class MapViewController: UIViewController {
             }
         }
     }
+    
 }
 
 
@@ -833,10 +838,8 @@ extension MapViewController : MKMapViewDelegate {
         ref.child("friends").child(user.uid).child(userTapped.uid).observe(.value) { (snapshot) in
             if snapshot.exists(){
                 self.profileview.heartButton.setImage(UIImage(named:"heartTap"), for: .normal)
-//                self.videoView.heartButton.backgroundColor = .white
             }else{
                 self.profileview.heartButton.setImage(UIImage(named:"heartUntap"), for: .normal)
-//                self.videoView.heartButton.backgroundColor = .magenta
             }
         }
         
@@ -906,6 +909,8 @@ extension MapViewController: ShowProfileDelegate {
         }, completion: nil)
         self.profileview.stop()
         self.profileview.isHidden = true
+        // THIS IS WORK AROUND
+        loadUsers()
     }
     
 }
