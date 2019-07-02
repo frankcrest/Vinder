@@ -25,12 +25,12 @@ class ButtonView: UIStackView {
     
     //MARK: PROPERTIES
     
-    var backButton: UIButton!
+    var backButton: RoundedButton!
     var recordButtonView: RecordButtonView!
-    var switchButtonView: UIView!
-    var switchCameraButton: UIButton!
+    var switchCameraButton: RoundedButton!
     var didFinishRecording: Bool = false
-    
+    var backBtnCtn = UIView()
+    var switchBtnCtn = UIView()
     
     private func setupViews() {
         
@@ -43,9 +43,13 @@ class ButtonView: UIStackView {
         translatesAutoresizingMaskIntoConstraints = false
         
         func backButtonConfig() {
-            backButton = UIButton()
+            backButton = RoundedButton()
+            backButton.setImage(UIImage(named: "back"), for: .normal)
             backButton.setTitle("Back", for: .normal)
-            backButton.setTitleColor(.white, for: .normal)
+            backButton.setTitleColor(.clear, for: .normal)
+            backBtnCtn.backgroundColor = .clear
+            backBtnCtn.translatesAutoresizingMaskIntoConstraints = false
+            backBtnCtn.addSubview(backButton)
         }
         
         func recordButtonConfig() {
@@ -53,35 +57,47 @@ class ButtonView: UIStackView {
         }
         
         func switchButtonViewConfig() {
-            switchButtonView = UIView()
-            switchButtonView.translatesAutoresizingMaskIntoConstraints = false
-            switchButtonView.backgroundColor = .clear
-            
-            switchCameraButton = UIButton()
-            switchCameraButton.translatesAutoresizingMaskIntoConstraints = false
+            switchCameraButton = RoundedButton()
+            switchCameraButton.setImage(UIImage(named: "switch"), for: .normal)
             switchCameraButton.setTitle("Switch", for: .normal)
-            switchCameraButton.setTitleColor(.white, for: .normal)
-            
-            switchButtonView.addSubview(switchCameraButton)
-            NSLayoutConstraint.activate([
-                switchCameraButton.centerYAnchor.constraint(equalTo: switchButtonView.centerYAnchor),
-                switchCameraButton.trailingAnchor.constraint(equalTo: switchButtonView.trailingAnchor, constant: -20)
-                ])
-            
+            switchCameraButton.setTitleColor(.clear, for: .normal)
+            switchBtnCtn.backgroundColor = .clear
+            switchBtnCtn.translatesAutoresizingMaskIntoConstraints = false
+            switchBtnCtn.addSubview(switchCameraButton)
         }
         
         backButtonConfig()
         recordButtonConfig()
         switchButtonViewConfig()
         
-        self.addArrangedSubview(backButton)
-        self.addArrangedSubview(recordButtonView)
-        self.addArrangedSubview(switchButtonView)
+        addArrangedSubview(backBtnCtn)
+        addArrangedSubview(recordButtonView)
+        addArrangedSubview(switchBtnCtn)
         self.axis = .horizontal
-        self.alignment = .fill
-        self.distribution = .fillEqually
-        self.spacing = 8.0
+        self.alignment = .center
+        self.distribution = .equalSpacing
         recordButtonView.setupCircleProgressBar()
+        NSLayoutConstraint.activate([
+            
+            switchBtnCtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
+            switchBtnCtn.heightAnchor.constraint(equalTo: heightAnchor),
+            
+            backBtnCtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
+            backBtnCtn.heightAnchor.constraint(equalTo: heightAnchor),
+
+            recordButtonView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
+            recordButtonView.heightAnchor.constraint(equalTo: heightAnchor),
+            
+            switchCameraButton.heightAnchor.constraint(equalTo: switchBtnCtn.heightAnchor, multiplier: 0.9),
+            switchCameraButton.widthAnchor.constraint(equalTo: switchCameraButton.heightAnchor),
+            switchCameraButton.centerYAnchor.constraint(equalTo: switchBtnCtn.centerYAnchor),
+            switchCameraButton.centerXAnchor.constraint(equalTo: switchBtnCtn.centerXAnchor),
+            
+            backButton.heightAnchor.constraint(equalTo: backBtnCtn.heightAnchor, multiplier: 0.9),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
+            backButton.centerYAnchor.constraint(equalTo: backBtnCtn.centerYAnchor),
+            backButton.centerXAnchor.constraint(equalTo: backBtnCtn.centerXAnchor),
+            ])
     }
     
     override func layoutSubviews() {

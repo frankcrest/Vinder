@@ -233,12 +233,14 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        let loginNav = UINavigationController()
-//        let incomeview = IncomeCallViewController()
-//        incomeview.callerId = "OWOkfkXlLTdzwGT0zG0b9mTJyK13"
-//        loginNav.viewControllers = [incomeview]
-//        loginNav.modalPresentationStyle = .fullScreen
-//        present(loginNav, animated: false, completion: nil)
+//        let debugNav = UINavigationController()
+//        let debugview = VideoViewController()
+//        let debugview = IncomeCallViewController()
+//
+//        debugview.callerId = "OWOkfkXlLTdzwGT0zG0b9mTJyK13"
+//        debugNav.viewControllers = [debugview]
+//        debugNav.modalPresentationStyle = .fullScreen
+//        present(debugNav, animated: false, completion: nil)
         if Auth.auth().currentUser == nil {
             presentLogInNavigationController()
         } else{
@@ -320,9 +322,7 @@ class MapViewController: UIViewController {
         profileview.heartButton.addTarget(self, action: #selector(heartTapped), for: .touchUpInside)
         profileview.rightButton.addTarget(self, action: #selector(callTapped), for: .touchUpInside)
         profileview.dissmissButton.addTarget(self, action: #selector(hideProfileView), for: .touchUpInside )
-        profileview.addGestureRecognizer(swipeRecog)
-        swipeRecog.addTarget(self, action: #selector(swipeHandler(_:)))
-        swipeRecog.direction = .up
+
         
         leftViewTrailing = leftView.trailingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0)
         rightViewLeading = rightView.leadingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0)
@@ -661,13 +661,6 @@ class MapViewController: UIViewController {
     
     
     //MARK: Handle user interaction
-    
-    
-    @objc func swipeHandler(_ sender: UISwipeGestureRecognizer) {
-        if sender.state == .ended {
-            hideProfileView()
-        }
-    }
     
     @objc func refreshTapped(){
         generator.impactOccurred()

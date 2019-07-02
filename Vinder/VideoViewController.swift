@@ -17,6 +17,7 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   let notificationCenter = NotificationCenter.default
   var remoteVideoView: UIView!
   var localVideoView: UIView!
+    var localVideoViewCtn: UIView!
   var userWeAreCalling : String?
   var inCall = false
   
@@ -33,6 +34,8 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   var swipeLeftGesture : UISwipeGestureRecognizer!
   
   let webService = WebService()
+    
+
   
   var jokes : [String] = []
   
@@ -85,8 +88,13 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     agoraKit.leaveChannel(nil)
     UIApplication.shared.isIdleTimerDisabled = false
   }
+    
+    override func viewWillLayoutSubviews() {
+        buttonStackView.spacing = (buttonStackView.bounds.size.width - (buttonStackView.bounds.height*4))/3.0
+    }
   
   //MARK: ACTIONS
+    
   @objc func callResponseReceived(notification:NSNotification){
     print("did receive local notification")
     guard let callResponse = notification.object as? CallResponse else {return}
@@ -120,6 +128,7 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   
   @objc private func mute(_ sender: UIButton) {
     sender.isSelected = !sender.isSelected
+    sender.setImage(UIImage(named: "micon"), for: .selected)
     agoraKit.muteLocalAudioStream(sender.isSelected)
   }
   
@@ -129,10 +138,13 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   
   @objc private func turnOffCamera(_ sender: UIButton) {
     sender.isSelected = !sender.isSelected
+    sender.setImage(UIImage(named: "camon"), for: .selected)
     if sender.isSelected {
+      localVideoView.isHidden = true
       agoraKit.disableVideo()
     } else {
       agoraKit.enableVideo()
+      localVideoView.isHidden = false
     }
     agoraKit.muteLocalVideoStream(sender.isSelected)
   }
@@ -168,12 +180,20 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   //MARK: UI SETUPS
   
   private func setupVideoViews() {
+    
+    let localDefaultImageView = UIImageView()
+    localDefaultImageView.image = UIImage(named: "localdefault")
+    
     remoteVideoView = UIView()
     localVideoView = UIView()
+    localVideoViewCtn = UIView()
     remoteVideoView.translatesAutoresizingMaskIntoConstraints = false
     localVideoView.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(remoteVideoView)
-    view.addSubview(localVideoView)
+    view.addSubview(localVideoViewCtn)
+    localVideoViewCtn.addSubview(localDefaultImageView)
+    localVideoViewCtn.addSubview(localVideoView)
+    
     
     NSLayoutConstraint.activate([
       remoteVideoView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -181,16 +201,20 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
       remoteVideoView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       remoteVideoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       ])
-    
-    localVideoView.frame = CGRect(x: view.bounds.maxX - 170.0 , y: 44.0, width: 150, height: 200)
-    localVideoView.layer.cornerRadius = 10
-    localVideoView.layer.masksToBounds = true
+    localVideoViewCtn.frame =  CGRect(x: view.bounds.maxX - 170.0 , y: 44.0, width: 150, height: 200)
+    localDefaultImageView.frame = CGRect(x: localVideoViewCtn.bounds.midX - localVideoViewCtn.bounds.midX/2,
+                                         y: localVideoViewCtn.bounds.midY - localVideoViewCtn.bounds.midY/2,
+                                         width: localVideoViewCtn.bounds.midX,
+                                         height: localVideoViewCtn.bounds.midY)
+    localVideoView.frame = CGRect(x: 0 , y: 0, width: 150, height: 200)
+    localVideoViewCtn.layer.cornerRadius = 10
+    localVideoViewCtn.layer.masksToBounds = true
     
     remoteVideoView.backgroundColor = .black
-    localVideoView.backgroundColor = .black
+    localVideoViewCtn.backgroundColor = .gray
     
-    localVideoView.isUserInteractionEnabled = true
-    localVideoView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(moveLocalVideoview(_:))))
+    localVideoViewCtn.isUserInteractionEnabled = true
+    localVideoViewCtn.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(moveLocalVideoview(_:))))
   }
   
   private func setUpJokeView(){
@@ -207,32 +231,31 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
   private func setupButtons() {
     
     switchButton = UIButton()
-    switchButton.setTitle("Switch", for: .normal)
+    switchButton.setImage(UIImage(named: "switch2"), for: .normal)
     switchButton.addTarget(self, action: #selector(self.switchCamera(_:)), for: .touchUpInside)
     
     hangupButton = UIButton()
-    hangupButton.setTitle("Hangup", for: .normal)
+    hangupButton.setImage(UIImage(named: "hangup"), for: .normal)
     hangupButton.addTarget(self, action: #selector(self.hangupTapped), for: .touchUpInside)
     
     muteButton = UIButton()
-    muteButton.setTitle("Mute", for: .normal)
+    muteButton.setImage(UIImage(named: "micoff"), for: .normal)
     muteButton.addTarget(self, action: #selector(self.mute(_:)), for: .touchUpInside)
     
     turnOffCameraButton = UIButton()
-    turnOffCameraButton.setTitle("Turn Off", for: .normal)
+    turnOffCameraButton.setImage(UIImage(named: "camoff"), for: .normal)
     turnOffCameraButton.addTarget(self, action: #selector(self.turnOffCamera(_:)), for: .touchUpInside)
     
     buttonStackView = UIStackView(arrangedSubviews: [switchButton, hangupButton,turnOffCameraButton,muteButton])
     buttonStackView.axis = .horizontal
     buttonStackView.distribution = .fillEqually
-    buttonStackView.alignment = .fill
-    buttonStackView.spacing = 8.0
+    buttonStackView.alignment = .center
     buttonStackView.translatesAutoresizingMaskIntoConstraints = false
     self.view.addSubview(buttonStackView)
     
     NSLayoutConstraint.activate([
-      buttonStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-      buttonStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+      buttonStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+      buttonStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
       buttonStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
       buttonStackView.heightAnchor.constraint(equalToConstant: 44.0)
       ])
