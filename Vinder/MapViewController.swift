@@ -910,6 +910,9 @@ extension MapViewController: ShowProfileDelegate {
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
             self.profileview.alpha = 0
         }, completion: nil)
+        if let task = profileview.ws.profileVideDLTSK {
+            task.cancel()
+        }
         self.profileview.stop()
         self.profileview.isHidden = true
         // THIS IS WORK AROUND

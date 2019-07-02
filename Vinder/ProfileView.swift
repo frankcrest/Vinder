@@ -237,7 +237,7 @@ class ProfileView: RoundedCornerView {
     func configureView() {
         
         if let url = videoURL {
-            WebService().fetchProfileVideo(at: url) { (url, err) -> (Void) in
+            ws.fetchProfileVideo(at: url) { (url, err) -> (Void) in
                 guard err == nil, let url = url else { return }
                 DispatchQueue.main.async {
                     self.player = AVPlayer(url: url)

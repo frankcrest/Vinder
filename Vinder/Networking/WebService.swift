@@ -23,6 +23,7 @@ class WebService {
     var updateProgressDelegate: UpdateProgressDelegate?
     
     var msgDLTSK: StorageDownloadTask?
+    var profileVideDLTSK: StorageDownloadTask?
     
     private var downloadURL: URL!
     private let ref = Database.database().reference()
@@ -280,6 +281,7 @@ class WebService {
     let downloadTask = httpReference.write(toFile: profileFileURL) { (url, error) in
       completion(url,error)
     }
+    profileVideDLTSK = downloadTask
     downloadTask.observe(.progress) { (snapshot) in
       let percent = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
       DispatchQueue.main.async {
