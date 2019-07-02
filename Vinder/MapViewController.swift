@@ -402,14 +402,14 @@ class MapViewController: UIViewController {
             finderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             finderButton.heightAnchor.constraint(equalToConstant: 35),
             finderButton.widthAnchor.constraint(equalToConstant: 35),
-            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -10),
+            finderButton.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -5),
             
             buttonStackViewLeadingConstraint!,
             buttonStackViewTrailingConstraint!,
             buttonStackView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
             buttonStackView.heightAnchor.constraint(equalToConstant: 55),
             
-            refreshButton.bottomAnchor.constraint(equalTo: self.buttonStackView.topAnchor, constant: 0),
+            refreshButton.bottomAnchor.constraint(equalTo: self.buttonStackView.topAnchor, constant: -5),
             refreshButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
             refreshButton.heightAnchor.constraint(equalToConstant: 35),
             refreshButton.widthAnchor.constraint(equalToConstant: 35),
@@ -984,20 +984,26 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
 
 extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return friends.count
-    }
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return friends.count
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "contactCell", for: indexPath) as! ContactsCollectionViewCell
+    let friend = friends[indexPath.row]
+    cell.friend = friend
+    return cell
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    return CGSize(width: (self.view.bounds.width - 40) / 4, height: (self.view.bounds.width - 40) / 4)
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let userTapped = friends[indexPath.row]
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "contactCell", for: indexPath) as! ContactsCollectionViewCell
-        let friend = friends[indexPath.row]
-        cell.friend = friend
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (self.view.bounds.width - 40) / 4, height: (self.view.bounds.width - 40) / 4)
-    }
+    showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
+  }
 }
 
 

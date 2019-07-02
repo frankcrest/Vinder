@@ -114,7 +114,7 @@
         self.view.addGestureRecognizer(swipeGesture)
       
       let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight))
-      downSwipeGesture.direction = .right
+      downSwipeGesture.direction = .down
       self.view.addGestureRecognizer(downSwipeGesture)
       
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTap))
