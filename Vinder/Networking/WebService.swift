@@ -248,7 +248,7 @@ class WebService {
         return
       }
       
-      ref.child("messages").child(userID).observe(DataEventType.value) { (snapshot) in
+      ref.child("messages").child(userID).observe(.value) { (snapshot) in
         print("webservice reference fetch message")
         var messages = [Messages]()
         for messageID in snapshot.children.allObjects as! [DataSnapshot] {
@@ -290,7 +290,7 @@ class WebService {
         print("gonna delegate")
         self.updateProgressDelegate?.updateProgress(progress: percent)
       }
-      print("downloading: \(percent)%")
+      print("\(percent)%")
     }
   }
   

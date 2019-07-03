@@ -496,7 +496,6 @@ class MapViewController: UIViewController {
   //MARK: FETCH MESSAGE
   
   func getMessages() {
-    
     self.webService.fetchAllMessages { (allMessages) -> (Void) in
       guard let allMessages = allMessages else { return }
       DispatchQueue.main.async {
