@@ -21,6 +21,7 @@
     var playerLayer: AVPlayerLayer!
     var player: AVPlayer!
     var isLoop: Bool = false
+    private let webService = WebService()
     
     let ud = UserDefaults.standard
     
@@ -35,6 +36,16 @@
         b.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
         b.imageEdgeInsets = UIEdgeInsets(top: 8,left: 8,bottom: 8,right: 8)
         b.translatesAutoresizingMaskIntoConstraints = false
+        return b
+    }()
+    
+    let logoutButton : UIButton = {
+        let b = UIButton()
+        b.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitle("Logout", for: .normal)
+        b.setTitleColor(UIColor(red: 36/255, green: 171/255, blue: 255/255, alpha: 1), for: .normal)
+
         return b
     }()
     
@@ -105,6 +116,7 @@
         self.view.addSubview(profileVideo)
         
         self.view.addSubview(editButton)
+        self.view.addSubview(logoutButton)
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
         self.imageView.addGestureRecognizer(longPressGesture)
@@ -112,10 +124,6 @@
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight))
         swipeGesture.direction = .right
         self.view.addGestureRecognizer(swipeGesture)
-      
-      let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight))
-      downSwipeGesture.direction = .down
-      self.view.addGestureRecognizer(downSwipeGesture)
       
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTap))
         self.profileVideo.addGestureRecognizer(tapGesture)
@@ -152,8 +160,17 @@
             tableView.topAnchor.constraint(equalTo: profileHeader.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            
+            //logoutButton constraint
+            logoutButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            logoutButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            logoutButton.heightAnchor.constraint(equalToConstant: 50)
             ])
+        
+        
+        
         
         setUpProfileVideo()
         self.view.bringSubviewToFront(profileVideo)
@@ -209,6 +226,26 @@
         recordController.mode = .profileMode
         self.navigationController?.pushViewController(recordController, animated: true)
     }
+    
+    @objc func logoutTapped(){
+        print("logout")
+        do{
+            try webService.logOut()
+            UserDefaults.standard.set(false, forKey: "isLoggedIn")
+            presentLogInNavigationController()
+            
+        }catch let err{
+            print("can not log out \(err)")
+        }
+    }
+    
+    private func presentLogInNavigationController() {
+        let loginNav = UINavigationController()
+        loginNav.viewControllers = [LoginViewController()]
+        loginNav.modalPresentationStyle = .fullScreen
+        present(loginNav, animated: false, completion: nil)
+    }
+
     
     func updateUserInfo(){
       print("\(String(describing: currentUser?.profileVideoUrl))")
