@@ -347,7 +347,7 @@ class MapViewController: UIViewController {
       navView.topAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 0),
       navView.leadingAnchor.constraint(equalTo: self.mapView.leadingAnchor, constant: 0),
       navView.trailingAnchor.constraint(equalTo: self.mapView.trailingAnchor, constant: 0),
-      navView.heightAnchor.constraint(equalToConstant: 240),
+      navView.heightAnchor.constraint(equalToConstant: 220),
       
       centerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
       centerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
