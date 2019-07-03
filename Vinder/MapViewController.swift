@@ -288,7 +288,7 @@ class MapViewController: UIViewController {
     self.centerView.addSubview(mapView)
     self.mapView.addSubview(navView)
     self.centerView.addSubview(logoutButton)
-    self.navView.addSubview(settingButton)
+    self.centerView.addSubview(settingButton)
     self.centerView.addSubview(refreshButton)
     self.view.addSubview(buttonStackView)
     self.buttonStackView.addArrangedSubview(contactButton)
@@ -394,8 +394,8 @@ class MapViewController: UIViewController {
       logoutButton.heightAnchor.constraint(equalToConstant: 50),
       logoutButton.widthAnchor.constraint(equalToConstant: 50),
       
-      settingButton.topAnchor.constraint(equalTo: self.navView.topAnchor, constant: statusBarHeight),
-      settingButton.trailingAnchor.constraint(equalTo: self.navView.trailingAnchor, constant: -10),
+      settingButton.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: statusBarHeight),
+      settingButton.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: -10),
       settingButton.heightAnchor.constraint(equalToConstant: 35),
       settingButton.widthAnchor.constraint(equalToConstant: 35),
       
