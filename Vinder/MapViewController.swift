@@ -803,30 +803,52 @@ extension MapViewController : CLLocationManagerDelegate {
 extension MapViewController : MKMapViewDelegate {
   
   func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-    guard let annotation = annotation as? User else { return nil }
     
-    let identifier = "user"
-    var view: NearbyUserView
-    
-    if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? NearbyUserView{
-      dequeuedView.annotation = annotation
-      view = dequeuedView
-    } else{
-      view = NearbyUserView(annotation: annotation, reuseIdentifier: identifier)
-      view.canShowCallout = false
-      view.calloutOffset = CGPoint(x: -5, y: 5)
-      view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+     if (annotation is MKUserLocation) {
+        
+        let identifier = "self"
+        var view: SelfAnnotationView
+        
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView{
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        } else{
+            view = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = false
+            view.calloutOffset = CGPoint(x: -5, y: 5)
+            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        
+        return view
+     } else {
+        
+        guard let annotation = annotation as? User else { return nil }
+        
+        let identifier = "user"
+        var view: NearbyUserView
+        
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? NearbyUserView{
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        } else{
+            view = NearbyUserView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = false
+            view.calloutOffset = CGPoint(x: -5, y: 5)
+            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        
+        let limeGreen =  UIColor(red: 172/255, green: 245/255, blue: 87/255, alpha: 1)
+        if(annotation.onlineStatus == true){
+            view.layer.borderColor = limeGreen.cgColor
+        }else{
+            view.layer.borderColor = UIColor.gray.cgColor
+        }
+        
+        view.layer.borderWidth = 3
+        return view
+        
     }
-    
-    let limeGreen =  UIColor(red: 172/255, green: 245/255, blue: 87/255, alpha: 1)
-    if(annotation.onlineStatus == true){
-      view.layer.borderColor = limeGreen.cgColor
-    }else{
-      view.layer.borderColor = UIColor.gray.cgColor
-    }
-    
-    view.layer.borderWidth = 3
-    return view
+
   }
   
   //MARK: DID SELECT USER

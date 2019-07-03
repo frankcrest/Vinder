@@ -47,6 +47,7 @@
 		EDC60CA322CAB2DC00368C0A /* CallerVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC60CA222CAB2DC00368C0A /* CallerVideoView.swift */; };
 		EDC730C322C52CCB00773F67 /* TNImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C222C52CCB00773F67 /* TNImageView.swift */; };
 		EDC730C622C5360100773F67 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C522C5360100773F67 /* ProfileImageView.swift */; };
+		EDEF07F522CD1F67005C5181 /* SelfAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEF07F422CD1F67005C5181 /* SelfAnnotationView.swift */; };
 		EDF4476322BABFBA0048BAE2 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4476222BABFBA0048BAE2 /* CameraController.swift */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +96,7 @@
 		EDC60CA222CAB2DC00368C0A /* CallerVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerVideoView.swift; sourceTree = "<group>"; };
 		EDC730C222C52CCB00773F67 /* TNImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TNImageView.swift; sourceTree = "<group>"; };
 		EDC730C522C5360100773F67 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
+		EDEF07F422CD1F67005C5181 /* SelfAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfAnnotationView.swift; sourceTree = "<group>"; };
 		EDF4476222BABFBA0048BAE2 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		F0C8F18A0138C4DE55983CB0 /* Pods-Vinder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinder.debug.xcconfig"; path = "Target Support Files/Pods-Vinder/Pods-Vinder.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,6 +159,7 @@
 				ED31021822BEAE8200D2211B /* loading */,
 				E935543422B9735F00CD7958 /* AppDelegate.swift */,
 				0D91629C22C1439D00C58DCF /* NearbyUserView.swift */,
+				EDEF07F422CD1F67005C5181 /* SelfAnnotationView.swift */,
 				E9035D6722C18EFF00D9D170 /* CallResponse.swift */,
 				E90C498122C2F42E00606A03 /* UserLocation.swift */,
 				E942743122C7F14600715166 /* User.swift */,
@@ -380,6 +383,7 @@
 				E97F74F222BC159600AE8155 /* MessageTableViewCell.swift in Sources */,
 				ED4B9D8C22C429E800BA7234 /* MessageVideoPlayerViewController.swift in Sources */,
 				ED64C2C522C174170077DCF7 /* Messages.swift in Sources */,
+				EDEF07F522CD1F67005C5181 /* SelfAnnotationView.swift in Sources */,
 				ED3BE86622BC1F330046E35C /* RecordButtonView.swift in Sources */,
 				E935543522B9735F00CD7958 /* AppDelegate.swift in Sources */,
 				ED3BE86822BD58280046E35C /* TutorialView.swift in Sources */,
