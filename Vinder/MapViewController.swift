@@ -5,7 +5,7 @@ import Firebase
 
 //78 178 249 blue color hex code
 class MapViewController: UIViewController {
-  
+   
   //MARK: PROPERTIES
   private let webService = WebService()
   private var messages: [Messages] = []
@@ -391,8 +391,8 @@ class MapViewController: UIViewController {
       
       logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: statusBarHeight),
       logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-      logoutButton.heightAnchor.constraint(equalToConstant: 50),
-      logoutButton.widthAnchor.constraint(equalToConstant: 50),
+      logoutButton.heightAnchor.constraint(equalToConstant: 35),
+      logoutButton.widthAnchor.constraint(equalToConstant: 35),
       
       settingButton.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: statusBarHeight),
       settingButton.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: -10),
@@ -858,7 +858,7 @@ extension MapViewController: ShowProfileDelegate {
   
   func actionToMsg(_ message: Messages) {
     let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-    alert.view.tintColor = .blue
+    alert.view.tintColor = UIColor.defaultBlue
     alert.addAction(UIAlertAction(title: "Reply", style: .default, handler: { (_) in
       let recordMessageVC = RecordVideoViewController()
       recordMessageVC.mode = .messageMode
