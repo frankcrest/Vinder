@@ -356,7 +356,7 @@
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -372,20 +372,26 @@
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "setting", for: indexPath) as! SettingTableViewCell
-        guard let user = currentUser else {return UITableViewCell()}
-        cell.accessoryType = .disclosureIndicator
-        
-        switch indexPath.row {
-        case 0:
-            cell.titleLabel.text = "Display Name"
-            cell.subtitleLabel.text = user.name
-        case 1:
-            cell.titleLabel.text = "Email"
-            cell.subtitleLabel.text = user.email
-        default:
-            return cell
+        if indexPath.section == 0{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "setting", for: indexPath) as! SettingTableViewCell
+            guard let user = currentUser else {return UITableViewCell()}
+            cell.accessoryType = .disclosureIndicator
+            
+            switch indexPath.row {
+            case 0:
+                cell.titleLabel.text = "Display Name"
+                cell.subtitleLabel.text = user.name
+            case 1:
+                cell.titleLabel.text = "Email"
+                cell.subtitleLabel.text = user.email
+            default:
+                return cell
+            }
         }
+        
+//        else if indexPath.section == 1{
+//            let cell = tableView.dequeueReusableCell(withIdentifier: ())
+//        }
         
         return cell
     }
