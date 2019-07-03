@@ -500,6 +500,7 @@ class MapViewController: UIViewController {
     self.webService.fetchAllMessages { (allMessages) -> (Void) in
       
       guard let allMessages = allMessages else { return }
+        print("self.messages.count \(self.messages.count)")
       DispatchQueue.main.async {
         self.messages = allMessages
         self.messages.sort { (msg1, msg2) -> Bool in
@@ -656,10 +657,11 @@ class MapViewController: UIViewController {
   }
   
   @objc func sendMessage() {
-    guard let user = self.selectedUser else { return }
+//    guard let user = self.selectedUser else { return }
+    guard let userID = profileview.userID else { return }
     let recordMessageVC = RecordVideoViewController()
     recordMessageVC.mode = .messageMode
-    recordMessageVC.toUserID = user.uid
+    recordMessageVC.toUserID = userID
     navigationController?.pushViewController(recordMessageVC, animated: true)
   }
   
@@ -676,17 +678,20 @@ class MapViewController: UIViewController {
     UIView.animate(withDuration: 0.3, delay: 0.15, options: .curveEaseIn, animations: {
       self.refreshButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi*2.0)
     }, completion: nil)
-    
+    updateLocationToFirebase()
     loadUsers()
   }
   
   @objc func callTapped(){
     //check if user is currently in call, if not , call them
-    guard let selectedUser = selectedUser else {return}
+//    guard let selectedUser = selectedUser else {return}
+    guard let selectedUserID = profileview.userID else { return }
+    print("calling ID: \(selectedUserID)")
     guard let currentUser = currentUser else {return}
-    ref.child("calling").child(currentUser.uid).setValue([selectedUser.uid : 1])
+    ref.child("calling").child(currentUser.uid).setValue([selectedUserID : 1])
     let videoVC = VideoViewController()
     self.present(videoVC, animated: true, completion: nil)
+    hideProfileView()
   }
   
   @objc func heartTapped(){
@@ -828,6 +833,7 @@ extension MapViewController : MKMapViewDelegate {
     self.selectedUser = view.annotation as? User
     guard let user = currentUser else {return}
     guard let userTapped = self.selectedUser else {return}
+    profileview.userID = userTapped.uid
     
     ref.child("friends").child(user.uid).child(userTapped.uid).observeSingleEvent(of: .value) { (snapshot) in
       if snapshot.exists(){
@@ -839,7 +845,7 @@ extension MapViewController : MKMapViewDelegate {
     
     if user.uid != userTapped.uid{
       print("did not tap self, the user uid = \(userTapped.uid)")
-      showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
+      showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl, userID: userTapped.uid)
     } else{
       print("you tapped on yourself, do nothing")
     }
@@ -886,7 +892,8 @@ extension MapViewController: ShowProfileDelegate {
   
   
   
-  func showProfileView(withUser name: String, profileVideoUrl: String) {
+    func showProfileView(withUser name: String, profileVideoUrl: String, userID: String) {
+        profileview.userID = userID
     view.bringSubviewToFront(profileview)
     profileview.isHidden = false
     UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
@@ -970,6 +977,8 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
           self.messageTableView.beginUpdates()
           self.messageTableView.deleteRows(at: [indexPath], with: .fade)
           self.messageTableView.endUpdates()
+            self.messageTableView.reloadData()
+            self.messageTableView.layoutSubviews()
         }
       }
     }
@@ -1008,7 +1017,7 @@ extension MapViewController:UICollectionViewDelegate, UICollectionViewDataSource
       }
     }
     
-    showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl)
+    showProfileView(withUser: userTapped.name, profileVideoUrl: userTapped.profileVideoUrl, userID: userTapped.uid)
   }
 }
 

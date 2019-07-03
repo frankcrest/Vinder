@@ -13,7 +13,7 @@ import AVFoundation
 
 
 class ProfileView: RoundedCornerView {
-    
+    var userID: String?
     var playerLayer: AVPlayerLayer!
     var player: AVPlayer!
     var isLoop: Bool = false
