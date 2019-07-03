@@ -114,7 +114,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
       
       buttonView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
       buttonView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-      buttonView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+      buttonView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
       buttonView.heightAnchor.constraint(equalToConstant: 70),
       
       recordPreviewView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
