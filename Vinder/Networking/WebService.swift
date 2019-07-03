@@ -243,12 +243,14 @@ class WebService {
     
    
     func fetchAllMessages(completion: @escaping ([Messages]?) ->(Void)) {
-      
+      print("fetch all message")
       guard let userID = currentUserID else {
         return
       }
-      var messages: [Messages] = []
-      ref.child("messages").child(userID).observe(DataEventType.value) { (snapshot) in
+      
+      ref.child("messages").child(userID).observe(.value) { (snapshot) in
+        print("webservice reference fetch message")
+        var messages = [Messages]()
         for messageID in snapshot.children.allObjects as! [DataSnapshot] {
           guard let message = messageID.value as? [String: AnyObject] else { continue }
           guard let messageURL = message["messageURL"] as? String else { continue }
@@ -288,7 +290,7 @@ class WebService {
         print("gonna delegate")
         self.updateProgressDelegate?.updateProgress(progress: percent)
       }
-      print("downloading: \(percent)%")
+      print("\(percent)%")
     }
   }
   
