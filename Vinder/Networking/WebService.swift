@@ -243,13 +243,14 @@ class WebService {
     
    
     func fetchAllMessages(completion: @escaping ([Messages]?) ->(Void)) {
-      
+      print("fetch all message")
       guard let userID = currentUserID else {
         return
       }
       
       ref.child("messages").child(userID).observe(DataEventType.value) { (snapshot) in
-        var messages: [Messages] = []
+        print("webservice reference fetch message")
+        var messages = [Messages]()
         for messageID in snapshot.children.allObjects as! [DataSnapshot] {
           guard let message = messageID.value as? [String: AnyObject] else { continue }
           guard let messageURL = message["messageURL"] as? String else { continue }
