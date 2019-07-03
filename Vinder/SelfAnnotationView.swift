@@ -13,7 +13,7 @@ class SelfAnnotationView: MKAnnotationView {
     
     override var annotation: MKAnnotation? {
         willSet {
-            image = UIImage(named: "aim")!.scaleImage(toSize: CGSize.init(width: 12, height: 12))
+            image = UIImage(named: "aim")!.scaleImage(toSize: CGSize.init(width: 10, height: 10))
             UIView.animate(withDuration: 1.0,
                            delay: 0,
                            options: [.autoreverse, .repeat, .allowUserInteraction],
