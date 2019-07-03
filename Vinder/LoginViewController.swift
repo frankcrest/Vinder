@@ -94,6 +94,7 @@ extension UIColor {
   static let yellowColor = UIColor(red: 255/255, green: 226/255, blue: 111/255, alpha: 1)
   static let blueColor = UIColor(red: 149/255, green: 225/255, blue: 211/255, alpha: 1)
   static let grayColor = UIColor(red: 245/255, green: 255/255, blue: 208/255, alpha: 1)
+  static let defaultBlue = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)
 }
 
 extension UITextField {

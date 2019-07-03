@@ -5,7 +5,7 @@ import Firebase
 
 //78 178 249 blue color hex code
 class MapViewController: UIViewController {
-  
+   
   //MARK: PROPERTIES
   private let webService = WebService()
   private var messages: [Messages] = []
@@ -858,7 +858,7 @@ extension MapViewController: ShowProfileDelegate {
   
   func actionToMsg(_ message: Messages) {
     let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-    alert.view.tintColor = .blue
+    alert.view.tintColor = UIColor.defaultBlue
     alert.addAction(UIAlertAction(title: "Reply", style: .default, handler: { (_) in
       let recordMessageVC = RecordVideoViewController()
       recordMessageVC.mode = .messageMode

@@ -125,10 +125,10 @@ class MessageTableViewCell: UITableViewCell {
           timestampLabel.heightAnchor.constraint(equalToConstant: 12),
           timestampLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
           
-          replyButton.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+          replyButton.topAnchor.constraint(equalTo: topAnchor, constant: 9),
           replyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-          replyButton.widthAnchor.constraint(equalToConstant: 44.0),
-          replyButton.heightAnchor.constraint(equalToConstant: 44.0),
+          replyButton.widthAnchor.constraint(equalToConstant: 34.0),
+          replyButton.heightAnchor.constraint(equalToConstant: 34.0),
             
             thumbnailImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
             thumbnailImageView.topAnchor.constraint(equalTo: self.profileImageView.bottomAnchor, constant: 4),

@@ -110,6 +110,7 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     } else if callResponse.status == .rejected {
       print("you have been rejected")
       let uc = UIAlertController(title: "The User You Are Calling Is Busy", message: "You Can Start A Conversation With Another User", preferredStyle: .alert)
+      uc.view.tintColor = UIColor.defaultBlue
       let action = UIAlertAction(title: "Okay", style: .cancel) { (action) in
         self.dismiss(animated: true, completion: nil)
       }
@@ -118,6 +119,7 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
     }else if callResponse.status == .hangup{
       print("they hang up on you")
       let uc = UIAlertController(title: "The Other User Hanged Up", message: "You Can Start A Conversation With Another User", preferredStyle: .alert)
+      uc.view.tintColor = UIColor.defaultBlue
       let action = UIAlertAction(title: "Okay", style: .cancel) { (action) in
         self.dismiss(animated: true, completion: nil)
       }
