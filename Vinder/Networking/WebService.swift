@@ -247,8 +247,9 @@ class WebService {
       guard let userID = currentUserID else {
         return
       }
-      var messages: [Messages] = []
+      
       ref.child("messages").child(userID).observe(DataEventType.value) { (snapshot) in
+        var messages: [Messages] = []
         for messageID in snapshot.children.allObjects as! [DataSnapshot] {
           guard let message = messageID.value as? [String: AnyObject] else { continue }
           guard let messageURL = message["messageURL"] as? String else { continue }
