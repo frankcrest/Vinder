@@ -26,7 +26,10 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
   let topView = UIView()
   let bottomView = UIView()
   var loading: LoadingView!
-  let buttonView = ButtonView()
+  let buttonView : ButtonView = {
+   let b = ButtonView()
+    return b
+  }()
   let notSurebutton : UIButton = {
     let b = UIButton()
     b.translatesAutoresizingMaskIntoConstraints = false
@@ -109,10 +112,10 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
     
     NSLayoutConstraint.activate([
       
-      buttonView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      buttonView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.frame.height * 1/12),
-      buttonView.widthAnchor.constraint(equalToConstant: view.frame.width),
-      buttonView.heightAnchor.constraint(equalToConstant: view.frame.height * 1/12),
+      buttonView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+      buttonView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+      buttonView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+      buttonView.heightAnchor.constraint(equalToConstant: 70),
       
       recordPreviewView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
       recordPreviewView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
@@ -261,7 +264,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
       }
       
       buttonView.switchCameraButton.setTitle("Switch", for: .normal)
-      buttonView.switchCameraButton.setImage(UIImage(named: "switch"), for: .normal)
+      buttonView.switchCameraButton.setBackgroundImage(UIImage(named:"switch"), for: .normal)
       sender.setTitle("Back", for: .normal)
       clearVideoReviewLayer()
       self.configureCameraController()
@@ -321,7 +324,7 @@ extension RecordVideoViewController: VideoHandlerDelegate, StartAnimationDelegat
       
       self.buttonView.backButton.setTitle("Retake", for: .normal)
         self.buttonView.switchCameraButton.setTitle("Confirm", for: .normal)
-      self.buttonView.switchCameraButton.setImage(UIImage(named: "confirm"), for: .normal)
+      self.buttonView.switchCameraButton.setBackgroundImage(UIImage(named: "confirm"), for: .normal)
       
       self.notSurebutton.isHidden = true
     }
