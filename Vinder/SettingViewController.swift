@@ -21,6 +21,7 @@
     var playerLayer: AVPlayerLayer!
     var player: AVPlayer!
     var isLoop: Bool = false
+    let webService = WebService()
     
     let ud = UserDefaults.standard
     
@@ -69,6 +70,7 @@
         v.alwaysBounceVertical = false
         v.tableFooterView = UIView()
         v.register(SettingTableViewCell.self, forCellReuseIdentifier: "setting")
+        v.register(LogoutTableViewCell.self, forCellReuseIdentifier: "logout")
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -113,9 +115,9 @@
         swipeGesture.direction = .right
         self.view.addGestureRecognizer(swipeGesture)
       
-      let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight))
-      downSwipeGesture.direction = .down
-      self.view.addGestureRecognizer(downSwipeGesture)
+//      let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight))
+//      downSwipeGesture.direction = .down
+//      self.view.addGestureRecognizer(downSwipeGesture)
       
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTap))
         self.profileVideo.addGestureRecognizer(tapGesture)
@@ -188,6 +190,7 @@
     @objc func longPress(){
         print("long press")
         let alert = UIAlertController(title: "Choose Photo From", message: "", preferredStyle: .actionSheet)
+        alert.view.tintColor = UIColor.defaultBlue
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
             self.getImage(fromSourceType: .camera)
         }))
@@ -307,7 +310,24 @@
         dismiss(animated: true, completion: nil)
     }
     
+    @objc func logoutTapped(){
+        print("logout")
+        do{
+            try webService.logOut()
+            UserDefaults.standard.set(false, forKey: "isLoggedIn")
+            presentLogInNavigationController()
+            self.navigationController?.popViewController(animated: true)
+        }catch let err{
+            print("can not log out \(err)")
+        }
+    }
     
+    private func presentLogInNavigationController() {
+        let loginNav = UINavigationController()
+        loginNav.viewControllers = [LoginViewController()]
+        loginNav.modalPresentationStyle = .fullScreen
+        present(loginNav, animated: true, completion: nil)
+    }
     
   }
   
@@ -315,15 +335,25 @@
   extension SettingViewController : UITableViewDataSource , UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        if section == 0{
+            return 2
+        }
+        else{
+            return 1
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "My Account"
+        if section == 0{
+            return "My Account"
+        }
+        else {
+            return " "
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -335,22 +365,29 @@
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "setting", for: indexPath) as! SettingTableViewCell
-        guard let user = currentUser else {return UITableViewCell()}
-        cell.accessoryType = .disclosureIndicator
         
-        switch indexPath.row {
-        case 0:
-            cell.titleLabel.text = "Display Name"
-            cell.subtitleLabel.text = user.name
-        case 1:
-            cell.titleLabel.text = "Email"
-            cell.subtitleLabel.text = user.email
-        default:
+        if indexPath.section == 0{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "setting", for: indexPath) as! SettingTableViewCell
+            guard let user = currentUser else {return UITableViewCell()}
+            cell.accessoryType = .disclosureIndicator
+            
+            switch indexPath.row {
+            case 0:
+                cell.titleLabel.text = "Display Name"
+                cell.subtitleLabel.text = user.name
+            case 1:
+                cell.titleLabel.text = "Email"
+                cell.subtitleLabel.text = user.email
+            default:
+                print("default")
+            }
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "logout", for: indexPath) as! LogoutTableViewCell
+            cell.logoutButton.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
             return cell
         }
         
-        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
