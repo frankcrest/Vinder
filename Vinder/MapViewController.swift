@@ -82,14 +82,6 @@ class MapViewController: UIViewController {
     return mp
   }()
   
-  let logoutButton: RoundedButton = {
-    let b = RoundedButton()
-    b.setImage(UIImage(named: "exit"), for: .normal)
-    b.translatesAutoresizingMaskIntoConstraints = false
-    b.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
-    return b
-  }()
-  
   let settingButton: UIButton = {
     let b = UIButton()
     b.backgroundColor = .clear
@@ -286,7 +278,6 @@ class MapViewController: UIViewController {
     
     self.centerView.addSubview(mapView)
     self.mapView.addSubview(navView)
-    self.centerView.addSubview(logoutButton)
     self.centerView.addSubview(settingButton)
     self.centerView.addSubview(refreshButton)
     self.view.addSubview(buttonStackView)
@@ -387,11 +378,6 @@ class MapViewController: UIViewController {
       mapView.leadingAnchor.constraint(equalTo: self.centerView.leadingAnchor, constant: 0),
       mapView.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: 0),
       mapView.bottomAnchor.constraint(equalTo: self.centerView.bottomAnchor, constant: 0),
-      
-      logoutButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: statusBarHeight),
-      logoutButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-      logoutButton.heightAnchor.constraint(equalToConstant: 35),
-      logoutButton.widthAnchor.constraint(equalToConstant: 35),
       
       settingButton.topAnchor.constraint(equalTo: self.centerView.topAnchor, constant: statusBarHeight),
       settingButton.trailingAnchor.constraint(equalTo: self.centerView.trailingAnchor, constant: -10),
@@ -522,18 +508,6 @@ class MapViewController: UIViewController {
   }
   
   //MARK: BUTTON ACTIONS
-  @objc func logoutTapped(){
-    profileview.isHidden = true
-    do{
-      try webService.logOut()
-      UserDefaults.standard.set(false, forKey: "isLoggedIn")
-      presentLogInNavigationController()
-      
-    }catch let err{
-      print("can not log out \(err)")
-    }
-  }
-  
   @objc func settingTapped(){
     let settingsVC = SettingViewController()
     guard let user = selfUser else {return}

@@ -190,6 +190,7 @@
     @objc func longPress(){
         print("long press")
         let alert = UIAlertController(title: "Choose Photo From", message: "", preferredStyle: .actionSheet)
+        alert.view.tintColor = UIColor.defaultBlue
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
             self.getImage(fromSourceType: .camera)
         }))
