@@ -51,6 +51,7 @@ class MapViewController: UIViewController {
   let navView: GradientView = {
     let v = GradientView()
     v.backgroundColor = .clear
+    v.isUserInteractionEnabled = false
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
@@ -58,14 +59,14 @@ class MapViewController: UIViewController {
   let navViewLeft: UIView = {
     let v = UIView()
     v.isUserInteractionEnabled = true
-    v.backgroundColor = .magenta
+    v.backgroundColor = UIColor.pinkColor
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
   
   let navViewRight: UIView = {
     let v = UIView()
-    v.backgroundColor = .cyan
+    v.backgroundColor = UIColor.blueColor
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
@@ -498,9 +499,7 @@ class MapViewController: UIViewController {
   //MARK: FETCH MESSAGE
   
   func getMessages() {
-    
     self.webService.fetchAllMessages { (allMessages) -> (Void) in
-      
       guard let allMessages = allMessages else { return }
         print("self.messages.count \(self.messages.count)")
       DispatchQueue.main.async {
@@ -856,7 +855,6 @@ extension MapViewController : MKMapViewDelegate {
 }
 //MARK: VIDEO VIEW RELATED
 extension MapViewController: ShowProfileDelegate {
-  
   
   func actionToMsg(_ message: Messages) {
     let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
