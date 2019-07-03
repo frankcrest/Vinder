@@ -109,16 +109,16 @@ class VideoViewController: UIViewController, UIGestureRecognizerDelegate {
       joinChannel(uid: tryingToCallUserUid)
     } else if callResponse.status == .rejected {
       print("you have been rejected")
-      let uc = UIAlertController(title: "YOU HAVE BEEN REJECTED", message: "YOU WILL BE REDIRECTED TO TINDER FOR DOGS", preferredStyle: .alert)
-      let action = UIAlertAction(title: "okay man", style: .cancel) { (action) in
+      let uc = UIAlertController(title: "The User You Are Calling Is Busy", message: "You Can Start A Conversation With Another User", preferredStyle: .alert)
+      let action = UIAlertAction(title: "Okay", style: .cancel) { (action) in
         self.dismiss(animated: true, completion: nil)
       }
       uc.addAction(action)
       self.present(uc, animated: true, completion: nil)
     }else if callResponse.status == .hangup{
       print("they hang up on you")
-      let uc = UIAlertController(title: "THEY HANG UP ON YOU", message: "FIND ANOTHER USER TO TALK TO", preferredStyle: .alert)
-      let action = UIAlertAction(title: "okay man", style: .cancel) { (action) in
+      let uc = UIAlertController(title: "The Other User Hanged Up", message: "You Can Start A Conversation With Another User", preferredStyle: .alert)
+      let action = UIAlertAction(title: "Okay", style: .cancel) { (action) in
         self.dismiss(animated: true, completion: nil)
       }
       uc.addAction(action)

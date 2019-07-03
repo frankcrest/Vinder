@@ -31,7 +31,7 @@
         b.tintColor = UIColor(red: 36/255, green: 171/255, blue: 255/255, alpha: 1)
         b.imageView?.contentMode = .scaleAspectFit
         b.clipsToBounds = true
-        b.backgroundColor = .black
+        b.backgroundColor = .white
         b.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
         b.imageEdgeInsets = UIEdgeInsets(top: 8,left: 8,bottom: 8,right: 8)
         b.translatesAutoresizingMaskIntoConstraints = false
