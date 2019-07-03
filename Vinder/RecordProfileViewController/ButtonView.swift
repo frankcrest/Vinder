@@ -74,25 +74,26 @@ class ButtonView: UIStackView {
         addArrangedSubview(recordButtonView)
         addArrangedSubview(switchBtnCtn)
         self.axis = .horizontal
-        self.alignment = .center
-        self.distribution = .equalSpacing
+        self.alignment = .fill
+        self.distribution = .fillEqually
         recordButtonView.setupCircleProgressBar()
         NSLayoutConstraint.activate([
             
-            switchBtnCtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            switchBtnCtn.heightAnchor.constraint(equalTo: heightAnchor),
-            
-            backBtnCtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            backBtnCtn.heightAnchor.constraint(equalTo: heightAnchor),
-
-            recordButtonView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            recordButtonView.heightAnchor.constraint(equalTo: heightAnchor),
-            
+//            switchBtnCtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
+//            switchBtnCtn.heightAnchor.constraint(equalTo: heightAnchor),
+//
+//            backBtnCtn.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
+//            backBtnCtn.heightAnchor.constraint(equalTo: heightAnchor),
+//
+//
+//            recordButtonView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
+//            recordButtonView.heightAnchor.constraint(equalTo: heightAnchor),
+//
             switchCameraButton.heightAnchor.constraint(equalTo: switchBtnCtn.heightAnchor, multiplier: 0.9),
             switchCameraButton.widthAnchor.constraint(equalTo: switchCameraButton.heightAnchor),
             switchCameraButton.centerYAnchor.constraint(equalTo: switchBtnCtn.centerYAnchor),
             switchCameraButton.centerXAnchor.constraint(equalTo: switchBtnCtn.centerXAnchor),
-            
+
             backButton.heightAnchor.constraint(equalTo: backBtnCtn.heightAnchor, multiplier: 0.9),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
             backButton.centerYAnchor.constraint(equalTo: backBtnCtn.centerYAnchor),
@@ -103,6 +104,7 @@ class ButtonView: UIStackView {
     override func layoutSubviews() {
         super.layoutSubviews()
        recordButtonView.setupCircleProgressBar()
+
     }
     
 }
