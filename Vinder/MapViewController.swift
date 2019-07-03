@@ -51,6 +51,7 @@ class MapViewController: UIViewController {
   let navView: GradientView = {
     let v = GradientView()
     v.backgroundColor = .clear
+    v.isUserInteractionEnabled = false
     v.translatesAutoresizingMaskIntoConstraints = false
     return v
   }()
