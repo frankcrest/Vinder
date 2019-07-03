@@ -2,19 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow app to access your album?</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Do you allow this app to know your current location?</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Need to use microphone to chat</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Need to use camera do to video chat</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -48,6 +35,8 @@
 	<string>We need your location to find other users.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need to use microphone to chat</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow app to access your album?</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
@@ -64,8 +53,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
