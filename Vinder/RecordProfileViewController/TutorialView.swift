@@ -27,7 +27,7 @@ class TutorialView: UIView {
     
     let tutorialVideoView: UIView = {
        let v = UIView()
-        v.backgroundColor = .clear
+        v.backgroundColor = .black
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -63,6 +63,7 @@ class TutorialView: UIView {
   let stackView = UIStackView()
   
   func setupViews(){
+    backgroundColor = .black
     translatesAutoresizingMaskIntoConstraints = false
     stackView.translatesAutoresizingMaskIntoConstraints = false
     stackView.addArrangedSubview(replayButton)

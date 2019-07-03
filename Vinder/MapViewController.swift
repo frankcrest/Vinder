@@ -75,7 +75,7 @@ class MapViewController: UIViewController {
     mp.mapType = MKMapType.standard
     mp.isZoomEnabled = true
     mp.isScrollEnabled = true
-    mp.showsUserLocation = false
+//    mp.showsUserLocation = false
     mp.showsCompass = false
     mp.translatesAutoresizingMaskIntoConstraints = false
     return mp

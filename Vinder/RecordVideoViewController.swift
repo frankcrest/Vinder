@@ -251,7 +251,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
   @objc func backButton(_ sender: UIButton) {
     
     if sender.titleLabel?.text == "Back" {
-      self.dismiss(animated: true, completion: nil)
+//      self.dismiss(animated: true, completion: nil)
       navigationController?.popViewController(animated: true)
     }
     
