@@ -76,7 +76,7 @@ class MapViewController: UIViewController {
     mp.mapType = MKMapType.standard
     mp.isZoomEnabled = true
     mp.isScrollEnabled = true
-//    mp.showsUserLocation = false
+    mp.showsUserLocation = false
     mp.showsCompass = false
     mp.translatesAutoresizingMaskIntoConstraints = false
     return mp
@@ -251,7 +251,6 @@ class MapViewController: UIViewController {
       getMessages()
       loadUsers()
     }
-    mapView.showsUserLocation = true
     view.layoutSubviews()
     generator.prepare()
   }
@@ -347,7 +346,7 @@ class MapViewController: UIViewController {
     leftView.addGestureRecognizer(swipeToLeft)
     
     NSLayoutConstraint.activate([
-      
+   
       inboxLabel.centerXAnchor.constraint(equalTo: navViewRight.centerXAnchor),
       inboxLabel.centerYAnchor.constraint(equalTo: navViewRight.centerYAnchor, constant: 15),
       
@@ -454,6 +453,7 @@ class MapViewController: UIViewController {
       locationManager.startUpdatingHeading()
       locationManager.startUpdatingLocation()
     }
+    updateLocationToFirebase()
   }
   
   func loadUsers(){
