@@ -52,6 +52,9 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
   var isTutorialMode = false
   var mode: Mode!
   var toUserID: String?
+    
+    private var tutorialPlayer: AVPlayer?
+    private var tutorialPlayLayer: AVPlayerLayer?
   
   //MARK: ViewWDidLoad
   
@@ -71,8 +74,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
       self.setupTutorialView()
       self.recordPreviewView.isHidden = true
       self.buttonView.isHidden = true
-      self.notSurebutton.isHidden = false
-      //self.videoReviewer.playVideo(atUrl:url, on: self.tutorialView)
+//      self.notSurebutton.isHidden = false
     }
     
     if mode == Mode.profileMode || mode == Mode.signupMode {
@@ -117,7 +119,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
       recordPreviewView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
       recordPreviewView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
       
-      notSurebutton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+      notSurebutton.topAnchor.constraint(equalTo: view.topAnchor, constant: 33),
       notSurebutton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
       notSurebutton.heightAnchor.constraint(equalToConstant: 50),
       notSurebutton.widthAnchor.constraint(equalToConstant: 50),
@@ -162,7 +164,7 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
   }
   
   func setupTutorialView() {
-    
+    notSurebutton.isHidden = true
     view.addSubview(tutorialView)
     tutorialView.gotItButton.addTarget(self, action: #selector(gotItTapped), for: .touchUpInside)
     tutorialView.replayButton.addTarget(self, action: #selector(replayTapped), for: .touchUpInside)
@@ -172,8 +174,18 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
       tutorialView.heightAnchor.constraint(equalTo: view.heightAnchor),
       tutorialView.widthAnchor.constraint(equalTo: view.widthAnchor)
       ])
+    guard let path = Bundle.main.path(forResource: "tutorial", ofType:"mp4") else {
+        debugPrint("video.m4v not found")
+        return
+    }
     
-    videoReviewer.playVideo(atUrl: cameraController.tutorialURL, on: tutorialView)
+    tutorialPlayer = AVPlayer(url: URL(fileURLWithPath: path))
+    tutorialPlayLayer = AVPlayerLayer(player: tutorialPlayer)
+    tutorialPlayLayer!.frame = view.bounds
+    tutorialView.tutorialVideoView.layer.addSublayer(tutorialPlayLayer!)
+    
+    tutorialPlayer?.play()
+    
   }
   
   func hideNavBar() {
@@ -260,13 +272,23 @@ class RecordVideoViewController: UIViewController, UpdateProgressDelegate {
   
   
   @objc func gotItTapped() {
+    if tutorialPlayer != nil {
+        tutorialPlayer?.pause()
+        tutorialPlayer?.seek(to: CMTime.zero)
+        tutorialPlayLayer?.removeFromSuperlayer()
+    }
     tutorialView.removeFromSuperview()
+    notSurebutton.isHidden = false
     recordPreviewView.isHidden = false
     buttonView.isHidden = false
   }
   
   @objc func replayTapped() {
-    
+    if tutorialPlayer != nil {
+        tutorialPlayer?.pause()
+        tutorialPlayer?.seek(to: .zero)
+        tutorialPlayer?.play()
+    }
   }
   
   //MARK: HELPER

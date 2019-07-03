@@ -43,6 +43,7 @@
 		EDA2A28222CA733900391D23 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA2A28122CA733900391D23 /* ProfileView.swift */; };
 		EDA2A28422CA73FF00391D23 /* RoundedCornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA2A28322CA73FF00391D23 /* RoundedCornerView.swift */; };
 		EDA2A28822CAA01C00391D23 /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = EDA2A28622CAA01C00391D23 /* simple.json */; };
+		EDAE02E722CC47AA0028E59D /* tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = EDAE02E622CC47A90028E59D /* tutorial.mp4 */; };
 		EDC60CA322CAB2DC00368C0A /* CallerVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC60CA222CAB2DC00368C0A /* CallerVideoView.swift */; };
 		EDC730C322C52CCB00773F67 /* TNImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C222C52CCB00773F67 /* TNImageView.swift */; };
 		EDC730C622C5360100773F67 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC730C522C5360100773F67 /* ProfileImageView.swift */; };
@@ -90,6 +91,7 @@
 		EDA2A28122CA733900391D23 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		EDA2A28322CA73FF00391D23 /* RoundedCornerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerView.swift; sourceTree = "<group>"; };
 		EDA2A28622CAA01C00391D23 /* simple.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = simple.json; sourceTree = "<group>"; };
+		EDAE02E622CC47A90028E59D /* tutorial.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = tutorial.mp4; sourceTree = "<group>"; };
 		EDC60CA222CAB2DC00368C0A /* CallerVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallerVideoView.swift; sourceTree = "<group>"; };
 		EDC730C222C52CCB00773F67 /* TNImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TNImageView.swift; sourceTree = "<group>"; };
 		EDC730C522C5360100773F67 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		E935542822B9735F00CD7958 = {
 			isa = PBXGroup;
 			children = (
+				EDAE02E622CC47A90028E59D /* tutorial.mp4 */,
 				E935543322B9735F00CD7958 /* Vinder */,
 				E935543222B9735F00CD7958 /* Products */,
 				F2E6C00A1AF2E58EEC06126B /* Pods */,
@@ -305,6 +308,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EDAE02E722CC47AA0028E59D /* tutorial.mp4 in Resources */,
 				E935543F22B9736000CD7958 /* LaunchScreen.storyboard in Resources */,
 				E935543C22B9736000CD7958 /* Assets.xcassets in Resources */,
 				ED5DEC9E22B98B4C0013142C /* GoogleService-Info.plist in Resources */,

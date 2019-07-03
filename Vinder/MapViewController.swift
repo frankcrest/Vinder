@@ -231,14 +231,16 @@ class MapViewController: UIViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    //        let debugNav = UINavigationController()
-    //        let debugview = VideoViewController()
-    //        let debugview = IncomeCallViewController()
-    //
-    //        debugview.callerId = "OWOkfkXlLTdzwGT0zG0b9mTJyK13"
-    //        debugNav.viewControllers = [debugview]
-    //        debugNav.modalPresentationStyle = .fullScreen
-    //        present(debugNav, animated: false, completion: nil)
+//            let debugNav = UINavigationController()
+//            let debugview = VideoViewController()
+//            let debugview = IncomeCallViewController()
+//    let debugview = RecordVideoViewController()
+//    debugview.mode = .signupMode
+//    debugview.isTutorialMode = true
+////            debugview.callerId = "OWOkfkXlLTdzwGT0zG0b9mTJyK13"
+//            debugNav.viewControllers = [debugview]
+//            debugNav.modalPresentationStyle = .fullScreen
+//            present(debugNav, animated: false, completion: nil)
     if Auth.auth().currentUser == nil {
       presentLogInNavigationController()
     } else{

@@ -24,31 +24,39 @@ class TutorialView: UIView {
     super.layoutSubviews()
     setupStackView()
   }
+    
+    let tutorialVideoView: UIView = {
+       let v = UIView()
+        v.backgroundColor = .clear
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
   
   let promptLabel : UILabel = {
     let label = UILabel()
-    label.text = "Take A Short 10 To 15 Second Intro Video To Show Your Personality & Interests"
+    label.text = "You're almost there!"
+//    Take A Short 10 To 15 Second Intro Video To Show Your Personality & Interests
     label.numberOfLines = 0
-    label.font = UIFont.systemFont(ofSize: 20)
+    label.textAlignment = .center
+    label.font = UIFont.systemFont(ofSize: 24, weight: .medium)
     label.textColor = .white
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   }()
   
-  let replayButton:UIButton = {
-    let button = UIButton()
+  let replayButton:RoundedRectButton = {
+    let button = RoundedRectButton()
     button.setTitle("Replay", for: .normal)
     button.setTitleColor(.white, for: .normal)
-    
-    button.translatesAutoresizingMaskIntoConstraints = false
+    button.backgroundColor = .blueColor
     return button
   }()
   
-  let gotItButton:UIButton = {
-    let button = UIButton()
+  let gotItButton:RoundedRectButton = {
+    let button = RoundedRectButton()
     button.setTitle("Next", for: .normal)
     button.setTitleColor(.white, for: .normal)
-    button.translatesAutoresizingMaskIntoConstraints = false
+    button.backgroundColor = .pinkColor
     return button
   }()
   
@@ -57,15 +65,20 @@ class TutorialView: UIView {
   func setupViews(){
     translatesAutoresizingMaskIntoConstraints = false
     stackView.translatesAutoresizingMaskIntoConstraints = false
-    backgroundColor = .lightGray
     stackView.addArrangedSubview(replayButton)
     stackView.addArrangedSubview(gotItButton)
+    addSubview(tutorialVideoView)
     addSubview(promptLabel)
     addSubview(stackView)
     
     setupStackView()
     
     NSLayoutConstraint.activate([
+        
+        tutorialVideoView.centerXAnchor.constraint(equalTo: centerXAnchor),
+        tutorialVideoView.centerYAnchor.constraint(equalTo: centerYAnchor),
+        tutorialVideoView.widthAnchor.constraint(equalTo: widthAnchor),
+        tutorialVideoView.heightAnchor.constraint(equalTo: heightAnchor),
       
       promptLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
       promptLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
@@ -85,9 +98,9 @@ class TutorialView: UIView {
     NSLayoutConstraint.activate([
       
       stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -44),
-      stackView.heightAnchor.constraint(equalToConstant: 44),
-      stackView.widthAnchor.constraint(equalTo: widthAnchor)
+      stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -88),
+      stackView.heightAnchor.constraint(equalToConstant: 66),
+      stackView.widthAnchor.constraint(equalTo: widthAnchor,constant: -32)
       //problem here
       
       ])
