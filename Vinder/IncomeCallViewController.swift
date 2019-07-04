@@ -23,6 +23,14 @@ class IncomeCallViewController: UIViewController {
                 }
             }
         }
+  
+  var username: String? {
+    didSet{
+      if let name = username{
+         callerView.nameLabel.text = name
+      }
+    }
+  }
     
   
     lazy var callerView : CallerVideoView = {
@@ -33,12 +41,15 @@ class IncomeCallViewController: UIViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-
+  
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .yellow
         setUpViews()
+      if username != nil{
+        print("got username calling \(username!)")
+      }
     }
   
     func setUpViews(){

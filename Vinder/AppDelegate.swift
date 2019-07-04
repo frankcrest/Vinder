@@ -133,12 +133,14 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     
     let userInfo = response.notification.request.content.userInfo
     let callerId = userInfo["callerId"] as? String
+    let username = userInfo["nameId"] as? String
     guard let firebaseRef = ref else {return}
-    if callerId != nil {
+    if callerId != nil && username != nil{
       firebaseRef.child("calling").child(callerId!).removeValue()
       let presentVC = self.window!.rootViewController!
       let incomeCallVC = IncomeCallViewController()
       incomeCallVC.callerId = callerId!
+      incomeCallVC.username = username!
       presentVC.present(incomeCallVC, animated: true, completion: nil)
     } else{
       print("Do nothing")
