@@ -870,14 +870,6 @@ extension MapViewController: ShowProfileDelegate {
     
     alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { (_) in
       
-      let i = self.messages.firstIndex (where: {$0.messageID == message.messageID})
-      guard let index = i else { return }
-        self.messages.remove(at: index)
-        self.messageTableView.beginUpdates()
-        
-        self.messageTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
-        self.messageTableView.endUpdates()
-      
       self.webService.deleteMessage(message) { (err) in
         guard err == nil else { return }
       }
