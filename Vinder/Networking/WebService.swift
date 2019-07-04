@@ -263,7 +263,9 @@ class WebService {
           let messageDate = Date(timeIntervalSince1970: timeInterval)
           
           let msg = Messages(messageID: msgID, senderID: senderID, messageURL: messageURL, sender: sender, timestamp: messageDate, imageURL: imageURL)
+            print("debug \(msg.messageID)")
           messages.append(msg)
+        
         }
 
         completion(messages)

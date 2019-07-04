@@ -8,7 +8,11 @@ class MapViewController: UIViewController {
    
   //MARK: PROPERTIES
   private let webService = WebService()
-  private var messages: [Messages] = []
+    private var messages: [Messages] = [] {
+        didSet {
+            self.messageTableView.reloadData()
+        }
+    }
   let ref = Database.database().reference()
   var currentUser = Auth.auth().currentUser
   var selfUser : User?
@@ -486,14 +490,16 @@ class MapViewController: UIViewController {
   
   func getMessages() {
     self.webService.fetchAllMessages { (allMessages) -> (Void) in
-      guard let allMessages = allMessages else { return }
-        print("self.messages.count \(self.messages.count)")
+      guard var allMessages = allMessages else { return }
+
       DispatchQueue.main.async {
-        self.messages = allMessages
-        self.messages.sort { (msg1, msg2) -> Bool in
+        
+            print("self.messages.count \(self.messages.count)")
+        allMessages.sort { (msg1, msg2) -> Bool in
           return msg1.timestamp > msg2.timestamp
         }
-        self.messageTableView.reloadData()
+        self.messages = allMessages
+        
       }
     }
   }
@@ -864,21 +870,16 @@ extension MapViewController: ShowProfileDelegate {
     
     alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { (_) in
       
-      let i = self.messages.firstIndex { (msg) -> Bool in
-        msg.messageID == message.messageID
-      }
-      
+      let i = self.messages.firstIndex (where: {$0.messageID == message.messageID})
       guard let index = i else { return }
+        self.messages.remove(at: index)
+        self.messageTableView.beginUpdates()
+        
+        self.messageTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+        self.messageTableView.endUpdates()
       
       self.webService.deleteMessage(message) { (err) in
         guard err == nil else { return }
-        DispatchQueue.main.async {
-          self.messages.remove(at: index)
-          self.messageTableView.beginUpdates()
-          
-          self.messageTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
-          self.messageTableView.endUpdates()
-        }
       }
     }))
     
@@ -964,18 +965,11 @@ extension MapViewController: UITableViewDelegate, UITableViewDataSource{
   }
   
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    print("debug \(indexPath)")
     if editingStyle == .delete {
       let msg = messages[indexPath.row]
       webService.deleteMessage(msg) { (err) in
         guard err == nil else { return }
-        DispatchQueue.main.async {
-          self.messages.remove(at: indexPath.row)
-          self.messageTableView.beginUpdates()
-          self.messageTableView.deleteRows(at: [indexPath], with: .fade)
-          self.messageTableView.endUpdates()
-            self.messageTableView.reloadData()
-            self.messageTableView.layoutSubviews()
-        }
       }
     }
   }

@@ -43,7 +43,7 @@ class CallerVideoView: UIView {
     
     let callerProfileView:UIView = {
         let v = UIView()
-        v.backgroundColor = .black
+        v.backgroundColor = .white
         v.alpha = 0.5
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -70,7 +70,7 @@ class CallerVideoView: UIView {
         let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
-        label.textColor = .white
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
