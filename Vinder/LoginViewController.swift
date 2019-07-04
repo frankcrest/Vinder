@@ -12,7 +12,7 @@ class LoginViewController: UIViewController {
   
   let logoLabel: UILabel = {
     let l = UILabel()
-    l.text = "CHATTER"
+    l.text = "CHATTO"
     l.font = UIFont.boldSystemFont(ofSize: 60)
     l.textAlignment = .center
     l.textColor = .white
@@ -73,8 +73,8 @@ class LoginViewController: UIViewController {
     NSLayoutConstraint.activate([
       logoView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -50),
       logoView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0),
-      logoView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.3),
-      logoView.widthAnchor.constraint(equalTo: self.logoView.heightAnchor, multiplier: 1),
+      logoView.heightAnchor.constraint(equalToConstant: 240),
+      logoView.widthAnchor.constraint(equalToConstant: 240),
       
       logoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
       logoLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
