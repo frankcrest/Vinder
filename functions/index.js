@@ -31,7 +31,8 @@ exports.observeCalling = functions.database.ref('/calling/{uid}/{callingId}').on
               body: userDoingCalling.username +  ' wants to video chat with you.'
             },
             data:{
-              "callerId": userDoingCalling.uid
+              "callerId": userDoingCalling.uid,
+              "nameId": userDoingCalling.name
             },
           };
 
