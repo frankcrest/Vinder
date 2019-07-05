@@ -6,4 +6,4 @@
 
 - Technologies: Swift, MapKit, Core Location, AVFoundation, Agora API(for live video call), Firebase(real time database, storage, cloud functions, authentication)
 
-![Alt text](https://imgur.com/a/4usv2q5 "Optional title")
+![Alt text](https://imgur.com/we0jh8x "Optional title")
