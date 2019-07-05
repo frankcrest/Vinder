@@ -24,13 +24,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b0337bb2-6850-4028-b494-90e22815f314" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Vinder/MessageVideoPlayerViewController.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Vinder.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/Vinder.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Vinder/CircleProgressBar.swift" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Vinder/MapViewController.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Vinder/MapViewController.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Vinder/MessageTableViewCell.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Vinder/MessageTableViewCell.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Vinder/Networking/WebService.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Vinder/Networking/WebService.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Vinder/SignUpViewController.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Vinder/SignUpViewController.swift" afterDir="false" />
     </list>
     <ignored path="$USER_HOME$/Library/Caches/AppCode2019.1/DerivedData/Vinder-eusqldyaggxjfsbfehvoufmejsue/Build/Intermediates.noindex/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,9 +36,40 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="iphoneos_00008020-0012549C0A98002E" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="iphoneos_" />
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Vinder/RecordProfileViewController/ButtonView.swift">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Vinder/RecordProfileViewController/RecordButtonView.swift">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="645">
+              <caret line="91" selection-start-line="91" selection-end-line="91" />
+              <folding>
+                <element signature="e#469#567#0" />
+                <element signature="e#577#668#0" />
+                <element signature="e#683#913#0" />
+                <element signature="e#923#1065#0" />
+                <element signature="e#1075#1198#0" />
+                <element signature="e#1213#2089#0" />
+                <element signature="e#2099#2198#0" />
+                <element signature="e#2208#2309#0" />
+                <element signature="e#2324#2441#0" />
+                <element signature="e#2451#2854#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -76,7 +104,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -112,6 +139,7 @@
         </subPane>
       </pane>
       <pane id="Cidr.FilesView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -131,7 +159,7 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="Vinder" type="AppleRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Vinder" TARGET_NAME="Vinder" CONFIG_NAME="Debug" SCHEME_NAME="Vinder" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" RUN_TARGET_PROJECT_NAME="Vinder" RUN_TARGET_NAME="Vinder" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
+    <configuration default="false" name="Vinder" type="AppleRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Vinder" TARGET_NAME="Vinder" CONFIG_NAME="Debug" SCHEME_NAME="Vinder" IS_LOCATION_SIMULATION_ALLOWED="true" LOCATION_SCENARIO_ID="com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier" LOCATION_SCENARIO_TYPE="1" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" RUN_TARGET_PROJECT_NAME="Vinder" RUN_TARGET_NAME="Vinder" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
       <EXTENSION ID="org.jetbrains.appcode.reveal.RevealRunConfigurationExtension">
         <REVEAL_SETTINGS autoInject="false" autoInstall="true" askToEnableAutoInstall="true" />
       </EXTENSION>
@@ -153,14 +181,16 @@
       <updated>1561565585432</updated>
       <workItem from="1561565588779" duration="101000" />
       <workItem from="1561641028219" duration="101000" />
+      <workItem from="1562346952872" duration="76000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="202000" />
+    <option name="totallyTimeSpent" value="278000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1200" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18530351" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -233,6 +263,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Vinder/SignUpViewController.swift">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Vinder/RecordProfileViewController/ButtonView.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Vinder/RecordProfileViewController/RecordButtonView.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="645">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+          <folding>
+            <element signature="e#469#567#0" />
+            <element signature="e#577#668#0" />
+            <element signature="e#683#913#0" />
+            <element signature="e#923#1065#0" />
+            <element signature="e#1075#1198#0" />
+            <element signature="e#1213#2089#0" />
+            <element signature="e#2099#2198#0" />
+            <element signature="e#2208#2309#0" />
+            <element signature="e#2324#2441#0" />
+            <element signature="e#2451#2854#0" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

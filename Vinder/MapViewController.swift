@@ -510,7 +510,8 @@ class MapViewController: UIViewController {
     let lat = String(format: "%f", location.coordinate.latitude)
     let lon = String(format: "%f", location.coordinate.longitude)
     guard let user = currentUser else {return}
-    webService.updateUserWithLocation(lat: lat, lon: lon, uid: user.uid)
+    guard let id = webService.currentUserID else { return }
+    webService.updateUserWithLocation(lat: lat, lon: lon, uid: id)
   }
   
   //MARK: BUTTON ACTIONS
@@ -559,6 +560,7 @@ class MapViewController: UIViewController {
         self.view.layoutIfNeeded()
       }
     }
+    retrieveFriendList()
   }
   
   @objc func mapTapped(){
@@ -690,7 +692,8 @@ class MapViewController: UIViewController {
   
   func retrieveFriendList(){
     guard let currentUser = currentUser else {return}
-    ref.child("friends").child(currentUser.uid).observe(.value) { (snapshot) in
+    guard let currentUserID = webService.currentUserID else {return}
+    ref.child("friends").child(currentUserID).observe(.value) { (snapshot) in
       self.friends.removeAll()
       self.contactsCollectionView.reloadData()
       var friendList = [String]()

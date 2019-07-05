@@ -60,7 +60,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     
     let emailTextfield: UITextField = {
         let tf = UITextField()
-//        tf.text = "testemail\(arc4random_uniform(99))@email.com"
+        tf.text = "demoemail\(arc4random_uniform(99))@email.com"
         tf.borderStyle = UITextField.BorderStyle.none
         tf.textColor = UIColor.pinkColor
         tf.font = UIFont.systemFont(ofSize: 25)
@@ -75,7 +75,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     
     let usernameTextfield: UITextField = {
         let tf = UITextField()
-//        tf.text = "testuser\(arc4random_uniform(99))"
+        tf.text = "demouser\(arc4random_uniform(99))"
         tf.borderStyle = UITextField.BorderStyle.none
         tf.textColor = UIColor.pinkColor
         tf.font = UIFont.systemFont(ofSize: 25)
@@ -90,7 +90,7 @@ class SignUpViewController: UIViewController,UITextFieldDelegate {
     
     let nameTextfield: UITextField = {
         let tf = UITextField()
-//        tf.text = "testuser\(arc4random_uniform(99))"
+        tf.text = "Demouser\(arc4random_uniform(99))"
         tf.borderStyle = UITextField.BorderStyle.none
         tf.textColor = UIColor.pinkColor
         tf.font = UIFont.systemFont(ofSize: 25)

@@ -24,12 +24,12 @@ class WebService {
     
     var msgDLTSK: StorageDownloadTask?
     var profileVideDLTSK: StorageDownloadTask?
-    
+//    var currentUser: User?
     private var downloadURL: URL!
     private let ref = Database.database().reference()
     private let ud = UserDefaults.standard
     private let storage = Storage.storage()
-    let currentUserID = Auth.auth().currentUser?.uid
+    var currentUserID: String?
     
     private var storageRef: StorageReference {
         return Storage.storage().reference(forURL: "gs://vinder-2a778.appspot.com")
@@ -68,6 +68,8 @@ class WebService {
     
     Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
       completion(result,error)
+        self.currentUserID = result?.user.uid
+       
     }
   }
   
@@ -107,7 +109,10 @@ class WebService {
         registered(false, error)
         return
       }
+        
       guard let uid = user?.user.uid else { return }
+        self.currentUserID = uid
+        
       print("Registered uid \(uid)")
       self.ud.set(uid, forKey:"uid")
         self.ref.child("users").child(uid).setValue((["uid": uid, "token": token, "email":email, "username":username, "name":name, "profileVideo": "\(url)", "profileImageUrl": profileImageURL, "onlineStatus": true]), withCompletionBlock: { (error, ref) in
@@ -243,7 +248,8 @@ class WebService {
     
    
     func fetchAllMessages(completion: @escaping ([Messages]?) ->(Void)) {
-      print("fetch all message")
+
+        currentUserID = Auth.auth().currentUser?.uid
       guard let userID = currentUserID else {
         return
       }
