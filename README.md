@@ -1,4 +1,4 @@
-# Chatto
+# Vinder
 
 - Location base live video chat / video messaging application
 
